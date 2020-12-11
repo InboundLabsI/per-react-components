@@ -20,7 +20,7 @@ Add empty `div` elements with `permobil-navigator-component` class and pass conf
 
 ### 2. Add script and styles
 
-Upload js and css files add add it to the page:
+Upload js and css files from `dist` folder, and add it to the page:
 
 ```
 <link href="permobil-navigator-components.css" rel="stylesheet" />
