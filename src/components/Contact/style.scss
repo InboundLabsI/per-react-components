@@ -1,8 +1,7 @@
 .contact-component {
+    display: inline-block;
     margin-left: 50px;
-}
-
-.contact-component {
+    position: relative;
     
     button {
         align-items: center;
@@ -21,13 +20,16 @@
 
         &:hover {
             background: var(--permobil-light-grey, #F5F8FA);
-            color: var(--permobil-charcoal, #414042);
+            color: var(--permobil-royal-blue, #0067A6);
         }
 
         &:focus {
+            outline-width: 0;
+        }
+        
+        &.dropdown-opened {
             background: var(--permobil-light-blue, #EDF8FF);
             color: var(--permobil-royal-blue, #0067A6);
-            outline-width: 0;
         }
 
         svg {
@@ -41,5 +43,73 @@
             font-size: 13px;
             line-height: 13px;
         }
+    }
+
+    &__dropdown {
+        background: #FFFFFF;
+        border-radius: 4px;
+        left: 0;
+        padding: 32px;
+        position: absolute;
+        top: calc(100% + 8px);
+
+
+        &-menu {
+            min-width: 160px;
+            margin: 0;
+            padding: 0;
+
+            li {
+                border-bottom: 1px solid rgba(65, 64, 66, 0.1);
+                list-style-type: none;
+                margin: 0 0 12px;
+                padding: 0 0 12px;
+
+                a {
+                    align-items: center;
+                    color: #191919;
+                    display: flex;
+                    flex-direction: row;
+                    flex-wrap: nowrap;
+                    font-family: 'Open Sans', sans-serif;
+                    font-style: normal;
+                    font-weight: normal;
+                    font-size: 13px;
+                    justify-content: flex-start;
+                    line-height: normal;
+                    text-decoration: none;
+
+                    &:hover {
+                        color: var(--permobil-royal-blue, #0067A6);
+                        text-decoration: none;
+                    }
+
+                    svg {
+                        margin-right: 6px;
+                    }
+                }
+            }
+
+            li:last-of-type {
+                border-bottom: none;
+                margin: 0;
+                padding: 0;
+            }
+        }
+    }
+
+    &__dropdown--left {
+        left: 0;
+        right: auto;
+    }
+
+    &__dropdown--right {
+        right: 0;
+        left: auto;
+    }
+    &__dropdown--center {
+        right: auto;
+        left: 50%;
+        transform: translateX(-50%);
     }
 }

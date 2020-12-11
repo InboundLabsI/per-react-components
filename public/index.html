@@ -25,7 +25,7 @@
   <title>React App</title>
 </head>
 
-<body>
+<body style="margin: 0; padding: 0; background: #eee;">
   <noscript>You need to enable JavaScript to run this app.</noscript>
   <div class="navbar c--standalone-header-navigation"></div>
   <!--
@@ -44,6 +44,7 @@
     let contactDiv = document.createElement('div')
     contactDiv.className = 'permobil-navigator-component'
     contactDiv.dataset.component = 'contact'
+    contactDiv.dataset.supportUrl = '#support'
     document.querySelector('.navbar.c--standalone-header-navigation').append(contactDiv)
   </script>
 </body>

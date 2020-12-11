@@ -11,7 +11,7 @@ function App({ domElement }) {
 
   if (!!component && component === 'contact') {
     domElement.classList.add('init');
-    return <Contact />
+    return <Contact domElement={domElement} />
   }
 
   return null;
