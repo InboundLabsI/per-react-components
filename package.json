@@ -15,6 +15,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "build:widget": "parcel build src/index.js --no-source-maps -o permobil-navigator-components -d dist",
+    "deploy": "parcel build src/index.js --no-source-maps -o permobil-navigator-components -d dist && hs upload dist /permobil-navigator-components",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -37,6 +38,7 @@
     ]
   },
   "devDependencies": {
+    "@hubspot/cms-cli": "^2.2.0",
     "parcel-bundler": "^1.12.4",
     "sass": "^1.30.0"
   }

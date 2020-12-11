@@ -28,3 +28,8 @@ yarn-error.log*
 
 # editor
 .vscode
+
+# hubspot
+hubspot.config.yml
+
+.eslintcache
