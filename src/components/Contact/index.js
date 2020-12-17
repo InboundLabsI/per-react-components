@@ -64,7 +64,7 @@ const Contact = ({ domElement }) => {
 
     const renderSalesNavigator = () => (
         <div className="contact-component__sales">
-            {!!zip && (
+            {!!zip && zip.length == 5 && (
                 <div style={{ 'display': 'none' }}>
                     <iframe title="sales-locator" src={`https://hub.permobil.com/sales-locator-find-v2?zip=${zip}`}></iframe>
                 </div>
@@ -88,7 +88,7 @@ const Contact = ({ domElement }) => {
                     />
                 </div>
             </form>
-            {!!searching && (
+            {!!searching && !!zip && zip.length == 5 && (
                 <div className="contact-component__sales-results">
                     <p className="contact-component__sales-searching">Locating the nearest sales specialist for you...</p>
                 </div>
