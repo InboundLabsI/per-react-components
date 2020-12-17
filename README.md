@@ -31,10 +31,13 @@ Upload js and css files from `dist` folder, and add it to the page:
 
 Options must be passed via `data-` attributes, with each component.
 
-| Option           | Required      | Description                                             |
-| --------------   |:-------------:| --------------------------------------------------------|
-| data-component   | Yes           | Component name. One of: "Contact"                       |
-| data-support-url | No            | URL for support menu item. Only for "Contact" component |
+| Option                       | Component | Required | Description                       |
+| ---------------------------- |-----------|:--------:| ----------------------------------|
+| data-component               | *         | Yes      | Component name. One of: "Contact" |
+| data-support-url             | Contact   | No       | URL for support menu item.        |
+| data-ticket-submission-url   | Contact   | No       | URL for ticket submission link.   |
+| data-sales-contact-form-id   | Contact   | No       | Sales rep contact HS form id.     |
+| data-sales-contact-portal-id | Contact   | No       | Sales rep contact HS portal id.   |
 
 ## Author
 
