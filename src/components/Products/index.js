@@ -3,31 +3,36 @@ import algoliasearch from 'algoliasearch/lite';
 import { InstantSearch, SearchBox, Hits, connectStateResults } from 'react-instantsearch-dom';
 import './style.scss';
 import ProductsIcon from '../Icons/ProductsIcon'
+import ProductsDisplay from '../ProductsDisplay'
 
 const menuItems = [
     {
         subtitle: 'EXPLORE',
         title: 'Power Wheelchairs',
         image: 'https://f.hubspotusercontent00.net/hubfs/1624307/navigator-components/power-wheelchairs.png',
-        url: 'https://permobilus.com/products/power-wheelchairs-by-permobil'
+        url: 'https://permobilus.com/products/power-wheelchairs-by-permobil',
+        categoryName: 'Power Wheelchairs'
     },
     {
         subtitle: 'EXPLORE',
         title: 'Manual Wheelchairs',
         image: 'https://f.hubspotusercontent00.net/hubfs/1624307/navigator-components/manual-wheelchairs.png',
-        url: 'https://permobilus.com/products/tilite-manual-wheelchairs-smartdrive-power-assist/'
+        url: 'https://permobilus.com/products/tilite-manual-wheelchairs-smartdrive-power-assist/',
+        categoryName: 'Manual Wheelchairs'
     },
     {
         subtitle: 'EXPLORE',
         title: 'Seating / Positioning',
         image: 'https://f.hubspotusercontent00.net/hubfs/1624307/navigator-components/seating.png',
-        url: 'https://permobilus.com/products/seating-and-positioning-by-roho/'
+        url: 'https://permobilus.com/products/seating-and-positioning-by-roho/',
+        categoryName: 'Seating and Positioning'
     }
 ]
 
 const Products = ({ domElement }) => {
     const [expanded, setExpanded] = useState(false);
-    const [dropdownAlignment, setDropdownAlignment] = useState('left')
+    const [dropdownAlignment, setDropdownAlignment] = useState('left');
+    const [selectedCategory, setSelectedCategory] = useState(null);
     const componentRef = useRef(null);
     const algoliaAppID = domElement.getAttribute('data-algolia-app-id');
     const algoliaSearchKey = domElement.getAttribute('data-algolia-search-key');
@@ -49,6 +54,19 @@ const Products = ({ domElement }) => {
         closeDropdown();
         if (!!hit.url) {
             window.location.href = hit.url;
+        }
+    }
+
+    const handleMenuItemClick = (e, item) => {
+        e.preventDefault();
+        closeDropdown();
+        const search = window.location.search;
+        const params = new URLSearchParams(search);
+        const dev = params.get('dev');
+        if (!!dev) {
+            setSelectedCategory(item.categoryName);
+        } else {
+            window.location.href = item.url
         }
     }
 
@@ -86,7 +104,7 @@ const Products = ({ domElement }) => {
         <ul className="products-component__dropdown-menu" role="menu">
             {!!menuItems && menuItems.length > 0 && menuItems.map((item, i) => (
                 <li key={`${item.title}-${i}`}>
-                    <a href={item.url} role="menuitem" className="products-component__dropdown-menu-item">
+                    <a href={item.url} role="menuitem" className="products-component__dropdown-menu-item" onClick={e => { handleMenuItemClick(e, item) }}>
                         <div className="products-component__dropdown-menu-item-image" style={{ backgroundImage: `url(${item.image})` }}></div>
                         <div className="products-component__dropdown-menu-item-text">
                             <p className="products-component__dropdown-menu-item-subtitle">{item.subtitle}</p>
@@ -143,22 +161,30 @@ const Products = ({ domElement }) => {
     }, [componentRef]);
 
     return !!algoliaAppID && !!algoliaSearchKey && !!algoliaIndexName ? (
-        <InstantSearch searchClient={searchClient} indexName={algoliaIndexName}>
-            <div className="products-component" id="products-component" ref={componentRef}>
-                <button
-                    aria-haspopup="true"
-                    aria-expanded={expanded}
-                    onClick={handleButtonClick}
-                    tabindex="0"
-                    className={`products-component__button ${expanded ? 'dropdown-opened' : 'dropdown-closed'}`}
-                >
-                    <ProductsIcon />
-                    <span>Products</span>
-                </button>
-                {!!expanded ? renderDropdown() : null}
+        <>
+            <InstantSearch searchClient={searchClient} indexName={algoliaIndexName}>
+                <div className="products-component" id="products-component" ref={componentRef}>
+                    <button
+                        aria-haspopup="true"
+                        aria-expanded={expanded}
+                        onClick={handleButtonClick}
+                        tabindex="0"
+                        className={`products-component__button ${expanded ? 'dropdown-opened' : 'dropdown-closed'}`}
+                    >
+                        <ProductsIcon />
+                        <span>Products</span>
+                    </button>
+                    {!!expanded ? renderDropdown() : null}
 
-            </div>
-        </InstantSearch>
+                </div>
+            </InstantSearch>
+            <InstantSearch searchClient={searchClient} indexName={algoliaIndexName}>
+                <ProductsDisplay isOpened={!!selectedCategory} onClose={() => {
+                    setSelectedCategory(null);
+                }} selectedCategory={selectedCategory} />
+            </InstantSearch>
+        </>
+
     ) : null;
 }
 
