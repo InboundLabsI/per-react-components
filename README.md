@@ -31,13 +31,16 @@ Upload js and css files from `dist` folder, and add it to the page:
 
 Options must be passed via `data-` attributes, with each component.
 
-| Option                       | Component | Required | Description                       |
-| ---------------------------- |-----------|:--------:| ----------------------------------|
-| data-component               | *         | Yes      | Component name. One of: "Contact" |
-| data-support-url             | Contact   | No       | URL for support menu item.        |
-| data-ticket-submission-url   | Contact   | No       | URL for ticket submission link.   |
-| data-sales-contact-form-id   | Contact   | No       | Sales rep contact HS form id.     |
-| data-sales-contact-portal-id | Contact   | No       | Sales rep contact HS portal id.   |
+| Option                       | Component | Required | Description                                    |
+| ---------------------------- |-----------|:--------:| -----------------------------------------------|
+| data-component               | *         | Yes      | Component name. One of: "Contact", "Products". |
+| data-support-url             | Contact   | No       | URL for support menu item.                     |
+| data-ticket-submission-url   | Contact   | No       | URL for ticket submission link.                |
+| data-sales-contact-form-id   | Contact   | No       | Sales rep contact HS form id.                  |
+| data-sales-contact-portal-id | Contact   | No       | Sales rep contact HS portal id.                |
+| data-algolia-app-id          | Products  | Yes      | Algolia Application ID                         |
+| data-algolia-search-key      | Products  | Yes      | Algolia search-only API key                    |
+| data-algolia-index-name      | Products  | Yes      | Algolia index name                             |
 
 ## Author
 

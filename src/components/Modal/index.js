@@ -9,7 +9,7 @@ const modalStyles = {
         right: 0,
         bottom: 0,
         zIndex: 99999,
-        backgroundColor: 'rgba(0, 0, 0, 0.75)'
+        backgroundColor: 'rgba(255, 255, 255, 0.8)'
     },
     content: {
         position: 'absolute',

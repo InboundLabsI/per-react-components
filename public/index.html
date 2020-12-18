@@ -40,7 +40,17 @@
     -->
   <script>
 
-    // Add "Contact" component to Permobil Navigator
+    // Add "Products" component
+    let productsDiv = document.createElement('div')
+    productsDiv.className = 'permobil-navigator-component'
+    productsDiv.dataset.component = 'products'
+    productsDiv.dataset.algoliaAppId = 'T3FLYU2RPO'
+    productsDiv.dataset.algoliaSearchKey = '719475e80b235809bc40a2afc0f3e1e1'
+    productsDiv.dataset.algoliaIndexName = 'products-at'
+    productsDiv.style.marginLeft = "40px";
+    document.querySelector('.navbar.c--standalone-header-navigation').append(productsDiv)
+
+    // Add "Contact" component
     let contactDiv = document.createElement('div')
     contactDiv.className = 'permobil-navigator-component'
     contactDiv.dataset.component = 'contact'
@@ -50,6 +60,11 @@
     contactDiv.dataset.salesContactPortalId = '1624307'
     document.querySelector('.navbar.c--standalone-header-navigation').append(contactDiv)
   </script>
+  <style>
+    [data-component] {
+      display: inline-block;
+    }
+  </style>
 </body>
 
 </html>

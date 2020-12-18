@@ -1,7 +1,7 @@
 .contact-component {
     font-family: 'Open Sans', sans-serif;
     display: inline-block;
-    margin-left: 40px;
+    margin: 0 2px;
     position: relative;
     
     button {
@@ -19,12 +19,21 @@
         margin: 0;
         padding: 16px 32px;
 
+        @media(max-width: 1023px){
+            padding: 10px 32px;
+        }
+
+        @media(max-width: 576px){
+            padding: 10px 15px;
+        }
+
         &:hover {
             background: var(--permobil-light-grey, #F5F8FA);
             color: var(--permobil-royal-blue, #0067A6);
         }
 
         &:focus {
+            color: var(--permobil-royal-blue, #0067A6);
             outline-width: 0;
         }
         
@@ -35,6 +44,10 @@
 
         svg {
             margin-right: 4px;
+
+            @media(max-width: 576px){
+                margin-right: 0;
+            }
         }
 
         span {
@@ -42,6 +55,10 @@
             font-weight: normal;
             font-size: 13px;
             line-height: 13px;
+
+            @media(max-width: 576px){
+                display: none;
+            }
         }
     }
 
@@ -53,6 +70,10 @@
         padding: 32px;
         position: absolute;
         top: calc(100% + 8px);
+
+        @media(max-width: 1023px) { 
+            padding: 24px;
+        }
 
 
         &-menu {
@@ -101,11 +122,19 @@
     &__dropdown--left {
         left: 0;
         right: auto;
+
+        @media(max-width: 576px){
+            left: -20px;
+        }
     }
 
     &__dropdown--right {
         right: 0;
         left: auto;
+
+        @media(max-width: 576px){
+            right: -20px;
+        }
     }
     &__dropdown--center {
         right: auto;
@@ -310,29 +339,12 @@
     
 }
 
-@media(max-width: 1200px){
-    .contact-component {
-        margin-left: 12px;
-    }
-}
 @media(max-width: 1023px){
     .navbar-menu-wrapper {
         order: 3;
     }
     .navbar-menu {
         z-index: 1;
-    }
-    .contact-component {
-        margin-left: 30px;
-        margin-right: 30px;
-
-        button {
-            padding: 10px 32px;
-        }
-
-        &__dropdown { 
-            padding: 24px;
-        }
     }
 }
 

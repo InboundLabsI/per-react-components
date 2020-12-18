@@ -88,7 +88,7 @@ const Contact = ({ domElement }) => {
 
     const renderSalesNavigator = () => (
         <div className="contact-component__sales">
-            {!!zip && zip.length == 5 && (
+            {!!zip && zip.length === 5 && (
                 <div style={{ 'display': 'none' }}>
                     <iframe title="sales-locator" src={`https://hub.permobil.com/sales-locator-find-v2?zip=${zip}`}></iframe>
                 </div>
@@ -112,7 +112,7 @@ const Contact = ({ domElement }) => {
                     />
                 </div>
             </form>
-            {!!searching && !!zip && zip.length == 5 && (
+            {!!searching && !!zip && zip.length === 5 && (
                 <div className="contact-component__sales-results">
                     <p className="contact-component__sales-searching">Locating the nearest sales specialist for you...</p>
                 </div>
@@ -238,6 +238,7 @@ const Contact = ({ domElement }) => {
             <button
                 aria-haspopup="true"
                 aria-expanded={expanded}
+                tabindex="0"
                 onClick={handleButtonClick}
                 className={`contact-component__button ${expanded ? 'dropdown-opened' : 'dropdown-closed'}`}
             >
