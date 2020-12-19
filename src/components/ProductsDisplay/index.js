@@ -1,9 +1,15 @@
 import React, { useRef, useEffect } from 'react'
-import { CurrentRefinements, InfiniteHits, RefinementList } from 'react-instantsearch-dom';
+import {
+    connectCurrentRefinements,
+    Stats,
+    connectMenu,
+    InfiniteHits,
+    MenuSelect
+} from 'react-instantsearch-dom';
 import './style.scss';
 
 const ProductsDisplay = (props) => {
-    const { isOpened, onClose, selectedCategory } = props;
+    const { isOpened, onClose, selectedCategory, menuItems } = props;
     const componentRef = useRef(null);
 
     const closeFilters = () => {
@@ -21,17 +27,82 @@ const ProductsDisplay = (props) => {
         </a>)
     }
 
+    const ProductsTitle = connectCurrentRefinements(({ items }) => {
+        const categoryItem = items.find(item => item.attribute === 'categories');
+        return !!categoryItem ? (<span>{categoryItem.currentRefinement}</span>) : null;
+    })
+
+    const CurrentRefinements = connectCurrentRefinements(({ items, refine }) => items.length > 0 ? <div className="products-display-component__results-refinements">
+        {items.map(item => (
+            <button key={item.label} onClick={(e) => {
+                e.preventDefault();
+                refine(item.value)
+            }}>
+                <span>{item.currentRefinement}</span>
+                <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5.14648 3.875L7.35938 1.68359L7.81055 1.23242C7.875 1.16797 7.875 1.06055 7.81055 0.974609L7.33789 0.501953C7.25195 0.4375 7.14453 0.4375 7.08008 0.501953L4.4375 3.16602L1.77344 0.501953C1.70898 0.4375 1.60156 0.4375 1.51562 0.501953L1.04297 0.974609C0.978516 1.06055 0.978516 1.16797 1.04297 1.23242L3.70703 3.875L1.04297 6.53906C0.978516 6.60352 0.978516 6.71094 1.04297 6.79688L1.51562 7.26953C1.60156 7.33398 1.70898 7.33398 1.77344 7.26953L4.4375 4.60547L6.62891 6.81836L7.08008 7.26953C7.14453 7.33398 7.25195 7.33398 7.33789 7.26953L7.81055 6.79688C7.875 6.71094 7.875 6.60352 7.81055 6.53906L5.14648 3.875Z" fill="#A7A9AC" />
+                </svg>
+            </button>
+        ))}
+    </div> : null)
 
     const renderResults = () => (
         <div className="products-display-component__results">
             <div className="products-display-component__results-header">
-                <CurrentRefinements />
+                <CurrentRefinements transformItems={items =>
+                    items.filter(item => item.attribute !== 'categories')
+                } />
+                <div className="products-display-component__results-title">
+                    <Stats
+                        translations={{
+                            stats(nbHits) {
+                                return nbHits;
+                            },
+                        }}
+                    />
+                    <ProductsTitle transformItems={items =>
+                        items.filter(item => item.attribute === 'categories')
+                    } />
+                </div>
             </div>
             <div className="products-display-component__results-body">
                 <InfiniteHits hitComponent={renderHit} />
             </div>
         </div>
     )
+
+    const CategoriesMenu = connectMenu(({ items, currentRefinement, refine }) => {
+        return (
+            <ul className="products-display-component__filters-categories">
+                {items.filter(item => menuItems.map(i => i.categoryName).includes(item.label)).map(item => {
+                    const menuItem = menuItems.find(i => i.categoryName === item.label);
+                    if (!!menuItem) {
+                        item.order = menuItem.order
+                    }
+                    return item;
+                }).sort((a, b) => a.order - b.order).map(item => {
+                    const menuItem = menuItems.find(i => i.categoryName === item.label);
+                    return (<li key={item.label}>
+                        <a
+                            href="#"
+                            onClick={event => {
+                                event.preventDefault();
+                                console.log('currentRefinement', currentRefinement);
+                                //refine(currentRefinement[0]);
+                                if (!item.isRefined) {
+                                    refine(item.value);
+                                }
+                            }}
+                            className={item.isRefined ? 'active' : 'not-active'}
+                        >
+                            {!!menuItem.image && (<div style={{ backgroundImage: `url(${menuItem.image})` }}></div>)}
+                            <span>{item.label}</span>
+                        </a>
+                    </li>)
+                })}
+            </ul>
+        )
+    })
 
     const renderFilters = () => (
         <div className="products-display-component__filters">
@@ -42,10 +113,16 @@ const ProductsDisplay = (props) => {
                 </svg>
             </div>
             <div className="products-display-component__filters-body">
-                <RefinementList attribute="categories" defaultRefinement={[selectedCategory]} />
-                <RefinementList attribute="filters.diagnostic" />
-                <RefinementList attribute="filters.movement" />
-                <RefinementList attribute="filters.weight" />
+                <CategoriesMenu attribute="categories" defaultRefinement={selectedCategory} limit={100} />
+                <div className="products-display-component__filters-select">
+                    <label><span>Diagnostic</span><br /><MenuSelect attribute="filters.diagnostic" /></label>
+                </div>
+                <div className="products-display-component__filters-select">
+                    <label><span>Movement Style</span><br /><MenuSelect attribute="filters.movement" /></label>
+                </div>
+                <div className="products-display-component__filters-select">
+                    <label><span>Your Weight</span><br /><MenuSelect attribute="filters.weight" /></label>
+                </div>
             </div>
         </div>
     )

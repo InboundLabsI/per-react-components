@@ -238,7 +238,7 @@ const Contact = ({ domElement }) => {
             <button
                 aria-haspopup="true"
                 aria-expanded={expanded}
-                tabindex="0"
+                tabIndex="0"
                 onClick={handleButtonClick}
                 className={`contact-component__button ${expanded ? 'dropdown-opened' : 'dropdown-closed'}`}
             >

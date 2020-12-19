@@ -11,21 +11,24 @@ const menuItems = [
         title: 'Power Wheelchairs',
         image: 'https://f.hubspotusercontent00.net/hubfs/1624307/navigator-components/power-wheelchairs.png',
         url: 'https://permobilus.com/products/power-wheelchairs-by-permobil',
-        categoryName: 'Power Wheelchairs'
+        categoryName: 'Power Wheelchairs',
+        order: 1
     },
     {
         subtitle: 'EXPLORE',
         title: 'Manual Wheelchairs',
         image: 'https://f.hubspotusercontent00.net/hubfs/1624307/navigator-components/manual-wheelchairs.png',
         url: 'https://permobilus.com/products/tilite-manual-wheelchairs-smartdrive-power-assist/',
-        categoryName: 'Manual Wheelchairs'
+        categoryName: 'Manual Wheelchairs',
+        order: 2
     },
     {
         subtitle: 'EXPLORE',
         title: 'Seating / Positioning',
         image: 'https://f.hubspotusercontent00.net/hubfs/1624307/navigator-components/seating.png',
         url: 'https://permobilus.com/products/seating-and-positioning-by-roho/',
-        categoryName: 'Seating and Positioning'
+        categoryName: 'Seating and Positioning',
+        order: 3
     }
 ]
 
@@ -168,7 +171,7 @@ const Products = ({ domElement }) => {
                         aria-haspopup="true"
                         aria-expanded={expanded}
                         onClick={handleButtonClick}
-                        tabindex="0"
+                        tabIndex="0"
                         className={`products-component__button ${expanded ? 'dropdown-opened' : 'dropdown-closed'}`}
                     >
                         <ProductsIcon />
@@ -179,9 +182,14 @@ const Products = ({ domElement }) => {
                 </div>
             </InstantSearch>
             <InstantSearch searchClient={searchClient} indexName={algoliaIndexName}>
-                <ProductsDisplay isOpened={!!selectedCategory} onClose={() => {
-                    setSelectedCategory(null);
-                }} selectedCategory={selectedCategory} />
+                <ProductsDisplay
+                    isOpened={!!selectedCategory}
+                    onClose={() => {
+                        setSelectedCategory(null);
+                    }}
+                    selectedCategory={selectedCategory}
+                    menuItems={menuItems}
+                />
             </InstantSearch>
         </>
 
