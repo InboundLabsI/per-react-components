@@ -66,11 +66,7 @@ const Products = ({ domElement }) => {
         const search = window.location.search;
         const params = new URLSearchParams(search);
         const dev = params.get('dev');
-        if (!!dev && dev === 'testing') {
-            setSelectedCategory(item.categoryName);
-        } else {
-            window.location.href = item.url
-        }
+        setSelectedCategory(item.categoryName);
     }
 
     const onHitKeyUp = (event, hit) => {

@@ -157,6 +157,21 @@
             }
 
             select {
+                appearance:none;
+                background-color: #FFFFFF;
+                background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAICAYAAADN5B7xAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAB3SURBVHgBhY67DYAwDEQDaSgpU1KmzAiMQMEAjMYADERJ6YKCkpKzsCUr4XPSixTnnDvnbgX3r4YPDyKYZLi9mAcwAqrNsBeezEkvnLCDQ5I60II1M59g4bmXBzJLQZaiMc9at8rik/yqUjPZSlY2qTB/SasVugD0AhbkeZai8wAAAABJRU5ErkJggg==');
+                background-position: calc(100% - 13px) 15px;
+                background-size: 12px 8px;
+                background-repeat: no-repeat;
+                border: 1px solid #CCCCCC;
+                border-radius: 4px;
+                box-sizing: border-box;
+                color: #000000;
+                font-weight: normal;
+                font-size: 13px;
+                line-height: 18px;
+                padding: 10px 12px;
+                position: relative;
                 width: 100%;
             }
             
