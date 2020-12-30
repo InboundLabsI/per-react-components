@@ -33,12 +33,12 @@ const modalStyles = {
 };
 
 const Modal = (props) => {
-    const { modalIsOpen, closeModal, children } = props;
+    const { modalIsOpen, closeModal, width, children } = props;
     return (
         <ReactModal
             isOpen={modalIsOpen}
             onRequestClose={closeModal}
-            style={modalStyles}
+            style={{ ...modalStyles, content: { ...modalStyles.content, width: width || '90%' } }}
             contentLabel="Example Modal"
             ariaHideApp={false}
         >

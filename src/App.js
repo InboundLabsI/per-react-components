@@ -2,6 +2,7 @@ import React from 'react';
 import './App.scss';
 import Contact from './components/Contact'
 import Products from './components/Products'
+import User from './components/User'
 
 function App({ domElement }) {
   const component = domElement.getAttribute("data-component")
@@ -18,6 +19,11 @@ function App({ domElement }) {
   if (!!component && component === 'products') {
     domElement.classList.add('init');
     return <Products domElement={domElement} />
+  }
+
+  if (!!component && component === 'user' && !!window && !!window.booya) {
+    domElement.classList.add('init');
+    return <User domElement={domElement} />
   }
 
   return null;
