@@ -26,6 +26,11 @@
         text-align: center;
         padding: 8px 10px;
         margin: 0 0 0 14px;
+        white-space: nowrap;
+
+        @media(max-width: 767px){
+            display: none;
+        }
 
         &:hover {
             background: none;
@@ -130,7 +135,7 @@
         flex-direction: row;
         flex-wrap: nowrap;
         justify-content: flex-start;
-        margin: 0 2px;
+        margin: 0 0 0 50px;
         padding: 8px;
 
         &:hover {
@@ -192,8 +197,9 @@
             color: var(--permobil-charcoal, #414042);
             font-weight: 600;
             font-size: 13px;
-            line-height: 120%;
+            line-height: normal;
             margin-right: 8px;
+            white-space: nowrap;
 
             @media(max-width: 576px){
                 display: none;
