@@ -108,7 +108,7 @@ const Contact = ({ domElement }) => {
                         onChange={handleZipInputChange}
                         id="zipcode"
                         name="zipcode"
-                        maxlength="5"
+                        maxLength="5"
                     />
                 </div>
             </form>

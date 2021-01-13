@@ -164,6 +164,93 @@
         transform: translateX(-50%);
     }
 
+    .ais-SearchBox {
+        margin-top: 20px;
+        position: relative;
+    
+        input[type="search"] {
+            background: #F5F8FA;
+            border: none;
+            border-radius: 26px;
+            box-sizing: border-box;
+            color: #0A1318;
+            font-family: 'Open Sans', sans-serif;
+            font-weight: normal;
+            font-size: 12px;
+            height: 36px;
+            line-height: 16px;
+            padding: 10px 12px 10px 40px;
+            width: 100%;
+        }
+    
+        button.ais-SearchBox-submit {
+            background: none !important;
+            height: 16px;
+            left: 12px;
+            padding: 0;
+            position: absolute;
+            top: 10px;
+            width: 16px;
+        }
+    
+        &-reset {
+            display: none !important;
+        }
+    }
+    
+    .ais-Hits {
+    
+        &-list {
+            margin: 15px 0 0;
+            max-height: 150px;
+            overflow: auto;
+            padding: 0 32px;
+            width: 100%;
+            transform: translateX(-32px);
+    
+            @media(max-width: 1023px) { 
+                padding: 0 24px;
+                transform: translateX(-24px);
+            }
+        }
+    
+        &-item {
+            list-style-type: none;
+            margin: 0;
+            padding: 5px 0;
+            position: relative;
+    
+            p {
+                color: #191919;
+                cursor: pointer;
+                font-weight: normal;
+                font-size: 13px;
+                line-height: 18px;
+                margin: 0;
+                padding: 0;
+                position: relative;
+                z-index: 1;
+            }
+    
+            &:hover:before {
+                content: '';
+                background: #EDF8FF;
+                display: block;
+                position: absolute;
+                height: 100%;
+                left: -32px;
+                mix-blend-mode: multiply;
+                top: 0;
+                width: calc(100% + 64px);
+    
+                @media(max-width: 1023px){
+                    left: -24px;
+                    width: calc(100% + 48px);
+                }
+            }
+        }
+    }
+
 }
 
 @media(max-width: 1023px){
@@ -175,89 +262,3 @@
     }
 }
 
-.ais-SearchBox {
-    margin-top: 20px;
-    position: relative;
-
-    input[type="search"] {
-        background: #F5F8FA;
-        border: none;
-        border-radius: 26px;
-        box-sizing: border-box;
-        color: #0A1318;
-        font-family: 'Open Sans', sans-serif;
-        font-weight: normal;
-        font-size: 12px;
-        height: 36px;
-        line-height: 16px;
-        padding: 10px 12px 10px 40px;
-        width: 100%;
-    }
-
-    button.ais-SearchBox-submit {
-        background: none !important;
-        height: 16px;
-        left: 12px;
-        padding: 0;
-        position: absolute;
-        top: 10px;
-        width: 16px;
-    }
-
-    &-reset {
-        display: none !important;
-    }
-}
-
-.ais-Hits {
-
-    &-list {
-        margin: 15px 0 0;
-        max-height: 150px;
-        overflow: auto;
-        padding: 0 32px;
-        width: 100%;
-        transform: translateX(-32px);
-
-        @media(max-width: 1023px) { 
-            padding: 0 24px;
-            transform: translateX(-24px);
-        }
-    }
-
-    &-item {
-        list-style-type: none;
-        margin: 0;
-        padding: 5px 0;
-        position: relative;
-
-        p {
-            color: #191919;
-            cursor: pointer;
-            font-weight: normal;
-            font-size: 13px;
-            line-height: 18px;
-            margin: 0;
-            padding: 0;
-            position: relative;
-            z-index: 1;
-        }
-
-        &:hover:before {
-            content: '';
-            background: #EDF8FF;
-            display: block;
-            position: absolute;
-            height: 100%;
-            left: -32px;
-            mix-blend-mode: multiply;
-            top: 0;
-            width: calc(100% + 64px);
-
-            @media(max-width: 1023px){
-                left: -24px;
-                width: calc(100% + 48px);
-            }
-        }
-    }
-}
