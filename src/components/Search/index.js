@@ -5,6 +5,7 @@ import './style.scss';
 import CloseIcon from '../Icons/CloseIcon'
 import DocumentIcon from '../Icons/DocumentIcon'
 import ProductIcon from '../Icons/ProductIcon'
+import ChevronLeftIcon from '../Icons/ChevronLeftIcon'
 
 const indexTitles = {
     'products-at': 'Product pages',
@@ -18,13 +19,23 @@ const Search = ({ domElement }) => {
     const algoliaSearchKey = domElement.getAttribute('data-algolia-search-key');
     const algoliaIndices = domElement.getAttribute('data-algolia-indices').split(',');
     const [isResultsVisible, setIsResultsVisible] = useState(false);
-
+    const [selectedIndex, setSelectedIndex] = useState(false);
     const searchClient = algoliasearch(algoliaAppID, algoliaSearchKey);
 
     const handleHitClick = (url) => {
         if (!!url) {
             window.location.href = url;
         }
+    }
+
+    const handleSeeAllClick = (e, idx) => {
+        e.preventDefault();
+        setSelectedIndex(idx);
+    }
+
+    const handleBackToResultsClick = (e) => {
+        e.preventDefault();
+        setSelectedIndex(false);
     }
 
     const renderProductsHit = ({ hit }) => {
@@ -51,6 +62,24 @@ const Search = ({ domElement }) => {
         )
     }
 
+    const IndexResults = connectStateResults(
+        ({ searchState, searchResults, children, idx }) =>
+          searchResults && searchResults.nbHits !== 0 ? (
+            <div>
+                {children}
+                {searchResults.nbHits > 4 && !selectedIndex && (
+                    <div className="search-component__results-see-all">
+                        <button onClick={(e)=>{handleSeeAllClick(e, idx)}}>See all</button>
+                    </div>
+                )}
+            </div>
+          ) : (
+            <div className="search-component__results-empty">
+              No results have been found for "{searchState.query}" in {indexTitles[idx]}
+            </div>
+          )
+      );
+
     const renderIndexResults = (idx) => {
         const renderFuntions = {
             'products-at': renderProductsHit,
@@ -63,8 +92,10 @@ const Search = ({ domElement }) => {
                 )}
                 <div className="search-component__results-index-hits">
                     <Index indexName={idx}>
-                        <Configure hitsPerPage={4} />
-                        <Hits hitComponent={renderFuntions[idx]} />
+                        <IndexResults idx={idx}>
+                            <Configure hitsPerPage={!!selectedIndex ? 1000 : 4} />
+                            <Hits hitComponent={renderFuntions[idx]} />
+                        </IndexResults>
                     </Index>
                 </div>
             </div>
@@ -72,18 +103,41 @@ const Search = ({ domElement }) => {
     }
 
     const CloseSearchButton = connectCurrentRefinements(({ items, refine }) => (
-        <button onClick={() => refine(items)} disabled={!items.length} ><CloseIcon /></button>
+        <button 
+            onClick={() => {
+                setSelectedIndex(false);
+                refine(items);
+            }} 
+            disabled={!items.length} 
+        >
+            <CloseIcon />
+        </button>
     ));
 
     const renderResults = connectStateResults(({ searchState }) =>
         searchState && searchState.query ? (
             <div className="search-component__results">
                 <div className="search-component__results-header">
-                    <p>Searching for "{searchState.query}"</p>
+                    {!!selectedIndex ? 
+                        <button 
+                            className="search-component__results-back" 
+                            onClick={handleBackToResultsClick}
+                        >
+                                <ChevronLeftIcon />
+                                <span>Back to all results for "{searchState.query}"</span>
+                        </button> 
+                    : 
+                        <p>Searching for "{searchState.query}"</p>
+                    }
                     <CloseSearchButton clearsQuery />
                 </div>
                 <div className="search-component__results-container">
-                    {!!algoliaIndices && algoliaIndices.map(idx => (
+                    {!!algoliaIndices && algoliaIndices.filter(index=>{
+                        if(!!selectedIndex){
+                            return index === selectedIndex;
+                        }
+                        return true;
+                    }).map(idx => (
                         <>{renderIndexResults(idx)}</>
                     ))}
                 </div>
@@ -102,6 +156,9 @@ const Search = ({ domElement }) => {
                 }}
                 onFocus={() => {
                     setIsResultsVisible(true);
+                }}
+                onReset={()=>{
+                    setSelectedIndex(false);
                 }}
             />
         </div>

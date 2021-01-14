@@ -4,6 +4,10 @@
     height: 36px;
     margin: 0 36px;
 
+    @media(max-width: 767px){
+        margin: 0 15px;
+    }
+
     &__searchbox {
 
         & > div {
@@ -25,6 +29,10 @@
             line-height: 16px;
             padding: 11px 16px 9px 40px;
             width: 223px;
+
+            @media(max-width: 767px){
+                width: 150px;
+            }
 
             &:focus {
                 outline-width: 0px;
@@ -79,13 +87,13 @@
     &__results {
         background: #FFFFFF;
         left: 50%;
-        max-height: calc(100vh - 77px);
+        height: calc(100vh - 77px);
         max-width: 1170px;
         overflow: auto;
         position: fixed;
         top: 77px;
         transform: translateX(-50%);
-        width: 100vw;
+        width: 95vw;
 
         &-header {
             align-items: center;
@@ -102,7 +110,11 @@
                 color: #0A1C2D;
                 opacity: 0.6;
                 margin: 0;
+                min-height: 26px;
+                overflow: hidden;
                 padding: 0;
+                text-overflow: ellipsis;
+                white-space: nowrap;
             }
 
             button {
@@ -117,9 +129,10 @@
         }
 
         &-container {
+            box-sizing: border-box;
             margin: 0 auto 0;
             max-width: 770px;
-            padding: 0 0 68px;
+            padding: 0 32px 68px;
             width: 100%;
         }
 
@@ -137,7 +150,7 @@
                 font-weight: normal;
                 font-size: 18px;
                 line-height: 140%;
-                margin: 0 0 34px;
+                margin: 0 0 20px;
                 opacity: 0.8;
                 text-align: left;
             }
@@ -145,7 +158,7 @@
             &-hits {
 
                 ul {
-                    align-items: flex-start;
+                    align-items: stretch;
                     display: flex;
                     flex-direction: row;
                     justify-content: flex-start;
@@ -163,6 +176,15 @@
 
                         &:nth-child(2n) {
                             margin: 0 0 22px 15px;
+                        }
+
+                        @media(max-width: 576px) {
+                            width: 100%;
+                            margin: 0 0 22px 0;
+
+                            &:nth-child(2n) {
+                                margin: 0 0 22px 0;
+                            }
                         }
 
                         &:hover {
@@ -219,6 +241,49 @@
                 opacity: 0.6;
                 white-space: nowrap;
                 text-overflow: ellipsis;
+                overflow: hidden;
+            }
+        }
+
+        &-empty {
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        &-see-all {
+            text-align: right;
+            margin: 10px 0 22px;
+
+            button {
+                color: #0067A6;
+                cursor: pointer;
+                border: none;
+                background: transparent;
+                font-weight: bold;
+                font-size: 16px;
+                line-height: 120%;
+
+                &:focus {
+                    outline-width: 0px;
+                }
+            }
+        }
+
+        &-back {
+            align-items: center;
+            color: #0A1C2D;
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            flex-wrap: nowrap;
+            font-weight: bold;
+            font-size: 14px;
+            line-height: 150%;
+            overflow: hidden;
+
+            span {
+                text-overflow: ellipsis;
+                white-space: nowrap;
                 overflow: hidden;
             }
         }
