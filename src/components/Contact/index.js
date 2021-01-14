@@ -14,8 +14,11 @@ const Contact = ({ domElement }) => {
     const [searching, setSearching] = useState(false)
     const [salesOpened, setSalesOpened] = useState(false);
     const [guessedZip, setGuessedZip] = useState("");
-    const [salesRep, setSalesRep] = useState([]);
-    const [zip, setZip] = useState("");
+    let savedReps = localStorage.getItem('savedReps');
+    if(!!savedReps) savedReps = JSON.parse(savedReps);
+    const [salesRep, setSalesRep] = useState(!!savedReps ? savedReps : []);
+    const savedZip = localStorage.getItem('savedZip');
+    const [zip, setZip] = useState(!!savedZip ? savedZip : "");
     const [selectedRep, setSelectedRep] = useState(null)
     const [showModalForm, setShowModalForm] = useState(false)
     const [dropdownAlignment, setDropdownAlignment] = useState('left')
@@ -199,6 +202,9 @@ const Contact = ({ domElement }) => {
                     setGuessedZip(data.zip);
                     setZip(data.zip);
                     setSearching(true)
+                    if(!savedZip){
+                        localStorage.setItem('savedZip', data.zip)
+                    }
                     return;
                 }
 
@@ -212,6 +218,8 @@ const Contact = ({ domElement }) => {
                     setSalesRep(result);
                     setZipError(null);
                     setSearching(false)
+                    localStorage.setItem('savedZip', data.zip);
+                    localStorage.setItem('savedReps', JSON.stringify(result));
                     return;
                 }
             }
