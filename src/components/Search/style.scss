@@ -87,11 +87,11 @@
     &__results {
         background: #FFFFFF;
         left: 50%;
-        height: calc(100vh - 77px);
+        height: calc(100vh - var(--header-height, 60px));
         max-width: 1170px;
         overflow: auto;
         position: fixed;
-        top: 77px;
+        top: var(--header-height, 60px);
         transform: translateX(-50%);
         width: 95vw;
 

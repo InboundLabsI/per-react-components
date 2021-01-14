@@ -18,6 +18,7 @@ const Search = ({ domElement }) => {
     const algoliaAppID = domElement.getAttribute('data-algolia-app-id');
     const algoliaSearchKey = domElement.getAttribute('data-algolia-search-key');
     const algoliaIndices = domElement.getAttribute('data-algolia-indices').split(',');
+    const headerHeight = domElement.getAttribute('data-header-height');
     const [isResultsVisible, setIsResultsVisible] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(false);
     const searchClient = algoliasearch(algoliaAppID, algoliaSearchKey);
@@ -179,7 +180,7 @@ const Search = ({ domElement }) => {
 
     return !!algoliaAppID && !!algoliaSearchKey && !!algoliaIndices && algoliaIndices.length > 0 ? (
         <InstantSearch searchClient={searchClient} indexName={algoliaIndices[0]}>
-            <div className="search-component" id="search-component" ref={componentRef}>
+            <div className="search-component" id="search-component" ref={componentRef} style={{'--header-height': !!headerHeight ? headerHeight+'px' : '60px'}}>
                 {renderSearchBox()}
                 {!!isResultsVisible ? renderResults() : null}
             </div>
