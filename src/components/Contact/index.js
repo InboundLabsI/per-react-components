@@ -6,6 +6,7 @@ import UserHeadsetIcon from '../Icons/UserHeadsetIcon'
 import QuestionCircleIcon from '../Icons/QuestionCircleIcon'
 import LocationIcon from '../Icons/LocationIcon'
 import Modal from '../Modal'
+import LoadingIcon from '../Icons/LoadingIcon';
 
 const Contact = ({ domElement }) => {
     const [expanded, setExpanded] = useState(false);
@@ -117,7 +118,8 @@ const Contact = ({ domElement }) => {
             </form>
             {!!searching && !!zip && zip.length === 5 && (
                 <div className="contact-component__sales-results">
-                    <p className="contact-component__sales-searching">Locating the nearest sales specialist for you...</p>
+                    <p className="contact-component__sales-searching">Searching in zip code <strong>{zip}...</strong></p>
+                    <div style={{textAlign: 'center'}}><LoadingIcon /></div>
                 </div>
             )}
             {!!salesRep && salesRep.length > 0 && !searching && !!zip && (
@@ -199,10 +201,10 @@ const Contact = ({ domElement }) => {
 
 
                 if (!!data.type && data.type === 'default_zip' && !!data.zip) {
-                    setGuessedZip(data.zip);
-                    setZip(data.zip);
-                    setSearching(true)
                     if(!savedZip){
+                        setGuessedZip(data.zip);
+                        setZip(data.zip);
+                        setSearching(true)
                         localStorage.setItem('savedZip', data.zip)
                     }
                     return;
@@ -293,7 +295,7 @@ const Contact = ({ domElement }) => {
                                             console.log('Submit!')
                                         }}
                                         onReady={(form) => onContactRepFormReady(form, selectedRep)}
-                                        loading={<p>Loading...</p>}
+                                        loading={<div style={{textAlign: 'center'}}><LoadingIcon /></div>}
                                     />
                                 </div>
                             )}

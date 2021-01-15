@@ -477,4 +477,41 @@
             }
         }
     }
+
+    
+
+
+}
+
+/* SVg Loading animation */
+$len: 242px;
+$dot: 0.02;
+$time: 1.8s;
+#loading-outline {
+    stroke-dasharray: $len * $dot, $len * $dot, $len * $dot, $len * $dot,
+    $len * $dot, $len;
+    stroke-dashoffset: 0;
+    animation: anim $time linear infinite;
+}
+@keyframes anim {
+    0% {
+        stroke-dasharray: $len * $dot, $len * $dot, $len * $dot, $len * $dot,
+        $len * $dot, $len;
+        stroke-dashoffset: 0;
+    }
+    12.5% {
+        stroke-dasharray: $len * $dot * 1.2, $len * $dot, $len * $dot * 1.2,
+        $len * $dot, $len * $dot * 1.2, $len;
+        stroke-dashoffset: -$len * 0.11;
+    }
+    43.75% {
+        stroke-dasharray: $len * $dot * 1.5, $len * $dot, $len * $dot * 1.5,
+        $len * $dot, $len * $dot * 1.5, $len;
+        stroke-dashoffset: -$len * 0.35;
+    }
+    100% {
+        stroke-dasharray: $len * $dot, $len * $dot, $len * $dot, $len * $dot,
+        $len * $dot, $len;
+        stroke-dashoffset: -$len * 0.99;
+    }
 }
