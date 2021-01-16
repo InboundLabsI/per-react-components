@@ -98,7 +98,7 @@ const Contact = ({ domElement }) => {
                 </div>
             )}
             <p className="contact-component__sales-title">Sales</p>
-            <form className="contact-component__sales-form">
+            <div className="contact-component__sales-form">
                 <label className="contact-component__sales-form-label" htmlFor="zipcode">Type Zipcode</label>
                 <div className="contact-component__sales-form-input">
                     {!!zipError && (
@@ -113,9 +113,14 @@ const Contact = ({ domElement }) => {
                         id="zipcode"
                         name="zipcode"
                         maxLength="5"
+                        onKeyPress={e => { 
+                            if (e.charCode === 13) {
+                                e.preventDefault();
+                            }
+                         }}
                     />
                 </div>
-            </form>
+            </div>
             {!!searching && !!zip && zip.length === 5 && (
                 <div className="contact-component__sales-results">
                     <p className="contact-component__sales-searching">Searching in zip code <strong>{zip}...</strong></p>
@@ -291,8 +296,9 @@ const Contact = ({ domElement }) => {
                                     <HubspotForm
                                         portalId='1624307'
                                         formId='4553cfe7-9000-4211-8f8c-31b856fb8910'
+                                        inlineMessage="Thanks for submitting the form"
                                         onSubmit={() => {
-                                            console.log('Submit!')
+                                            console.log('Submit!');
                                         }}
                                         onReady={(form) => onContactRepFormReady(form, selectedRep)}
                                         loading={<div style={{textAlign: 'center'}}><LoadingIcon /></div>}

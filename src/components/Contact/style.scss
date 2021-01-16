@@ -177,19 +177,16 @@
 
             &-input {
                 align-items: center;
-                background: var(--permobil-light-grey, #F5F8FA);
-                border: none;
-                border-radius: 31px;
-                box-sizing: border-box;
+                
                 display: flex;
                 flex-direction: row;
                 flex-wrap: nowrap;
                 justify-content: flex-start;
-                height: 36px;
                 max-width: 50%;
-                padding: 12px;
+                padding: 0;
                 position: relative;
                 width: 100%;
+
 
                 &-error {
                     color: red;
@@ -210,22 +207,31 @@
                 }
 
                 svg {
+                    bottom: 11px;
+                    left: 22px;
                     margin-right: 21px;
                     min-width: 13px;
+                    position: absolute;
+                    z-index: 2;
                 }
 
                 input {
-                    background: transparent;
+                    background: var(--permobil-light-grey, #F5F8FA);
                     border: none;
+                    border-radius: 31px;
                     box-sizing: border-box;
                     color: #191919;
                     font-style: normal;
                     font-weight: normal;
                     font-size: 12px;
                     line-height: 16px;
+                    height: 36px;
                     margin: 0;
-                    padding: 0;
-                    width: calc(100% - 13px - 21px);
+                    outline-width: 0px;
+                    padding: 12px 12px 12px 50px;
+                    position: relative;
+                    width: 100%;
+                    z-index: 1;
 
                     &:focus {
                         outline-width: 0px;
