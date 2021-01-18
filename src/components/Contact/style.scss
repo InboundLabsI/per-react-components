@@ -1,16 +1,16 @@
 .contact-component {
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'GT America Trial', 'Open Sans', sans-serif;
     display: inline-block;
     margin: 0 2px;
     position: relative;
     
     button {
         align-items: center;
-        background: var(--permobil-light-grey, #F5F8FA);
+        background: #F5F8FA;
         border: none;
-        border-radius: 9px;
+        border-radius: 0px;
         box-shadow: none;
-        color: var(--permobil-charcoal, #414042);
+        color: #0A1318;
         cursor: pointer;
         display: flex;
         flex-direction: row;
@@ -28,18 +28,19 @@
         }
 
         &:hover {
-            background: var(--permobil-light-grey, #F5F8FA);
-            color: var(--permobil-royal-blue, #0067A6);
+            background: #F5F8FA;
+            color: #0067A6;
         }
 
         &:focus {
-            color: var(--permobil-royal-blue, #0067A6);
+            background: #FFFFFF;
+            color: #0067A6;
             outline-width: 0;
         }
         
         &.dropdown-opened {
-            background: var(--permobil-light-blue, #EDF8FF);
-            color: var(--permobil-royal-blue, #0067A6);
+            background: #FFFFFF;
+            color: #0067A6;
         }
 
         svg {
@@ -52,7 +53,7 @@
 
         span {
             font-style: normal;
-            font-weight: normal;
+            font-weight: 500;
             font-size: 13px;
             line-height: 13px;
 
@@ -64,12 +65,12 @@
 
     &__dropdown {
         background: #FFFFFF;
-        border-radius: 4px;
-        box-shadow: 0 1px 2px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.07), 0 4px 8px rgba(0,0,0,0.07), 0 8px 16px rgba(0,0,0,0.07), 0 16px 32px rgba(0,0,0,0.07), 0 32px 64px rgba(0,0,0,0.07);
+        border-radius: 0px;
+        box-shadow: inset 0px 4px 0px #0067A6;
         left: 0;
         padding: 32px;
         position: absolute;
-        top: calc(100% + 8px);
+        top: calc(100% + 4px);
 
         @media(max-width: 1023px) { 
             padding: 24px;
@@ -77,7 +78,7 @@
 
 
         &-menu {
-            min-width: 160px;
+            min-width: 194px;
             margin: 0;
             padding: 0;
 
@@ -94,8 +95,8 @@
                     flex-direction: row;
                     flex-wrap: nowrap;
                     font-style: normal;
-                    font-weight: normal;
-                    font-size: 13px;
+                    font-weight: 500;
+                    font-size: 17px;
                     justify-content: flex-start;
                     line-height: normal;
                     text-decoration: none;
@@ -106,7 +107,11 @@
                     }
 
                     svg {
+                        width: 100%;
+                        height: auto;
                         margin-right: 6px;
+                        max-width: 17px;
+                        max-height: 17px;
                     }
                 }
             }
@@ -115,6 +120,55 @@
                 border-bottom: none;
                 margin: 0;
                 padding: 0;
+            }
+        }
+
+        &-support {
+            padding-top: 27px;
+            margin-top: 27px;
+            border-top: 1px solid #DFE1E5;
+
+            &-link {
+                align-items: center;
+                color: #0067A6;
+                display: flex;
+                flex-direction: row;
+                flex-wrap: nowrap;
+                justify-content: flex-start;
+                font-style: normal;
+                font-weight: 500;
+                font-size: 17px;
+                line-height: normal;
+                margin: 0;
+                padding: 0;
+                text-decoration: none;
+
+                &:visited {
+                    color: #0067A6;
+                }
+
+                &:hover {
+                    color: #0067A6;
+                    text-decoration: none;
+                }
+
+                &:focus {
+                    color: #0067A6;
+                    text-decoration: none;
+                    outline-width: 0px;
+                }
+
+                svg {
+                    margin-right: 6px;
+                }
+
+                span {
+                    color: inherit;
+                    font-size: inherit;
+                    font-weight: inherit;
+                    line-height: inherit;
+                }
+
             }
         }
     }
@@ -143,34 +197,49 @@
     }
 
     &__sales {
-        width: 260px;
+        min-width: 194px;
 
         &-title {
-            color: var(--permobil-primary, #0A1C2D);
-            font-style: normal;
-            font-weight: normal;
-            font-size: 18px;
-            line-height: 140%;
-            margin: 0 0 21px;
-            opacity: 0.8;
-            padding: 0;
-        }
-
-        &-form {
             align-items: center;
+            color: #191919;
             display: flex;
             flex-direction: row;
             flex-wrap: nowrap;
-            justify-content: space-between;
+            justify-content: flex-start;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 17px;
+            line-height: normal;
+            margin: 0 0 12px;
+            padding: 0;
+
+            svg {
+                margin-right: 6px;
+            }
+
+            span {
+                color: inherit;
+                font-size: inherit;
+                font-weight: inherit;
+                line-height: inherit;
+            }
+        }
+
+        &-form {
+            align-items: flex-start;
+            display: flex;
+            flex-direction: column;
+            flex-wrap: nowrap;
+            justify-content: flex-start;
 
             label {
                 color: #191919;
                 font-style: normal;
                 font-weight: normal;
-                font-size: 13px;
-                line-height: 18px;
-                margin: 0 12px 0 0;
-                max-width: calc(50% - 12px);
+                font-size: 14px;
+                line-height: 150%;
+                margin: 0 0 13px;
+                max-width: 100%;
                 padding: 0;
                 width: 100%;
             }
@@ -182,43 +251,34 @@
                 flex-direction: row;
                 flex-wrap: nowrap;
                 justify-content: flex-start;
-                max-width: 50%;
+                max-width: 100%;
                 padding: 0;
                 position: relative;
                 width: 100%;
 
 
                 &-error {
-                    color: red;
+                    color: #E51A92;
                     font-style: normal;
                     font-weight: normal;
-                    font-size: 11px;
-                    left: 0;
-                    line-height: 120%;
-                    margin: 0;
-                    opacity: 0.8;
+                    font-size: 12px;
+                    line-height: 150%;
+                    margin: 12px 0 0;
                     overflow: hidden;
                     padding: 0;
-                    position: absolute;
                     text-overflow: ellipsis;
-                    top: -20px;
                     width: 100%;
                     white-space: nowrap;
                 }
 
                 svg {
-                    bottom: 11px;
-                    left: 22px;
-                    margin-right: 21px;
-                    min-width: 13px;
-                    position: absolute;
-                    z-index: 2;
+                    display: none;
                 }
 
                 input {
-                    background: var(--permobil-light-grey, #F5F8FA);
+                    background: #F5F8FA;
                     border: none;
-                    border-radius: 31px;
+                    border-radius: 0px;
                     box-sizing: border-box;
                     color: #191919;
                     font-style: normal;
@@ -228,8 +288,9 @@
                     height: 36px;
                     margin: 0;
                     outline-width: 0px;
-                    padding: 12px 12px 12px 50px;
+                    padding: 12px 17px 12px;
                     position: relative;
+                    text-align: center;
                     width: 100%;
                     z-index: 1;
 
@@ -241,63 +302,75 @@
         }
 
         &-searching {
-            color: var(--permobil-primary, #0A1C2D);
+            color: #191919;
             font-style: normal;
             font-weight: normal;
-            font-size: 12px;
-            line-height: normal;
+            font-size: 14px;
+            line-height: 140%;
             margin: 0;
-            opacity: 0.8;
             padding: 0;
         }
 
+        &-loading {
+            margin-top: -10px;
+            text-align: center;
+            margin-bottom: -30px;
+
+            svg {
+                max-width: 130px;
+            }
+        }
+
         &-results {
-            border-top: 1px solid rgba(65, 64, 66, 0.1);
-            margin: 12px 0 0;
-            padding: 12px 0 0;
 
             &-title {
-                color: var(--permobil-primary, #0A1C2D);
+                color: #191919;
                 font-style: normal;
-                font-weight: 600;
+                font-weight: normal;
                 font-size: 14px;
-                line-height: 140%;
-                margin: 0;
-                opacity: 0.8;
+                line-height: 150%;
+                margin: 0 0 12px;
                 padding: 0;
+            }
+            &-change {
+                color: #0067A6;
+                cursor: pointer;
+                font-weight: 600;
             }
         }
 
         &-result {
             align-items: center;
-            background: var(--permobil-light0grey, #F5F8FA);
-            border-radius: 4px;
+            background: #fff;
+            border-radius: 0px;
             display: flex;
             flex-direction: row;
             flex-wrap: nowrap;
             justify-content: flex-start;
             margin-top: 12px;
-            padding: 12px;
+            padding: 0;
+            width: 260px;
+
 
             &-image {
                 background-color: #eee;
                 background-position: center center;
                 background-repeat: no-repeat;
                 background-size: cover;
-                border-radius: 50%;
-                height: 48px;
-                margin-right: 8px;
-                min-width: 48px;
+                border-radius: 0;
+                height: 78px;
+                margin-right: 10px;
+                min-width: 78px;
             }
 
             &-details {
                 overflow: hidden;
 
                 &-name {
-                    color: var(--permobil-charcoal, #414042);
+                    color: #0A1318;
                     font-style: normal;
-                    font-weight: 600;
-                    font-size: 11px;
+                    font-weight: bold;
+                    font-size: 12px;
                     line-height: 120%;
                     margin: 0 0 4px;
                     overflow: hidden;
@@ -307,12 +380,12 @@
                 }
 
                 &-jobtitle {
-                    color: var(--permobil-charcoal, #414042);
+                    color: #0A1318;
                     font-style: normal;
                     font-weight: normal;
-                    font-size: 11px;
+                    font-size: 10px;
                     line-height: 120%;
-                    margin: 0 0 6px;
+                    margin: 0 0 8px;
                     opacity: 0.8;
                     overflow: hidden;
                     padding: 0;
@@ -321,9 +394,9 @@
                 }
 
                 button {
-                    background: var(--permobil-ocean, #009AC7);
+                    background: #0067A6;
                     border: none;
-                    border-radius: 3px;
+                    border-radius: 2px;
                     box-sizing: border-box;
                     color: #FFFFFF;
                     cursor: pointer;
@@ -335,7 +408,7 @@
                     padding: 5px 9px;
 
                     &:hover {
-                        background: var(--permobil-ocean, #009AC7);
+                        background: #0067A6;
                         color: #FFFFFF;
                     }
                 }
@@ -355,7 +428,7 @@
 }
 
 .sales-modal {
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'GT America Trial', 'Open Sans', sans-serif;
     padding-bottom: 50px;
 
     &__image {
@@ -384,7 +457,7 @@
     }
 
     &__button {
-        font-family: 'Open Sans', sans-serif;
+        font-family: 'GT America Trial', 'Open Sans', sans-serif;
         background: #1668a6;
         border: 0 none;
         border-radius: 0;

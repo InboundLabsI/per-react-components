@@ -28,6 +28,7 @@ const Contact = ({ domElement }) => {
     const ticketSubmissionURL = domElement.getAttribute('data-ticket-submission-url')
     const salesContactFormId = domElement.getAttribute('data-sales-contact-form-id')
     const salesContactPortalId = domElement.getAttribute('data-sales-contact-portal-id')
+    const headerHeight = domElement.getAttribute('data-header-height');
 
     const handleSalesMenuClick = (event) => {
         event.preventDefault();
@@ -35,7 +36,7 @@ const Contact = ({ domElement }) => {
     }
 
     const handleZipInputChange = (event) => {
-        if (!!event.target.value) {
+        if (!!event.target.value && event.target.value.length >= 5) {
             setSearching(true)
         } else {
             setSearching(false)
@@ -97,69 +98,65 @@ const Contact = ({ domElement }) => {
                     <iframe title="sales-locator" src={`https://hub.permobil.com/sales-locator-find-v2?zip=${zip}`}></iframe>
                 </div>
             )}
-            <p className="contact-component__sales-title">Sales</p>
-            <div className="contact-component__sales-form">
-                <label className="contact-component__sales-form-label" htmlFor="zipcode">Type Zipcode</label>
-                <div className="contact-component__sales-form-input">
+            <p className="contact-component__sales-title"><UserHeadsetIcon /> <span>Sales</span></p>
+            {!searching && (!salesRep || salesRep.length < 1) && (
+                <div className="contact-component__sales-form">
+                    <label className="contact-component__sales-form-label" htmlFor="zipcode">Find a sales specialist near you</label>
+                    <div className="contact-component__sales-form-input">
+                        <LocationIcon />
+                        <input
+                            type="text"
+                            required
+                            value={zip}
+                            onChange={handleZipInputChange}
+                            id="zipcode"
+                            name="zipcode"
+                            maxLength="5"
+                            onKeyPress={e => { 
+                                if (e.charCode === 13) {
+                                    e.preventDefault();
+                                }
+                            }}
+                            placeholder="Enter zip code"
+                        />
+                    </div>
                     {!!zipError && (
                         <p class="contact-component__sales-form-input-error">{zipError}</p>
                     )}
-                    <LocationIcon />
-                    <input
-                        type="text"
-                        required
-                        value={zip}
-                        onChange={handleZipInputChange}
-                        id="zipcode"
-                        name="zipcode"
-                        maxLength="5"
-                        onKeyPress={e => { 
-                            if (e.charCode === 13) {
-                                e.preventDefault();
-                            }
-                         }}
-                    />
                 </div>
-            </div>
+            )}
             {!!searching && !!zip && zip.length === 5 && (
                 <div className="contact-component__sales-results">
                     <p className="contact-component__sales-searching">Searching in zip code <strong>{zip}...</strong></p>
-                    <div style={{textAlign: 'center'}}><LoadingIcon /></div>
+                    <div className="contact-component__sales-loading"><LoadingIcon /></div>
                 </div>
             )}
             {!!salesRep && salesRep.length > 0 && !searching && !!zip && (
                 <div className="contact-component__sales-results">
-                    <p className="contact-component__sales-results-title">Specialists{!!location ? ` in "${location}"` : ''}</p>
+                    <p className="contact-component__sales-results-title">Specialists found in <strong>{zip}</strong><br />(<span className="contact-component__sales-results-change" onClick={(e)=>{
+                        e.preventDefault();
+                        setSalesRep([])
+                        setZip(null)
+                    }}>change zip code</span>)</p>
                     {salesRep.slice(0, 3).map(renderResult)}
                 </div>
             )}
         </div>
     );
 
-    const renderMenu = () => (
-        <ul className="contact-component__dropdown-menu" role="menu">
-            <li>
-                <a href="#" role="menuitem" onClick={handleSalesMenuClick}>
-                    <UserHeadsetIcon />
-                    <span>Sales</span>
-                </a>
-            </li>
-            {!!supportURL && (
-                <li>
-                    <a href={supportURL} role="menuitem">
-                        <QuestionCircleIcon />
-                        <span>Support</span>
-                    </a>
-                </li>
-            )}
-        </ul>
-    )
+    const renderSupportLink = () => !!supportURL ? (
+        <div className="contact-component__dropdown-support">
+            <a href={supportURL} className="contact-component__dropdown-support-link">
+                <QuestionCircleIcon />
+                <span>Support</span>
+            </a>
+        </div>
+    ) : null
 
     const renderDropdown = () => (
         <div className={`contact-component__dropdown contact-component__dropdown--${dropdownAlignment}`}>
-            {!!salesOpened ? renderSalesNavigator() : (
-                renderMenu()
-            )}
+            {renderSalesNavigator()}
+            {renderSupportLink()}
         </div>
     )
 
@@ -192,13 +189,13 @@ const Contact = ({ domElement }) => {
                     return;
                 }
                 if (!!data.error && (data.error === 'invalid_zip' || data.error === 'Invalid zip code')) {
-                    setZipError('Invalid Zipcode');
+                    setZipError('Invalid zip code, please try again');
                     setSalesRep([]);
                     setSearching(false)
                     return;
                 }
                 if (!!data.error && data.error === 'unknown_failure') {
-                    setZipError('Unknown failure');
+                    setZipError('Unknown failure, please try again');
                     setSalesRep([]);
                     setSearching(false)
                     return;
@@ -249,7 +246,7 @@ const Contact = ({ domElement }) => {
     }, [componentRef]);
 
     return (
-        <div className="contact-component" id="contact-component" ref={componentRef}>
+        <div className="contact-component" id="contact-component" ref={componentRef} style={{'--header-height': !!headerHeight ? headerHeight+'px' : '60px'}}>
             <button
                 aria-haspopup="true"
                 aria-expanded={expanded}

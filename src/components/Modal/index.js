@@ -18,6 +18,7 @@ const modalStyles = {
         right: 'auto',
         bottom: 'auto',
         margin: '0',
+        maxHeight: '100%',
         transform: 'translate(-50%, -50%)',
         border: 'none',
         background: '#fff',
