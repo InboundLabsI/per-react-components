@@ -10,6 +10,17 @@ import LoadingIcon from '../Icons/LoadingIcon';
 import CloseIcon from '../Icons/CloseIcon'
 import ArrowRightIcon from '../Icons/ArrowRightIcon'
 
+const menuItems = [
+    {
+        url: "https://permobilus.com/dealer-locator/international-dealers",
+        label: "Roho International Dealers"
+    },
+    {
+        url: "https://permobilus.com/dealer-locator/online-retailers",
+        label: "Roho Online Dealers"
+    }
+]
+
 const Contact = ({ domElement }) => {
     const [expanded, setExpanded] = useState(false);
     const [zipError, setZipError] = useState(null)
@@ -28,6 +39,7 @@ const Contact = ({ domElement }) => {
     const salesContactFormId = domElement.getAttribute('data-sales-contact-form-id')
     const salesContactPortalId = domElement.getAttribute('data-sales-contact-portal-id')
     const headerHeight = domElement.getAttribute('data-header-height');
+    const showMenu = domElement.getAttribute('data-show-menu');
 
     const handleZipInputChange = (event) => {
         if (!!event.target.value && event.target.value.length >= 5) {
@@ -163,10 +175,23 @@ const Contact = ({ domElement }) => {
         </div>
     ) : null
 
+    const renderMenu = () => !!menuItems && menuItems.length > 0 ? (
+        <ul className="contact-component__dropdown-menu">
+            {menuItems.map(menuItem => (
+                <li>
+                    <a href={menuItem.url}>
+                        <span>{menuItem.label}</span>
+                    </a>
+                </li>
+            ))}
+        </ul>
+    ) : null
+
     const renderDropdown = () => (
         <div className={`contact-component__dropdown contact-component__dropdown--${dropdownAlignment}`}>
             {renderSalesNavigator()}
             {renderSupportLink()}
+            {!!showMenu && showMenu === 'true' ? renderMenu() : null}
         </div>
     )
 
