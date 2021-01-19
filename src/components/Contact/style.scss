@@ -429,57 +429,122 @@
 
 .sales-modal {
     font-family: 'GT America Trial', 'Open Sans', sans-serif;
-    padding-bottom: 50px;
+
+    &__close {
+        color: #222222;
+        cursor: pointer;
+        position: absolute;
+        right: 15px;
+        top: 15px;
+
+        span {
+            display: block;
+            line-height: 0;
+            padding: 5px;
+        }
+    }
+
+    &__container {
+        align-items: stretch;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+
+        @media(max-width: 576px){
+            flex-wrap: wrap;
+        }
+    }
 
     &__image {
         background-position: center center;
         background-size: cover;
         background-repeat: no-repeat;
-        margin-bottom: 25px;
-        padding-bottom: 50%;
-        width: 100%;   
+        width: 297px;   
+        min-width: 297px;
+        min-height: 297px;
+
+        @media(max-width: 767px){
+            width: 200px;   
+            min-width: 200px;
+            min-height: 200px;
+        }
+
+        @media(max-width: 576px){
+            width: 100%;   
+            min-width: 100%;
+            padding-bottom: 100%;
+            height: auto;
+            min-height: auto;
+        }
+    }
+
+    &__content {
+        flex-grow: 1;
+        padding: 35px 50px;
+        position: relative;
+
+        @media(max-width: 767px){
+            padding: 35px 30px;
+        }
+
+        @media(max-width: 576px){
+            padding: 35px 20px;
+        }
     }
 
     &__title {
-        font-size: 150%;
+        color: #333333;
+        font-weight: 500;
+        font-size: 32px;
+        line-height: normal;
         margin-bottom: 25px;
-        padding: 0 20px;
-        text-align: center;
+        padding: 0;
+        margin: 0 0 40px;
+        text-align: left;
     }
 
     &__buttons {
-        align-items: center;
+        align-items: stretch;
         display: flex;
         flex-direction: column;
         flex-wrap: nowrap;
-        justify-content: center;
-        padding: 0 20px;
+        justify-content: flex-start;
+        padding: 0;
     }
 
     &__button {
-        font-family: 'GT America Trial', 'Open Sans', sans-serif;
-        background: #1668a6;
-        border: 0 none;
+        align-items: center;
+        font-family: inherit;
+        background: transparent;
+        border: none;
+        border-top: 1px solid #DFE1E5;
         border-radius: 0;
-        color: white;
+        color: #414042;
         cursor: pointer;
-        display: inline-block;
-        font-size: 16px;
-        font-weight: 300;
-        line-height: 2;
-        margin: 8px 0;
-        padding: 0 1em;
-        text-align: center;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        font-size: 18px;
+        font-weight: 500;
+        line-height: 28px;
+        margin: 0;
+        padding: 20px 0;
+        text-align: left;
         text-decoration: none;
 
         &:hover {
-            color: white;
+            color: #414042;
             text-decoration: none;
+        }
+
+        span {
+            margin-right: 10px;
         }
     }
 
     &__form {
-        padding: 0 20px;
 
         p,
         .submitted-message {
@@ -489,8 +554,10 @@
         form {
             width: 100%;
             display: flex;
-            align-items: center;
+            align-items: stretch;
             flex-direction: column;
+            justify-content: flex-start;
+            padding: 15px 0;
 
             ul {
                 margin: 5px 0;
@@ -502,16 +569,49 @@
                     font-size: 15px;
                 }
             }
+
+            input[type=text],
+            input[type=email],
+            input[type=password],
+            input[type=tel],
+            input[type=number],
+            input[type=file],
+            select,
+            textarea {
+                background-color: #F5F8FA;
+                border: none;
+                border-radius: 0px;
+                box-sizing: border-box;
+                color: #000;
+                display: inline-block;
+                font-size: 17px;
+                height: 48px;
+                padding: 11px 20px 10px;
+                width: 100% !important;
+            }
+
+            textarea {
+                min-height: 96px;
+                resize: none;
+            }
+
+            fieldset {
+                max-width: 100% !important;
+            }
+        }
+
+        .hs-form-field {
+            margin-bottom: 20px;
         }
   
-        .hs-form-field {
+        /*.hs-form-field {
             display: grid;
             align-items: start;
             grid-template-columns: min-content 1fr;
             grid-column-gap: 2em;
             margin-bottom: 1em;
             width: 100%;
-            max-width: 400px;
+            max-width: 100%;
         }
         .hs-form-field > * {
           grid-column: 1 / span 2;
@@ -531,22 +631,71 @@
         }
         .hs-form-field .input input {
             min-height: 22px;
+        }*/
+
+        .hs-form-field > label:nth-child(1) span {
+            color: #0A1318;
+            font-size: 17px;
+            font-weight: normal;
+            line-height: 27px;
+        }
+
+        .hs_error_rollup {
+            margin-bottom: 20px;
+        }
+
+        .hs-error-msgs {
+            
+            label {
+                color: #E51A92;
+            }
+
+            a {
+                color: #E51A92;
+                text-decoration: underline;
+
+                &:hover {
+                    color: #E51A92;
+                    text-decoration: none;
+                }
+            }
+        }
+
+        
+
+        .hs-submit {
+            align-self: flex-end;
+        }
+
+        .hs-form-field ::placeholder {
+            font-family: 'GT America Trial', 'Open Sans', sans-serif;
+            color: #0A1318;
+        }
+          
+        .hs-form-field :-ms-input-placeholder { 
+            font-family: 'GT America Trial', 'Open Sans', sans-serif;
+            color: #0A1318;
+        }
+          
+        .hs-form-field ::-ms-input-placeholder { 
+            font-family: 'GT America Trial', 'Open Sans', sans-serif;
+            color: #0A1318;
         }
 
         .button,
         input[type="submit"] {
             display: inline-block;
-            background: #1668a6;
-            border: 0 none;
-            border-radius: 0;
+            background: #0067A6;
+            border: none;
+            border-radius: 2px;
             color: white;
             cursor: pointer;
             display: inline-block;
-            font-size: 16px;
-            font-weight: 300;
-            line-height: 2;
+            font-size: 17px;
+            font-weight: 500;
+            line-height: 27px;
             margin: 8px 0;
-            padding: 0 1em;
+            padding: 10px 27px;
             text-align: center;
             text-decoration: none;
 

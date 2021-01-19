@@ -9,7 +9,7 @@ const modalStyles = {
         right: 0,
         bottom: 0,
         zIndex: 99999,
-        backgroundColor: 'rgba(255, 255, 255, 0.8)'
+        backgroundColor: 'rgba(10, 19, 24, 0.8)'
     },
     content: {
         position: 'absolute',
@@ -24,12 +24,12 @@ const modalStyles = {
         background: '#fff',
         overflow: 'auto',
         WebkitOverflowScrolling: 'touch',
-        borderRadius: '4px',
+        borderRadius: '0px',
         outline: 'none',
         padding: '0',
-        boxShadow: '0 1px 2px rgba(0,0,0,.07), 0 2px 4px rgba(0,0,0,.07), 0 4px 8px rgba(0,0,0,.07), 0 8px 16px rgba(0,0,0,.07), 0 16px 32px rgba(0,0,0,.07), 0 32px 64px rgba(0,0,0,.07)',
-        width: '90%',
-        maxWidth: '700px'
+        boxShadow: 'none',
+        width: '95vw',
+        maxWidth: '842px'
     }
 };
 

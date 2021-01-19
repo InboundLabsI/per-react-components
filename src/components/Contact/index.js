@@ -7,16 +7,15 @@ import QuestionCircleIcon from '../Icons/QuestionCircleIcon'
 import LocationIcon from '../Icons/LocationIcon'
 import Modal from '../Modal'
 import LoadingIcon from '../Icons/LoadingIcon';
+import CloseIcon from '../Icons/CloseIcon'
+import ArrowRightIcon from '../Icons/ArrowRightIcon'
 
 const Contact = ({ domElement }) => {
     const [expanded, setExpanded] = useState(false);
-    const [location, setLocation] = useState(null);
     const [zipError, setZipError] = useState(null)
     const [searching, setSearching] = useState(false)
-    const [salesOpened, setSalesOpened] = useState(false);
-    const [guessedZip, setGuessedZip] = useState("");
     let savedReps = localStorage.getItem('savedReps');
-    if(!!savedReps) savedReps = JSON.parse(savedReps);
+    if (!!savedReps) savedReps = JSON.parse(savedReps);
     const [salesRep, setSalesRep] = useState(!!savedReps ? savedReps : []);
     const savedZip = localStorage.getItem('savedZip');
     const [zip, setZip] = useState(!!savedZip ? savedZip : "");
@@ -29,11 +28,6 @@ const Contact = ({ domElement }) => {
     const salesContactFormId = domElement.getAttribute('data-sales-contact-form-id')
     const salesContactPortalId = domElement.getAttribute('data-sales-contact-portal-id')
     const headerHeight = domElement.getAttribute('data-header-height');
-
-    const handleSalesMenuClick = (event) => {
-        event.preventDefault();
-        setSalesOpened(true);
-    }
 
     const handleZipInputChange = (event) => {
         if (!!event.target.value && event.target.value.length >= 5) {
@@ -62,18 +56,34 @@ const Contact = ({ domElement }) => {
     }
 
     const onContactRepFormReady = (form, rep) => {
-        console.log('onContactRepFormReady form', form);
-        console.log('onContactRepFormReady rep', rep);
+        let submitButton = document.querySelector('.sales-modal__form input[type="submit"]')
+        if (!!submitButton) {
+            submitButton.value = `Reach out to ${selectedRep.name}`;
+        }
+    }
+
+    const handleModalCloseButtonKeyPress = (e) => {
+        if (e.charCode === 13) {
+            e.preventDefault();
+            setSelectedRep(null);
+            setShowModalForm(false)
+        }
+    }
+
+    const handleModalCloseButtonClick = (e) => {
+        e.preventDefault();
+        setSelectedRep(null);
+        setShowModalForm(false)
     }
 
     const closeDropdown = () => {
         setExpanded(false);
-        setSalesOpened(false);
+        //setSalesOpened(false);
     }
 
     const openDropdown = () => {
         setExpanded(true);
-        setSalesOpened(false);
+        //setSalesOpened(false);
     }
 
     const renderResult = (result) => (
@@ -112,7 +122,7 @@ const Contact = ({ domElement }) => {
                             id="zipcode"
                             name="zipcode"
                             maxLength="5"
-                            onKeyPress={e => { 
+                            onKeyPress={e => {
                                 if (e.charCode === 13) {
                                     e.preventDefault();
                                 }
@@ -133,7 +143,7 @@ const Contact = ({ domElement }) => {
             )}
             {!!salesRep && salesRep.length > 0 && !searching && !!zip && (
                 <div className="contact-component__sales-results">
-                    <p className="contact-component__sales-results-title">Specialists found in <strong>{zip}</strong><br />(<span className="contact-component__sales-results-change" onClick={(e)=>{
+                    <p className="contact-component__sales-results-title">Specialists found in <strong>{zip}</strong><br />(<span className="contact-component__sales-results-change" onClick={(e) => {
                         e.preventDefault();
                         setSalesRep([])
                         setZip(null)
@@ -158,6 +168,83 @@ const Contact = ({ domElement }) => {
             {renderSalesNavigator()}
             {renderSupportLink()}
         </div>
+    )
+
+    const renderModalCloseButton = () => (
+        <div className="sales-modal__close">
+            <span
+                tabIndex="0"
+                onClick={handleModalCloseButtonClick}
+                onKeyPress={handleModalCloseButtonKeyPress}
+            ><CloseIcon /></span>
+        </div>
+    )
+
+    const renderSalesRepModal = () => !!selectedRep ? (
+        <div className="sales-modal">
+            <div className="sales-modal__container">
+
+                <div className="sales-modal__image" style={{ backgroundImage: `url(${selectedRep.sales_image})` }}></div>
+
+                <div className="sales-modal__content">
+
+                    {renderModalCloseButton()}
+
+                    {!!showModalForm && !!selectedRep.name ? null : <h2 className="sales-modal__title">How can we help you?</h2>}
+
+                    {!showModalForm && (
+                        <div className="sales-modal__buttons">
+                            {!!ticketSubmissionURL && (
+                                <a href={ticketSubmissionURL} className="sales-modal__button"><span>I need help with a product I purchased</span><ArrowRightIcon /></a>
+                            )}
+                            {!!salesContactFormId && !!salesContactPortalId && (
+                                <button className="sales-modal__button" onClick={() => {
+                                    setShowModalForm(true)
+                                }}><span>I'd like to buy a new product</span><ArrowRightIcon /></button>
+                            )}
+                        </div>
+                    )}
+
+                    <div style={{ display: !!salesContactFormId && !!salesContactPortalId && !!showModalForm ? 'block' : 'none' }}>
+                        <div className="sales-modal__form">
+                            <HubspotForm
+                                portalId={salesContactPortalId}
+                                formId={salesContactFormId}
+                                inlineMessage="Thanks for submitting the form"
+                                onSubmit={() => {
+                                    //console.log('Submit!');
+                                }}
+                                onReady={(form) => onContactRepFormReady(form, selectedRep)}
+                                loading={<div>
+                                    <h2 className="sales-modal__title">Loading form...</h2>
+                                    <div style={{ textAlign: 'center' }}><LoadingIcon /></div>
+                                </div>}
+                            />
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    ) : null;
+
+    const renderDefaultZipIframe = () => (
+        <div style={{ 'display': 'none' }}>
+            <iframe title="sales-locator" src="https://hub.permobil.com/sales-locator-find-v2"></iframe>
+        </div>
+    )
+
+    const renderContactButton = () => (
+        <button
+            aria-haspopup="true"
+            aria-expanded={expanded}
+            tabIndex="0"
+            onClick={handleButtonClick}
+            className={`contact-component__button ${expanded ? 'dropdown-opened' : 'dropdown-closed'}`}
+        >
+            <ContactsIcon />
+            <span>Contact</span>
+        </button>
     )
 
     // Listen to window resize
@@ -185,7 +272,6 @@ const Contact = ({ domElement }) => {
             const data = event.data
             if (!!data) {
                 if (!!data.error && data.error === 'not_in_us') {
-                    setGuessedZip("");
                     return;
                 }
                 if (!!data.error && (data.error === 'invalid_zip' || data.error === 'Invalid zip code')) {
@@ -203,8 +289,7 @@ const Contact = ({ domElement }) => {
 
 
                 if (!!data.type && data.type === 'default_zip' && !!data.zip) {
-                    if(!savedZip){
-                        setGuessedZip(data.zip);
+                    if (!savedZip) {
                         setZip(data.zip);
                         setSearching(true)
                         localStorage.setItem('savedZip', data.zip)
@@ -246,20 +331,12 @@ const Contact = ({ domElement }) => {
     }, [componentRef]);
 
     return (
-        <div className="contact-component" id="contact-component" ref={componentRef} style={{'--header-height': !!headerHeight ? headerHeight+'px' : '60px'}}>
-            <button
-                aria-haspopup="true"
-                aria-expanded={expanded}
-                tabIndex="0"
-                onClick={handleButtonClick}
-                className={`contact-component__button ${expanded ? 'dropdown-opened' : 'dropdown-closed'}`}
-            >
-                <ContactsIcon />
-                <span>Contact</span>
-            </button>
-            <div style={{ 'display': 'none' }}>
-                <iframe title="sales-locator" src="https://hub.permobil.com/sales-locator-find-v2"></iframe>
-            </div>
+        <div className="contact-component" id="contact-component" ref={componentRef} style={{ '--header-height': !!headerHeight ? headerHeight + 'px' : '60px' }}>
+
+            {renderContactButton()}
+
+            {renderDefaultZipIframe()}
+
             {!!expanded ? renderDropdown() : null}
 
             <Modal
@@ -269,44 +346,7 @@ const Contact = ({ domElement }) => {
                     setShowModalForm(false)
                 }}
             >
-                {!!selectedRep && (
-                    <div className="sales-modal">
-                        <div className="sales-modal__container">
-                            <div className="sales-modal__image" style={{ backgroundImage: `url(${selectedRep.sales_image})` }}></div>
-                            <h2 className="sales-modal__title">{!!showModalForm && !!selectedRep.name ? `Reach out to ${selectedRep.name}` : 'How can we help you?'}</h2>
-                            {!showModalForm && (
-                                <div className="sales-modal__buttons">
-                                    {!!ticketSubmissionURL && (
-                                        <a href={ticketSubmissionURL} className="sales-modal__button">I need help with a product I purchased</a>
-                                    )}
-                                    {!!salesContactFormId && !!salesContactPortalId && (
-                                        <button className="sales-modal__button" onClick={() => {
-                                            setShowModalForm(true)
-                                        }}>I'd like to buy a new product</button>
-                                    )}
-                                    
-
-                                </div>
-                            )}
-                            {!!salesContactFormId && !!salesContactPortalId && !!showModalForm && (
-                                <div className="sales-modal__form">
-                                    <HubspotForm
-                                        portalId='1624307'
-                                        formId='4553cfe7-9000-4211-8f8c-31b856fb8910'
-                                        inlineMessage="Thanks for submitting the form"
-                                        onSubmit={() => {
-                                            console.log('Submit!');
-                                        }}
-                                        onReady={(form) => onContactRepFormReady(form, selectedRep)}
-                                        loading={<div style={{textAlign: 'center'}}><LoadingIcon /></div>}
-                                    />
-                                </div>
-                            )}
-                            
-                        </div>
-                    </div>
-                )}
-
+                {renderSalesRepModal()}
             </Modal>
         </div>
     )
