@@ -603,35 +603,6 @@
         .hs-form-field {
             margin-bottom: 20px;
         }
-  
-        /*.hs-form-field {
-            display: grid;
-            align-items: start;
-            grid-template-columns: min-content 1fr;
-            grid-column-gap: 2em;
-            margin-bottom: 1em;
-            width: 100%;
-            max-width: 100%;
-        }
-        .hs-form-field > * {
-          grid-column: 1 / span 2;
-        }
-        .hs-form-field > label {
-            grid-column: 1;
-            font-weight: 300;
-            min-width: 6em;
-            text-align: left;
-        }
-        .hs-form-field > .input {
-            grid-column: 2;
-        }
-        .hs-form-field .input textarea,
-        .hs-form-field .input input {
-            width: 100%;
-        }
-        .hs-form-field .input input {
-            min-height: 22px;
-        }*/
 
         .hs-form-field > label:nth-child(1) span {
             color: #0A1318;

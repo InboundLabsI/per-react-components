@@ -45,8 +45,9 @@
             flex-direction: row;
             flex-wrap: nowrap;
             justify-content: space-between;
-            padding: 0 32px;
             height: 56px;
+            padding: 0 32px;
+            margin: 0 0 30px;
 
             span {
                 color: #FFFFFF;
@@ -72,12 +73,12 @@
 
         &-categories {
             align-items: stretch;
-            display: flex;
+            display: none;
             flex-direction: column;
             flex-wrap: nowrap;
             justify-content: flex-start;
             padding: 0;
-            margin: 30px 32px;
+            margin: 0 32px 30px; 
 
             li {
                 list-style-type: none;

@@ -9,7 +9,7 @@ const menuItems = [
     {
         subtitle: 'EXPLORE',
         title: 'Power Wheelchairs',
-        image: 'https://f.hubspotusercontent00.net/hubfs/1624307/navigator-components/power-wheelchairs.png',
+        image: 'https://f.hubspotusercontent00.net/hubfs/1624307/social-suggested-images/power.png',
         url: 'https://permobilus.com/products/power-wheelchairs-by-permobil',
         categoryName: 'Power Wheelchairs',
         order: 1
@@ -17,7 +17,7 @@ const menuItems = [
     {
         subtitle: 'EXPLORE',
         title: 'Manual Wheelchairs',
-        image: 'https://f.hubspotusercontent00.net/hubfs/1624307/navigator-components/manual-wheelchairs.png',
+        image: 'https://f.hubspotusercontent00.net/hubfs/1624307/social-suggested-images/manual.png',
         url: 'https://permobilus.com/products/tilite-manual-wheelchairs-smartdrive-power-assist/',
         categoryName: 'Manual Wheelchairs',
         order: 2
@@ -25,7 +25,7 @@ const menuItems = [
     {
         subtitle: 'EXPLORE',
         title: 'Seating / Positioning',
-        image: 'https://f.hubspotusercontent00.net/hubfs/1624307/navigator-components/seating.png',
+        image: 'https://f.hubspotusercontent00.net/hubfs/1624307/social-suggested-images/seat.png',
         url: 'https://permobilus.com/products/seating-and-positioning-by-roho/',
         categoryName: 'Seating and Positioning',
         order: 3
@@ -85,10 +85,11 @@ const Products = ({ domElement }) => {
 
     const renderHit = ({ hit }) => <p tabindex="0" onKeyPress={e => { onHitKeyUp(e, hit) }} onClick={(e) => { handleHitClick(e, hit) }}>{hit.title}</p>;
 
-    const renderResults = connectStateResults(({ searchState }) =>
+    const renderResults = connectStateResults(({ searchState, searchResults }) =>
         searchState && searchState.query ? (
-            <Hits hitComponent={renderHit} />
-        ) : null
+
+            searchResults && searchResults.nbHits !== 0 ? <Hits hitComponent={renderHit} /> : <p className="products-component__search-no-results">Nothing found in Products</p>
+        ) : renderMenu()
     );
 
     const renderSearchBox = () => (
@@ -117,7 +118,6 @@ const Products = ({ domElement }) => {
 
     const renderDropdown = () => (
         <div className={`products-component__dropdown products-component__dropdown--${dropdownAlignment}`}>
-            {renderMenu()}
             {renderSearchBox()}
             {renderResults()}
         </div>

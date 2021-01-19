@@ -6,11 +6,11 @@
     
     button {
         align-items: center;
-        background: var(--permobil-light-grey, #F5F8FA);
+        background: #F5F8FA;
         border: none;
-        border-radius: 9px;
+        border-radius: 0px;
         box-shadow: none;
-        color: var(--permobil-charcoal, #414042);
+        color: #0A1318;
         cursor: pointer;
         display: flex;
         flex-direction: row;
@@ -28,18 +28,18 @@
         }
 
         &:hover {
-            background: var(--permobil-light-grey, #F5F8FA);
-            color: var(--permobil-royal-blue, #0067A6);
+            background: #F5F8FA;
+            color: #0067A6;
         }
 
         &:focus {
-            color: var(--permobil-royal-blue, #0067A6);
+            color: #0067A6;
             outline-width: 0px;
         }
         
         &.dropdown-opened {
-            background: var(--permobil-light-blue, #EDF8FF);
-            color: var(--permobil-royal-blue, #0067A6);
+            background: #FFFFFF;
+            color: #0067A6;
         }
 
         svg {
@@ -52,7 +52,7 @@
 
         span {
             font-style: normal;
-            font-weight: normal;
+            font-weight: 500;
             font-size: 13px;
             line-height: 13px;
 
@@ -64,12 +64,12 @@
 
     &__dropdown {
         background: #FFFFFF;
-        border-radius: 4px;
-        box-shadow: 0 1px 2px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.07), 0 4px 8px rgba(0,0,0,0.07), 0 8px 16px rgba(0,0,0,0.07), 0 16px 32px rgba(0,0,0,0.07), 0 32px 64px rgba(0,0,0,0.07);
+        border-radius: 0px;
+        box-shadow: inset 0px 4px 0px #0067A6;
         left: 0;
         padding: 32px;
         position: absolute;
-        top: calc(100% + 8px);
+        top: calc(100% + 4px);
 
         @media(max-width: 1023px) { 
             padding: 24px;
@@ -80,7 +80,7 @@
             padding: 0;
 
             li {
-                border-bottom: rgba(65,64,66,0.1);
+                border-bottom: 1px solid rgba(65,64,66,0.1);
                 list-style-type: none;
                 margin: 0 0 10px;
                 padding: 0 0 10px;
@@ -164,14 +164,23 @@
         transform: translateX(-50%);
     }
 
+    &__search-no-results {
+        color: #0A1C2D;
+        font-size: 13px;
+        line-height: normal;
+        margin: 0;
+        opacity: 0.8;
+        padding: 10px 0 0;
+    }
+
     .ais-SearchBox {
-        margin-top: 20px;
+        margin-bottom: 10px;
         position: relative;
     
         input[type="search"] {
             background: #F5F8FA;
             border: none;
-            border-radius: 26px;
+            border-radius: 0px;
             box-sizing: border-box;
             color: #0A1318;
             font-family: 'GT America Trial', 'Open Sans', sans-serif;
@@ -180,8 +189,22 @@
             height: 36px;
             line-height: 16px;
             padding: 10px 12px 10px 40px;
-            width: 100%;
+            width: 260px;
         }
+
+        ::placeholder {
+            color: #A7A9AC;
+        }
+          
+        :-ms-input-placeholder { 
+            color: #A7A9AC;
+        }
+          
+        ::-ms-input-placeholder { 
+            color: #A7A9AC;
+        }
+
+        
     
         button.ais-SearchBox-submit {
             background: none !important;
@@ -191,6 +214,11 @@
             position: absolute;
             top: 10px;
             width: 16px;
+
+            svg {
+                width: 16px;
+                height: 16px;
+            }
         }
     
         &-reset {
@@ -202,7 +230,7 @@
     
         &-list {
             margin: 15px 0 0;
-            max-height: 150px;
+            max-height: 300px;
             overflow: auto;
             padding: 0 32px;
             width: 100%;
@@ -217,7 +245,7 @@
         &-item {
             list-style-type: none;
             margin: 0;
-            padding: 5px 0;
+            padding: 0;
             position: relative;
     
             p {
@@ -227,7 +255,7 @@
                 font-size: 13px;
                 line-height: 18px;
                 margin: 0;
-                padding: 0;
+                padding: 12px 0 10px;
                 position: relative;
                 z-index: 1;
             }
