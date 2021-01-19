@@ -94,7 +94,7 @@ const Search = ({ domElement }) => {
                 <div className="search-component__results-index-hits">
                     <Index indexName={idx}>
                         <IndexResults idx={idx}>
-                            <Configure hitsPerPage={!!selectedIndex ? 1000 : 4} />
+                            <Configure hitsPerPage={!!selectedIndex ? 1000 : 4} filters={idx === 'academy_resources_production' ? 'published:1' : undefined} />
                             <Hits hitComponent={renderFuntions[idx]} />
                         </IndexResults>
                     </Index>

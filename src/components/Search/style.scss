@@ -98,11 +98,10 @@
         z-index: 3;
 
         &-wrapper {
-            background: #0A1318;
+            background: rgb(10, 19, 24, 0.6);
             box-shadow: none;
             left: 0;
             height: calc(100vh - var(--header-height, 60px) + 10px);
-            opacity: 0.6;
             overflow: auto;
             position: fixed;
             top: calc(var(--header-height, 60px) - 10px);
