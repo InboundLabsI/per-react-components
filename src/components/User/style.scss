@@ -46,12 +46,12 @@
 
     &__dropdown {
         background: #FFFFFF;
-        border-radius: 4px;
-        box-shadow: 0 1px 2px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.07), 0 4px 8px rgba(0,0,0,0.07), 0 8px 16px rgba(0,0,0,0.07), 0 16px 32px rgba(0,0,0,0.07), 0 32px 64px rgba(0,0,0,0.07);
+        border-radius: 0px;
+        box-shadow: inset 0px 4px 0px #0067A6;
         left: 0;
         padding: 32px;
         position: absolute;
-        top: calc(100% + 8px);
+        top: calc(100% + 4px);
 
         @media(max-width: 1023px) { 
             padding: 24px;
@@ -128,7 +128,7 @@
         align-items: center;
         background: #F5F8FA;
         border: none;
-        border-radius: 72px;
+        border-radius: 0px;
         color: #0067A6;
         cursor: pointer;
         display: flex;

@@ -117,30 +117,32 @@ const Search = ({ domElement }) => {
 
     const renderResults = connectStateResults(({ searchState }) =>
         searchState && searchState.query ? (
-            <div className="search-component__results">
-                <div className="search-component__results-header">
-                    {!!selectedIndex ? 
-                        <button 
-                            className="search-component__results-back" 
-                            onClick={handleBackToResultsClick}
-                        >
-                                <ChevronLeftIcon />
-                                <span>Back to all results for "{searchState.query}"</span>
-                        </button> 
-                    : 
-                        <p>Searching for "{searchState.query}"</p>
-                    }
-                    <CloseSearchButton clearsQuery />
-                </div>
-                <div className="search-component__results-container">
-                    {!!algoliaIndices && algoliaIndices.filter(index=>{
-                        if(!!selectedIndex){
-                            return index === selectedIndex;
+            <div className="search-component__results-wrapper">
+                <div className="search-component__results">
+                    <div className="search-component__results-header">
+                        {!!selectedIndex ? 
+                            <button 
+                                className="search-component__results-back" 
+                                onClick={handleBackToResultsClick}
+                            >
+                                    <ChevronLeftIcon />
+                                    <span>Back to all results for "{searchState.query}"</span>
+                            </button> 
+                        : 
+                            <p>Searching for "{searchState.query}"</p>
                         }
-                        return true;
-                    }).map(idx => (
-                        <>{renderIndexResults(idx)}</>
-                    ))}
+                        <CloseSearchButton clearsQuery />
+                    </div>
+                    <div className="search-component__results-container">
+                        {!!algoliaIndices && algoliaIndices.filter(index=>{
+                            if(!!selectedIndex){
+                                return index === selectedIndex;
+                            }
+                            return true;
+                        }).map(idx => (
+                            <>{renderIndexResults(idx)}</>
+                        ))}
+                    </div>
                 </div>
             </div>
 
