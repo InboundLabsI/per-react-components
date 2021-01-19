@@ -229,6 +229,7 @@
     .ais-Hits {
     
         &-list {
+            box-sizing: content-box;
             margin: 15px 0 0;
             max-height: 300px;
             overflow: auto;
