@@ -97,6 +97,8 @@ const Products = ({ domElement }) => {
             submitTitle: 'Submit your search query.',
             resetTitle: 'Clear your search query.',
             placeholder: 'Search a product...',
+        }} onReset={() => {
+            console.log('reset');
         }} />
     )
 

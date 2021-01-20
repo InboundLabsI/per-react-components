@@ -140,6 +140,14 @@ const ProductsDisplay = (props) => {
         };
     }, [componentRef]);
 
+    useEffect(() => {
+        if (isOpened) {
+            document.querySelector('body').classList.add('products-display-opened');
+        } else {
+            document.querySelector('body').classList.remove('products-display-opened');
+        }
+    }, [isOpened])
+
     return isOpened ? (
         <div className="products-display-component" ref={componentRef}>
             {renderFilters()}

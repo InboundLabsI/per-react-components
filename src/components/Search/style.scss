@@ -1,8 +1,16 @@
+body.search-results-opened {
+    height: 100vh;
+    overflow-y: hidden;
+}
 .search-component {
     display: inline-block;
-    font-family: 'GT America Trial', 'Open Sans', sans-serif;
+    font-family: var(--permobil-navigator-font-family);
     height: 36px;
     margin: 0 36px;
+
+    & * {
+        font-family: var(--permobil-navigator-font-family);
+    }
 
     @media(max-width: 767px){
         margin: 0 10px;
@@ -96,6 +104,10 @@
         transform: translateX(-50%);
         width: 95vw;
         z-index: 3;
+
+        @media(max-width: 415px){
+            max-height: calc(100vh - var(--header-height, 60px) - 100px);
+        }
 
         &-wrapper {
             background: rgb(10, 19, 24, 0.6);

@@ -160,8 +160,12 @@ const Search = ({ domElement }) => {
                 onFocus={() => {
                     setIsResultsVisible(true);
                 }}
+                onChange={()=>{
+                    setIsResultsVisible(true)
+                }}
                 onReset={()=>{
                     setSelectedIndex(false);
+                    setIsResultsVisible(false)
                 }}
             />
         </div>
@@ -179,6 +183,7 @@ const Search = ({ domElement }) => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);
+
 
     return !!algoliaAppID && !!algoliaSearchKey && !!algoliaIndices && algoliaIndices.length > 0 ? (
         <InstantSearch searchClient={searchClient} indexName={algoliaIndices[0]}>

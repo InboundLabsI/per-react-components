@@ -1,3 +1,24 @@
+
+@font-face {
+  font-family: 'GT America Trial';
+  src: url("https://f.hubspotusercontent00.net/hubfs/1624307/permobil-navigator-components/fonts/GT-America-Standard-Regular-Trial.otf") format("opentype");
+}
+@font-face {
+  font-family: 'GT America Trial';
+  font-weight: bold;
+  src: url("https://f.hubspotusercontent00.net/hubfs/1624307/permobil-navigator-components/fonts/GT-America-Standard-Bold-Trial.otf") format("opentype");
+}
+@font-face {
+  font-family: 'GT America Trial';
+  font-style: italic;
+  src: url("https://f.hubspotusercontent00.net/hubfs/1624307/permobil-navigator-components/fonts/GT-America-Standard-Regular-Italic-Trial.otf") format("opentype");
+}
+@font-face {
+  font-family: 'GT America Trial';
+  font-weight: 500;
+  src: url("https://f.hubspotusercontent00.net/hubfs/1624307/permobil-navigator-components/fonts/GT-America-Standard-Medium-Trial.otf") format("opentype");
+}
+
 :root {
   --permobil-charcoal: #414042;
   --permobil-royal-blue: #0067A6;
@@ -5,9 +26,11 @@
   --permobil-light-blue: #EDF8FF;
   --permobil-primary: #0A1C2D;
   --permobil-ocean: #009AC7;
+  --permobil-navigator-font-family: 'GT America Trial', 'Open Sans', sans-serif;
 }
 
 .navbar.c--standalone-header-navigation {
+  font-family: var(--permobil-navigator-font-family);
   padding-top: 4px;
   padding-bottom: 4px;
 }

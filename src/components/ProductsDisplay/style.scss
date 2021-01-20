@@ -1,18 +1,26 @@
+body.products-display-opened {
+    height: 100vh;
+    overflow-y: hidden;
+}
 .products-display-component {
     align-items: stretch;
     background: #F5F8FA;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    font-family: 'GT America Trial', 'Open Sans', sans-serif;
+    font-family: var(--permobil-navigator-font-family);
     justify-content: flex-start;
     height: calc(100vh - 56px);
     left: 0;
     overflow: hidden;
     position: fixed;
-    top: 56px;
+    top: 55px;
     width: 100%;
     z-index: 99999;
+
+    & * {
+        font-family: var(--permobil-navigator-font-family);
+    }
 
 
     @media(max-width: 767px){

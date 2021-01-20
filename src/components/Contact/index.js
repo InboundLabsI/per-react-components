@@ -114,7 +114,7 @@ const Contact = ({ domElement }) => {
     )
 
     const renderSalesNavigator = () => (
-        <div className="contact-component__sales">
+        <div className={`contact-component__sales ${!!salesRep && salesRep.length > 0 && !searching && !!zip ? 'contact-component__sales--with-results' : ''}`}>
             {!!zip && zip.length === 5 && (
                 <div style={{ 'display': 'none' }}>
                     <iframe title="sales-locator" src={`https://hub.permobil.com/sales-locator-find-v2?zip=${zip}`}></iframe>
@@ -153,16 +153,18 @@ const Contact = ({ domElement }) => {
                     <div className="contact-component__sales-loading"><LoadingIcon /></div>
                 </div>
             )}
-            {!!salesRep && salesRep.length > 0 && !searching && !!zip && (
-                <div className="contact-component__sales-results">
-                    <p className="contact-component__sales-results-title">Specialists found in <strong>{zip}</strong><br />(<span className="contact-component__sales-results-change" onClick={(e) => {
-                        e.preventDefault();
-                        setSalesRep([])
-                        setZip(null)
-                    }}>change zip code</span>)</p>
-                    {salesRep.slice(0, 3).map(renderResult)}
-                </div>
-            )}
+            <div className={`contact-component__sales-results-wrapper contact-component__sales-results-wrapper--length-${salesRep.length > 3 ? '3' : salesRep.length}`}>
+                {!!salesRep && salesRep.length > 0 && !searching && !!zip && (
+                    <div className="contact-component__sales-results">
+                        <p className="contact-component__sales-results-title">Specialists found in <strong>{zip}</strong><br />(<span className="contact-component__sales-results-change" onClick={(e) => {
+                            e.preventDefault();
+                            setSalesRep([])
+                            setZip(null)
+                        }}>change zip code</span>)</p>
+                        {salesRep.slice(0, 3).map(renderResult)}
+                    </div>
+                )}
+            </div>
         </div>
     );
 

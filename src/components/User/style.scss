@@ -2,11 +2,19 @@
     margin-left: auto;
 }
 .user-component {
-    font-family: 'GT America Trial', 'Open Sans', sans-serif;    
+    font-family: var(--permobil-navigator-font-family);    
     position: relative;
 
+    & * {
+        font-family: var(--permobil-navigator-font-family);
+    }
+
     &__modal {
-        font-family: 'GT America Trial', 'Open Sans', sans-serif;    
+        font-family: var(--permobil-navigator-font-family);    
+
+        & * {
+            font-family: var(--permobil-navigator-font-family);
+        }
 
         .__booya-profile-form {
             padding: 40px;

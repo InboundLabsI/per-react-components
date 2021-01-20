@@ -1,8 +1,17 @@
+body.ReactModal__Body--open {
+    height: 100vh;
+    overflow-y: hidden;
+}
+
 .contact-component {
-    font-family: 'GT America Trial', 'Open Sans', sans-serif;
+    font-family: var(--permobil-navigator-font-family);
     display: inline-block;
     margin: 0 2px;
     position: relative;
+
+    & * {
+        font-family: var(--permobil-navigator-font-family);
+    }
     
     button {
         align-items: center;
@@ -71,7 +80,6 @@
         padding: 32px;
         position: absolute;
         top: calc(100% + 4px);
-        transition: all 0.6s ease-in-out;
 
         @media(max-width: 1023px) { 
             padding: 24px;
@@ -198,7 +206,15 @@
     }
 
     &__sales {
-        min-width: 194px;
+        transition: all 0.5s ease-in-out;
+        width: 194px;
+    }
+
+    &__sales--with-results {
+        width: 260px;
+    }
+
+    &__sales {
 
         &-title {
             align-items: center;
@@ -237,7 +253,7 @@
                 color: #191919;
                 font-style: normal;
                 font-weight: normal;
-                font-size: 13px;
+                font-size: 14px;
                 line-height: 150%;
                 margin: 0 0 13px;
                 max-width: 100%;
@@ -306,7 +322,7 @@
             color: #191919;
             font-style: normal;
             font-weight: normal;
-            font-size: 13px;
+            font-size: 14px;
             line-height: 150%;
             margin: 0;
             padding: 0;
@@ -323,6 +339,25 @@
         }
 
         &-results {
+
+            &-wrapper {
+                height: 0;
+                transition: all 0.5s ease-in-out;
+                overflow: hidden;
+
+                &--length-0 {
+                    height: 0;
+                }
+                &--length-1 {
+                    height: 132px;
+                }
+                &--length-2 {
+                    height: 222px;
+                }
+                &--length-3 {
+                    height: 312px;
+                }
+            }
 
             &-title {
                 color: #191919;
@@ -350,7 +385,7 @@
             justify-content: flex-start;
             margin-top: 12px;
             padding: 0;
-            width: 260px;
+            width: 100%;
 
 
             &-image {
@@ -429,7 +464,11 @@
 }
 
 .sales-modal {
-    font-family: 'GT America Trial', 'Open Sans', sans-serif;
+    font-family: var(--permobil-navigator-font-family);
+
+    & * {
+        font-family: var(--permobil-navigator-font-family);
+    }
 
     &__close {
         color: #222222;
@@ -536,8 +575,12 @@
         text-decoration: none;
 
         &:hover {
-            color: #414042;
+            color: #0067A6;
             text-decoration: none;
+        }
+
+        &:focus {
+            outline-width: 0px;
         }
 
         span {
@@ -546,7 +589,7 @@
     }
 
     &__form {
-
+        
         p,
         .submitted-message {
             text-align: center;
@@ -598,11 +641,12 @@
 
             fieldset {
                 max-width: 100% !important;
+                margin: 0 !important;
             }
         }
 
         .hs-form-field {
-            margin-bottom: 20px;
+            margin: 0 0 20px;
         }
 
         .hs-form-field > label:nth-child(1) span {
@@ -641,17 +685,17 @@
         }
 
         .hs-form-field ::placeholder {
-            font-family: 'GT America Trial', 'Open Sans', sans-serif;
+            font-family: var(--permobil-navigator-font-family);
             color: #0A1318;
         }
           
         .hs-form-field :-ms-input-placeholder { 
-            font-family: 'GT America Trial', 'Open Sans', sans-serif;
+            font-family: var(--permobil-navigator-font-family);
             color: #0A1318;
         }
           
         .hs-form-field ::-ms-input-placeholder { 
-            font-family: 'GT America Trial', 'Open Sans', sans-serif;
+            font-family: var(--permobil-navigator-font-family);
             color: #0A1318;
         }
 
