@@ -1,20 +1,81 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
+import Select from 'react-select';
 import {
+    connectRefinementList,
     connectCurrentRefinements,
     Stats,
     connectMenu,
-    InfiniteHits,
-    MenuSelect
+    InfiniteHits
 } from 'react-instantsearch-dom';
 import './style.scss';
+
+const customSelectStyles = {
+    control: (provided, state) => {
+        const boxShadow = state.isFocused ? 'none' : 'none'
+        return { ...provided, boxShadow };
+    },
+    menu: (provided, state) => {
+        const padding = '21px 0'
+        const border = '1px solid #CCCCCC'
+        const boxShadow = '0px 0px 5px rgba(0, 0, 0, 0.17)'
+        const top = '-35px'
+        return { ...provided, padding, border, boxShadow, top };
+    },
+    option: (provided, state) => {
+        const padding = '11px 32px'
+        const fontSize = '13px'
+        const lineHeight = '16px'
+
+        return { ...provided, padding, fontSize, lineHeight };
+    },
+    singleValue: (provided, state) => {
+        const fontSize = '13px'
+        const lineHeight = '16px'
+        const borderColor = state.isFocused ? '#ccc' : '#ccc'
+        return { ...provided, fontSize, lineHeight, borderColor };
+    },
+    placeholder: (provided, state) => {
+        const fontSize = '13px'
+        const lineHeight = '16px'
+
+        return { ...provided, fontSize, lineHeight };
+    },
+}
 
 const ProductsDisplay = (props) => {
     const { isOpened, onClose, selectedCategory, menuItems } = props;
     const componentRef = useRef(null);
+    const [productFilters, setProductFilters] = useState(['filters.seatingMinWidth <= 100'])
+    const [isFeaturesOpened, setIsFeaturesOpened] = useState(false)
 
     const closeFilters = () => {
         onClose();
     }
+
+    const CustomSelect = connectMenu(({ items, currentRefinement, refine }) => {
+        return (
+            <Select
+                placeholder="Select an option"
+                className="products-display-component__custom-select-container"
+                classNamePrefix="products-display-component__custom-select"
+                value={items.filter(item => item.isRefined).length > 0 ? items.filter(item => item.isRefined) : ""}
+                onChange={(value, action) => {
+                    refine(value.value)
+                }}
+                options={!!currentRefinement ? [{ value: null, label: "See all", isRefined: false }, ...items] : items}
+                theme={theme => ({
+                    ...theme,
+                    borderRadius: 4,
+                    colors: {
+                        ...theme.colors,
+                        primary25: '#F5F8FA',
+                        primary: '#0067A6',
+                    },
+                })}
+                styles={customSelectStyles}
+            />
+        )
+    })
 
     const renderHit = ({ hit }) => {
         const hitImage = !!hit.media && !!hit.media.thumbnails && !!hit.media.thumbnails.large ? hit.media.thumbnails.large : '';
@@ -50,7 +111,7 @@ const ProductsDisplay = (props) => {
         <div className="products-display-component__results">
             <div className="products-display-component__results-header">
                 <CurrentRefinements transformItems={items =>
-                    items.filter(item => item.attribute !== 'categories')
+                    items.filter(item => item.attribute !== 'categories' && item.attribute !== 'tags.ID')
                 } />
                 <div className="products-display-component__results-title">
                     <Stats
@@ -70,6 +131,37 @@ const ProductsDisplay = (props) => {
             </div>
         </div>
     )
+
+    const FeaturesList = connectRefinementList(({ items, currentRefinement, refine }) => {
+        const tags = [];
+        items.forEach(item => {
+            const tag = item.label.split('::')[1];
+            if (!!tags.includes(tag)) {
+                return;
+            } else {
+                tags.push(tag);
+            }
+        })
+
+
+        return !!tags && tags.length > 0 && tags.map(tag => (
+            <div key={tag}>
+                <span className="products-display-component__filters-checkbox-list-title">{tag}</span>
+                <ul className="products-display-component__filters-checkbox-list">
+                    {items.filter(item => item.label.split("::")[1] === tag).map(item => (
+                        <li key={tag + '-' + item.label}>
+                            <label className="ais-RefinementList-label">
+                                <input className="ais-RefinementList-checkbox" type="checkbox" value={item.value} onChange={event => {
+                                    refine(event.target.checked ? item.value : "");
+                                }} />
+                                <span className="ais-RefinementList-labelText">{item.label.split('::')[0]}</span>
+                            </label>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        ))
+    })
 
     const CategoriesMenu = connectMenu(({ items, currentRefinement, refine }) => {
         return (
@@ -107,7 +199,11 @@ const ProductsDisplay = (props) => {
     const renderFilters = () => (
         <div className="products-display-component__filters">
             <div className="products-display-component__filters-header">
-                <span className="products-display-component__filters-title">FILTERS</span>
+                <span className="products-display-component__filters-title">
+                    <ProductsTitle transformItems={items =>
+                        items.filter(item => item.attribute === 'categories')
+                    } />
+                </span>
                 <svg onClick={closeFilters} width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M10.0469 8L14.875 3.21875L15.8594 2.23438C16 2.09375 16 1.85938 15.8594 1.67188L14.8281 0.640625C14.6406 0.5 14.4062 0.5 14.2656 0.640625L8.5 6.45312L2.6875 0.640625C2.54688 0.5 2.3125 0.5 2.125 0.640625L1.09375 1.67188C0.953125 1.85938 0.953125 2.09375 1.09375 2.23438L6.90625 8L1.09375 13.8125C0.953125 13.9531 0.953125 14.1875 1.09375 14.375L2.125 15.4062C2.3125 15.5469 2.54688 15.5469 2.6875 15.4062L8.5 9.59375L13.2812 14.4219L14.2656 15.4062C14.4062 15.5469 14.6406 15.5469 14.8281 15.4062L15.8594 14.375C16 14.1875 16 13.9531 15.8594 13.8125L10.0469 8Z" fill="currentColor" />
                 </svg>
@@ -115,16 +211,36 @@ const ProductsDisplay = (props) => {
             <div className="products-display-component__filters-body">
                 <CategoriesMenu attribute="categories" defaultRefinement={selectedCategory} limit={100} />
                 <div className="products-display-component__filters-select">
-                    <label><span>Diagnostic</span><br /><MenuSelect attribute="filters.diagnostic" /></label>
+                    <label><span>Diagnostic</span><br /><CustomSelect attribute="filters.diagnostic" /></label>
                 </div>
                 <div className="products-display-component__filters-select">
-                    <label><span>Movement Style</span><br /><MenuSelect attribute="filters.movement" /></label>
+                    <label><span>Movement Style</span><br /><CustomSelect attribute="filters.movement" /></label>
                 </div>
                 <div className="products-display-component__filters-select">
-                    <label><span>Your Weight</span><br /><MenuSelect attribute="filters.weight" /></label>
+                    <label><span>Your Weight</span><br /><CustomSelect attribute="filters.weight" /></label>
                 </div>
+                <div className={`products-display-component__filters-features ${isFeaturesOpened ? 'opened' : ''}`}>
+                    <div className="products-display-component__filters-features-container">
+                        <div className="products-display-component__filters-features-title" onClick={() => {
+                            setIsFeaturesOpened(!isFeaturesOpened)
+                        }}>
+                            <span>Features</span>
+                            <svg width="13" height="8" viewBox="0 0 13 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M6.03516 7.19531C6.28125 7.44141 6.69141 7.44141 6.9375 7.19531L12.2695 1.89062C12.5156 1.61719 12.5156 1.20703 12.2695 0.960938L11.6406 0.332031C11.3945 0.0859375 10.9844 0.0859375 10.7109 0.332031L6.5 4.54297L2.26172 0.332031C1.98828 0.0859375 1.57812 0.0859375 1.33203 0.332031L0.703125 0.960938C0.457031 1.20703 0.457031 1.61719 0.703125 1.89062L6.03516 7.19531Z" fill="currentColor" />
+                            </svg>
+                        </div>
+                        <div className="products-display-component__filters-features-wrapper">
+                            <FeaturesList
+                                attribute="tags.ID"
+                                operator="and"
+                            />
+                        </div>
+                    </div>
+                </div>
+
+
             </div>
-        </div>
+        </div >
     )
 
     // Handle click outside the component
@@ -150,6 +266,7 @@ const ProductsDisplay = (props) => {
 
     return isOpened ? (
         <div className="products-display-component" ref={componentRef}>
+
             {renderFilters()}
             {renderResults()}
         </div>

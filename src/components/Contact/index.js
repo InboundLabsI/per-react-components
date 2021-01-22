@@ -70,7 +70,7 @@ const Contact = ({ domElement }) => {
     const onContactRepFormReady = (form, rep) => {
         let submitButton = document.querySelector('.sales-modal__form input[type="submit"]')
         if (!!submitButton) {
-            submitButton.value = `Reach out to ${selectedRep.name}`;
+            //submitButton.value = `Reach out to ${selectedRep.name}`;
         }
     }
 
@@ -375,6 +375,7 @@ const Contact = ({ domElement }) => {
             >
                 {renderSalesRepModal()}
             </Modal>
+
         </div>
     )
 }

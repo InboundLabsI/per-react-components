@@ -371,7 +371,7 @@ body.ReactModal__Body--open {
             &-change {
                 color: #0067A6;
                 cursor: pointer;
-                font-weight: 600;
+                font-weight: 500;
             }
         }
 
@@ -646,7 +646,7 @@ body.ReactModal__Body--open {
         }
 
         .hs-form-field {
-            margin: 0 0 20px;
+            margin: 0 0 20px !important;
         }
 
         .hs-form-field > label:nth-child(1) span {
