@@ -93,25 +93,46 @@ const ProductsDisplay = (props) => {
         return !!categoryItem ? (<span>{categoryItem.currentRefinement}</span>) : null;
     })
 
-    const CurrentRefinements = connectCurrentRefinements(({ items, refine }) => items.length > 0 ? <div className="products-display-component__results-refinements">
-        {items.map(item => (
-            <button key={item.label} onClick={(e) => {
-                e.preventDefault();
-                refine(item.value)
-            }}>
-                <span>{item.currentRefinement}</span>
-                <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M5.14648 3.875L7.35938 1.68359L7.81055 1.23242C7.875 1.16797 7.875 1.06055 7.81055 0.974609L7.33789 0.501953C7.25195 0.4375 7.14453 0.4375 7.08008 0.501953L4.4375 3.16602L1.77344 0.501953C1.70898 0.4375 1.60156 0.4375 1.51562 0.501953L1.04297 0.974609C0.978516 1.06055 0.978516 1.16797 1.04297 1.23242L3.70703 3.875L1.04297 6.53906C0.978516 6.60352 0.978516 6.71094 1.04297 6.79688L1.51562 7.26953C1.60156 7.33398 1.70898 7.33398 1.77344 7.26953L4.4375 4.60547L6.62891 6.81836L7.08008 7.26953C7.14453 7.33398 7.25195 7.33398 7.33789 7.26953L7.81055 6.79688C7.875 6.71094 7.875 6.60352 7.81055 6.53906L5.14648 3.875Z" fill="#A7A9AC" />
-                </svg>
-            </button>
-        ))}
-    </div> : null)
+    const CurrentRefinements = connectCurrentRefinements(({ items, refine }) => {
+        console.log('CurrentRefinements items', items);
+
+        return items.length > 0 ? <div className="products-display-component__results-refinements">
+            {items.filter(item => item.attribute !== 'tags.ID').map(item => (
+                <button key={item.label} onClick={(e) => {
+                    e.preventDefault();
+                    refine(item.value)
+                }}>
+                    <span>{item.currentRefinement}</span>
+                    <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5.14648 3.875L7.35938 1.68359L7.81055 1.23242C7.875 1.16797 7.875 1.06055 7.81055 0.974609L7.33789 0.501953C7.25195 0.4375 7.14453 0.4375 7.08008 0.501953L4.4375 3.16602L1.77344 0.501953C1.70898 0.4375 1.60156 0.4375 1.51562 0.501953L1.04297 0.974609C0.978516 1.06055 0.978516 1.16797 1.04297 1.23242L3.70703 3.875L1.04297 6.53906C0.978516 6.60352 0.978516 6.71094 1.04297 6.79688L1.51562 7.26953C1.60156 7.33398 1.70898 7.33398 1.77344 7.26953L4.4375 4.60547L6.62891 6.81836L7.08008 7.26953C7.14453 7.33398 7.25195 7.33398 7.33789 7.26953L7.81055 6.79688C7.875 6.71094 7.875 6.60352 7.81055 6.53906L5.14648 3.875Z" fill="#A7A9AC" />
+                    </svg>
+                </button>
+            ))}
+            {items.filter(item => item.attribute === 'tags.ID').map(itemGroup => (
+                <React.Fragment key={itemGroup.label}>
+                    {itemGroup.items.map(item => (
+                        <button key={item.label.split('::')[0]} onClick={(e) => {
+                            e.preventDefault();
+                            refine(item.value)
+                        }}>
+                            <span>{item.label.split('::')[0]}</span>
+                            <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M5.14648 3.875L7.35938 1.68359L7.81055 1.23242C7.875 1.16797 7.875 1.06055 7.81055 0.974609L7.33789 0.501953C7.25195 0.4375 7.14453 0.4375 7.08008 0.501953L4.4375 3.16602L1.77344 0.501953C1.70898 0.4375 1.60156 0.4375 1.51562 0.501953L1.04297 0.974609C0.978516 1.06055 0.978516 1.16797 1.04297 1.23242L3.70703 3.875L1.04297 6.53906C0.978516 6.60352 0.978516 6.71094 1.04297 6.79688L1.51562 7.26953C1.60156 7.33398 1.70898 7.33398 1.77344 7.26953L4.4375 4.60547L6.62891 6.81836L7.08008 7.26953C7.14453 7.33398 7.25195 7.33398 7.33789 7.26953L7.81055 6.79688C7.875 6.71094 7.875 6.60352 7.81055 6.53906L5.14648 3.875Z" fill="#A7A9AC" />
+                            </svg>
+                        </button>
+                    ))}
+                </React.Fragment>
+
+            ))}
+        </div> : null
+    })
+
 
     const renderResults = () => (
         <div className="products-display-component__results">
             <div className="products-display-component__results-header">
                 <CurrentRefinements transformItems={items =>
-                    items.filter(item => item.attribute !== 'categories' && item.attribute !== 'tags.ID')
+                    items.filter(item => item.attribute !== 'categories')
                 } />
                 <div className="products-display-component__results-title">
                     <Stats
@@ -144,17 +165,17 @@ const ProductsDisplay = (props) => {
         })
 
 
-        return !!tags && tags.length > 0 && tags.map(tag => (
+        return !!tags && tags.length > 0 && tags.sort((a, b) => (a > b) ? 1 : ((b > a) ? -1 : 0)).map(tag => (
             <div key={tag}>
                 <span className="products-display-component__filters-checkbox-list-title">{tag}</span>
                 <ul className="products-display-component__filters-checkbox-list">
-                    {items.filter(item => item.label.split("::")[1] === tag).map(item => (
+                    {items.filter(item => item.label.split("::")[1] === tag).sort((a, b) => (a.label.split('::')[0] > b.label.split('::')[0]) ? 1 : ((b.label.split('::')[0] > a.label.split('::')[0]) ? -1 : 0)).map(item => (
                         <li key={tag + '-' + item.label}>
                             <label className="ais-RefinementList-label">
-                                <input className="ais-RefinementList-checkbox" type="checkbox" value={item.value} onChange={event => {
-                                    refine(event.target.checked ? item.value : "");
+                                <input className="ais-RefinementList-checkbox" type="checkbox" checked={currentRefinement.includes(item.label)} value={item.value} onChange={event => {
+                                    refine(item.value);
                                 }} />
-                                <span className="ais-RefinementList-labelText">{item.label.split('::')[0]}</span>
+                                <span className="ais-RefinementList-labelText">{item.label.split('::')[0]} ({item.count})</span>
                             </label>
                         </li>
                     ))}
@@ -210,7 +231,7 @@ const ProductsDisplay = (props) => {
             </div>
             <div className="products-display-component__filters-body">
                 <CategoriesMenu attribute="categories" defaultRefinement={selectedCategory} limit={100} />
-                <div className="products-display-component__filters-select">
+                {/*<div className="products-display-component__filters-select">
                     <label><span>Diagnostic</span><br /><CustomSelect attribute="filters.diagnostic" /></label>
                 </div>
                 <div className="products-display-component__filters-select">
@@ -218,19 +239,15 @@ const ProductsDisplay = (props) => {
                 </div>
                 <div className="products-display-component__filters-select">
                     <label><span>Your Weight</span><br /><CustomSelect attribute="filters.weight" /></label>
-                </div>
-                <div className={`products-display-component__filters-features ${isFeaturesOpened ? 'opened' : ''}`}>
+                </div>*/}
+                <div className={`products-display-component__filters-features opened`}>
                     <div className="products-display-component__filters-features-container">
-                        <div className="products-display-component__filters-features-title" onClick={() => {
-                            setIsFeaturesOpened(!isFeaturesOpened)
-                        }}>
+                        <div className="products-display-component__filters-features-title">
                             <span>Features</span>
-                            <svg width="13" height="8" viewBox="0 0 13 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M6.03516 7.19531C6.28125 7.44141 6.69141 7.44141 6.9375 7.19531L12.2695 1.89062C12.5156 1.61719 12.5156 1.20703 12.2695 0.960938L11.6406 0.332031C11.3945 0.0859375 10.9844 0.0859375 10.7109 0.332031L6.5 4.54297L2.26172 0.332031C1.98828 0.0859375 1.57812 0.0859375 1.33203 0.332031L0.703125 0.960938C0.457031 1.20703 0.457031 1.61719 0.703125 1.89062L6.03516 7.19531Z" fill="currentColor" />
-                            </svg>
                         </div>
                         <div className="products-display-component__filters-features-wrapper">
                             <FeaturesList
+                                limit={100}
                                 attribute="tags.ID"
                                 operator="and"
                             />
