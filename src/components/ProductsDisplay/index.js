@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react'
-import Select from 'react-select';
+import Select, { components } from 'react-select';
 import {
     connectRefinementList,
     connectCurrentRefinements,
@@ -42,8 +42,48 @@ const customSelectStyles = {
     },
 }
 
+const customCategorySelectStyles = {
+    container: (provided, state) => {
+        return { ...provided, margin: '0 32px 30px' };
+    },
+    control: (provided, state) => {
+        const boxShadow = state.isFocused ? 'none' : 'none'
+        const border = '1px solid #DCDDDE'
+        return { ...provided, boxShadow, border, minHeight: 64, borderRadius: 4 };
+    },
+    indicatorSeparator: (provided, state) => {
+        return { ...provided, display: 'none' };
+    },
+    menu: (provided, state) => {
+        const padding = '21px 0'
+        const border = '1px solid #CCCCCC'
+        const boxShadow = '0px 0px 5px rgba(0, 0, 0, 0.17)'
+        const top = '100%'
+        return { ...provided, padding, border, boxShadow, top };
+    },
+    option: (provided, state) => {
+        const padding = '11px 32px'
+        const fontSize = '13px'
+        const lineHeight = '16px'
+        console.log('option state', state);
+        return { ...provided, padding, fontSize, lineHeight, backgroundColor: state.isFocused ? '#F5F8FA' : state.isSelected ? '#F5F8FA' : 'transparent', color: '#191919' };
+    },
+    singleValue: (provided, state) => {
+        const fontSize = '13px'
+        const lineHeight = '16px'
+        const borderColor = state.isFocused ? '#ccc' : '#ccc'
+        return { ...provided, fontSize, lineHeight, borderColor };
+    },
+    placeholder: (provided, state) => {
+        const fontSize = '13px'
+        const lineHeight = '16px'
+
+        return { ...provided, fontSize, lineHeight };
+    },
+}
+
 const ProductsDisplay = (props) => {
-    const { isOpened, onClose, selectedCategory, menuItems } = props;
+    const { isOpened, onClose, selectedCategory, menuItems, setSelectedCategory } = props;
     const componentRef = useRef(null);
     const [productFilters, setProductFilters] = useState(['filters.seatingMinWidth <= 100'])
     const [isFeaturesOpened, setIsFeaturesOpened] = useState(false)
@@ -94,7 +134,6 @@ const ProductsDisplay = (props) => {
     })
 
     const CurrentRefinements = connectCurrentRefinements(({ items, refine }) => {
-        console.log('CurrentRefinements items', items);
 
         return items.length > 0 ? <div className="products-display-component__results-refinements">
             {items.filter(item => item.attribute !== 'tags.ID').map(item => (
@@ -184,48 +223,56 @@ const ProductsDisplay = (props) => {
         ))
     })
 
-    const CategoriesMenu = connectMenu(({ items, currentRefinement, refine }) => {
-        return (
-            <ul className="products-display-component__filters-categories">
-                {items.filter(item => menuItems.map(i => i.categoryName).includes(item.label)).map(item => {
-                    const menuItem = menuItems.find(i => i.categoryName === item.label);
-                    if (!!menuItem) {
-                        item.order = menuItem.order
-                    }
-                    return item;
-                }).sort((a, b) => a.order - b.order).map(item => {
-                    const menuItem = menuItems.find(i => i.categoryName === item.label);
-                    return (<li key={item.label}>
-                        <a
-                            href="#"
-                            onClick={event => {
-                                event.preventDefault();
-                                console.log('currentRefinement', currentRefinement);
-                                //refine(currentRefinement[0]);
-                                if (!item.isRefined) {
-                                    refine(item.value);
-                                }
-                            }}
-                            className={item.isRefined ? 'active' : 'not-active'}
-                        >
-                            {!!menuItem.image && (<div style={{ backgroundImage: `url(${menuItem.image})` }}></div>)}
-                            <span>{item.label}</span>
-                        </a>
-                    </li>)
+    const SingleValue = ({ children, ...props }) => {
+        const currentCategory = props.getValue()[0];
+        return (<components.SingleValue {...props}>
+            <div className="products-display-component__category-select-value">
+                <div className="products-display-component__category-select-value-image" style={{ backgroundImage: `url(${currentCategory.image})` }}></div>
+                <div className="products-display-component__category-select-value-title">
+                    {currentCategory.title}
+                </div>
+
+            </div>
+        </components.SingleValue >)
+    }
+
+
+    const CategoriesMenu = connectRefinementList(() => (
+        <>
+            <Select
+                placeholder="Select an option"
+                className="products-display-component__custom-select-container"
+                classNamePrefix="products-display-component__custom-select"
+                value={menuItems.filter(item => item.categoryName === selectedCategory)}
+                onChange={(value, action) => {
+                    setSelectedCategory(value.categoryName)
+                }}
+                options={menuItems}
+                theme={theme => ({
+                    ...theme,
+                    borderRadius: 4,
+                    colors: {
+                        ...theme.colors,
+                        primary25: '#F5F8FA',
+                        primary: '#0067A6',
+                    },
                 })}
-            </ul>
-        )
-    })
+                styles={customCategorySelectStyles}
+                components={{ SingleValue }}
+            />
+        </>
+    ))
+
 
     const renderFilters = () => (
         <div className="products-display-component__filters">
             <div className="products-display-component__filters-header">
-                <span className="products-display-component__filters-title">
+                <span className="products-display-component__filters-title" style={{ display: 'none' }}>
                     <ProductsTitle transformItems={items =>
                         items.filter(item => item.attribute === 'categories')
                     } />
                 </span>
-                <svg onClick={closeFilters} width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg style={{ marginLeft: 'auto' }} onClick={closeFilters} width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M10.0469 8L14.875 3.21875L15.8594 2.23438C16 2.09375 16 1.85938 15.8594 1.67188L14.8281 0.640625C14.6406 0.5 14.4062 0.5 14.2656 0.640625L8.5 6.45312L2.6875 0.640625C2.54688 0.5 2.3125 0.5 2.125 0.640625L1.09375 1.67188C0.953125 1.85938 0.953125 2.09375 1.09375 2.23438L6.90625 8L1.09375 13.8125C0.953125 13.9531 0.953125 14.1875 1.09375 14.375L2.125 15.4062C2.3125 15.5469 2.54688 15.5469 2.6875 15.4062L8.5 9.59375L13.2812 14.4219L14.2656 15.4062C14.4062 15.5469 14.6406 15.5469 14.8281 15.4062L15.8594 14.375C16 14.1875 16 13.9531 15.8594 13.8125L10.0469 8Z" fill="currentColor" />
                 </svg>
             </div>

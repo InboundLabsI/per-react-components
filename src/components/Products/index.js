@@ -9,6 +9,8 @@ const menuItems = [
     {
         subtitle: 'EXPLORE',
         title: 'Power Wheelchairs',
+        label: 'Power Wheelchairs',
+        value: 'Power Wheelchairs',
         image: 'https://f.hubspotusercontent00.net/hubfs/1624307/social-suggested-images/power.png',
         url: 'https://permobilus.com/products/power-wheelchairs-by-permobil',
         categoryName: 'Power Wheelchairs',
@@ -17,6 +19,8 @@ const menuItems = [
     {
         subtitle: 'EXPLORE',
         title: 'Manual Wheelchairs',
+        label: 'Manual Wheelchairs',
+        value: 'Manual Wheelchairs',
         image: 'https://f.hubspotusercontent00.net/hubfs/1624307/social-suggested-images/manual.png',
         url: 'https://permobilus.com/products/tilite-manual-wheelchairs-smartdrive-power-assist/',
         categoryName: 'Manual Wheelchairs',
@@ -25,6 +29,8 @@ const menuItems = [
     {
         subtitle: 'EXPLORE',
         title: 'Seating / Positioning',
+        label: 'Seating and Positioning',
+        value: 'Seating and Positioning',
         image: 'https://f.hubspotusercontent00.net/hubfs/1624307/social-suggested-images/seat.png',
         url: 'https://permobilus.com/products/seating-and-positioning-by-roho/',
         categoryName: 'Seating and Positioning',
@@ -186,6 +192,7 @@ const Products = ({ domElement }) => {
                         setSelectedCategory(null);
                     }}
                     selectedCategory={selectedCategory}
+                    setSelectedCategory={setSelectedCategory}
                     menuItems={menuItems}
                 />
             </InstantSearch>
