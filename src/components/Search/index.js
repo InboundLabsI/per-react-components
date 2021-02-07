@@ -13,12 +13,8 @@ const indexTitles = {
 }
 
 
-const Search = ({ domElement }) => {
+const Search = ({ algoliaAppID, algoliaSearchKey, algoliaIndices, headerHeight }) => {
     const componentRef = useRef(null);
-    const algoliaAppID = domElement.getAttribute('data-algolia-app-id');
-    const algoliaSearchKey = domElement.getAttribute('data-algolia-search-key');
-    const algoliaIndices = domElement.getAttribute('data-algolia-indices').split(',');
-    const headerHeight = domElement.getAttribute('data-header-height');
     const [isResultsVisible, setIsResultsVisible] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(false);
     const searchClient = algoliasearch(algoliaAppID, algoliaSearchKey);
@@ -140,7 +136,7 @@ const Search = ({ domElement }) => {
                             }
                             return true;
                         }).map(idx => (
-                            <>{renderIndexResults(idx)}</>
+                            <React.Fragment key={idx}>{renderIndexResults(idx)}</React.Fragment>
                         ))}
                     </div>
                 </div>
@@ -171,19 +167,21 @@ const Search = ({ domElement }) => {
         </div>
     )
 
+    function handleClickOutside(event) {
+        if (componentRef.current && !componentRef.current.contains(event.target)) {
+            setIsResultsVisible(false);
+        }
+    }
+
     // Handle click outside the component
     useEffect(() => {
-        function handleClickOutside(event) {
-            if (componentRef.current && !componentRef.current.contains(event.target)) {
-                setIsResultsVisible(false);
-            }
+        if(typeof window !== 'undefined'){       
+            document.addEventListener("mousedown", handleClickOutside);
+            return () => {
+                document.removeEventListener("mousedown", handleClickOutside);
+            };
         }
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
     }, []);
-
 
     return !!algoliaAppID && !!algoliaSearchKey && !!algoliaIndices && algoliaIndices.length > 0 ? (
         <InstantSearch searchClient={searchClient} indexName={algoliaIndices[0]}>
@@ -192,7 +190,7 @@ const Search = ({ domElement }) => {
                 {!!isResultsVisible ? renderResults() : null}
             </div>
         </InstantSearch>
-    ) : null;
+    ) : <React.Fragment></React.Fragment>;
 }
 
 export default Search;

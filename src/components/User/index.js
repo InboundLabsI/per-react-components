@@ -5,14 +5,13 @@ import EditProfileIcon from '../Icons/EditProfileIcon'
 import PreferencesIcon from '../Icons/PreferencesIcon'
 import LogoutIcon from '../Icons/LogoutIcon'
 
-const User = ({ domElement }) => {
+const User = ({ preferencesURL }) => {
     const componentRef = useRef(null);
     const [user, setUser] = useState(null)
     const [expanded, setExpanded] = useState(false)
     const [modalOpened, setModalOpened] = useState(false);
     const [dropdownAlignment, setDropdownAlignment] = useState('left')
-    const booya = window.booya;
-    const preferencesURL = domElement.getAttribute('data-preferences-url')
+    const booya = typeof window !== 'undefined' && !!window && !!window.booya ? window.booya : undefined;
 
 
     const handleBooyaEvents = () => {
@@ -99,7 +98,7 @@ const User = ({ domElement }) => {
     )
 
     const renderUserButton = () => (
-        <>
+        <React.Fragment>
             <button
                 className={`user-component__user-button ${!!expanded ? 'user-component__user-button--opened' : ''}`}
                 aria-haspopup="true"
@@ -116,26 +115,28 @@ const User = ({ domElement }) => {
                 <span className="user-component__user-button-name">{user.first_name}</span>
             </button>
             {!!expanded ? renderDropdown() : null}
-        </>
+        </React.Fragment>
     )
 
     // Listen to window resize
     useEffect(() => {
-        function updatedropdownAlignment() {
-            const offsetRight = window.innerWidth - componentRef.current.offsetLeft - componentRef.current.offsetWidth;
-            if (offsetRight < 200) {
-                if (componentRef.current.offsetLeft < 150) {
-                    setDropdownAlignment('center');
+        if(typeof window !== 'undefined'){
+            function updatedropdownAlignment() {
+                const offsetRight = window.innerWidth - componentRef.current.offsetLeft - componentRef.current.offsetWidth;
+                if (offsetRight < 200) {
+                    if (componentRef.current.offsetLeft < 150) {
+                        setDropdownAlignment('center');
+                    } else {
+                        setDropdownAlignment('right');
+                    }
                 } else {
-                    setDropdownAlignment('right');
+                    setDropdownAlignment('left');
                 }
-            } else {
-                setDropdownAlignment('left');
             }
+            window.addEventListener('resize', updatedropdownAlignment);
+            updatedropdownAlignment();
+            return () => window.removeEventListener('resize', updatedropdownAlignment);
         }
-        window.addEventListener('resize', updatedropdownAlignment);
-        updatedropdownAlignment();
-        return () => window.removeEventListener('resize', updatedropdownAlignment);
     }, []);
 
     // Listen for booya events
@@ -163,10 +164,10 @@ const User = ({ domElement }) => {
     return !!booya ? (
         <div className="user-component" id="contact-component" ref={componentRef}>
             {!!user && !!user.id ? renderUserButton() : (
-                <>
+                <React.Fragment>
                     <button className="user-component__auth-button" onClick={handleSignUpClick}>Sign up</button>
                     <button className="user-component__auth-button" onClick={handleLogInClick}>Log in</button>
-                </>
+                </React.Fragment>
             )}
             <Modal
                 modalIsOpen={!!modalOpened}

@@ -1,52 +1,53 @@
-# Permobil Navigator 1.1 - React Components
+# il-per-react-components
 
-## Development
+> React components by InboundLabs
 
-`yarn start`
+## Install
 
-## Build
-
-`yarn build:widget`
-
-## How to use
-
-### 1. Create containers for components
-
-Add empty `div` elements with `permobil-navigator-component` class and pass configuration options via `data` attributes.
-
-```
-<div class="permobil-navigator-component" data-component="contact"></div>
+```bash
+yarn add il-per-react-components
 ```
 
-### 2. Add script and styles
+## Usage
 
-Upload js and css files from `dist` folder, and add it to the page:
+```jsx
+import React from 'react'
+import { Contact, Products, Search } from 'il-per-react-components'
+import 'il-per-react-components/dist/index.css'
 
+const searchOptions = {
+  algoliaAppID: "", // Algolia Application ID | required
+  algoliaSearchKey: "", // Algolia search-only API key | required
+  algoliaIndices: "", // Comma-separated list of Algolia indices | required
+  headerHeight: "", // Height of the Navigator container (header), in px. | optional
+}
+
+const productsOptions = {
+  algoliaAppID: "", // Algolia Application ID, required
+  algoliaSearchKey: "", // Algolia search-only API key | required
+  algoliaIndexName: "" // Algolia index name | required
+}
+
+const contactOptions = {
+  ticketSubmissionURL: "", // URL for ticket submission link. | optional
+  salesContactFormId: "", // Sales rep contact HS form id. | optional
+  salesContactPortalId: "", // Sales rep contact HS portal id. | optional
+  supportUrl: "", // URL for support menu item. | optional
+  headerHeight: "", // Height of the Navigator container (header), in px. | optional
+}
+
+const Example = () => {
+
+  return (
+    <div className="example-navigator">
+      <Search {...searchOptions} />
+      <Products {...productsOptions} />
+      <Contact {...contactOptions} />
+    </div>
+  )
+} 
 ```
-<link href="permobil-navigator-components.css" rel="stylesheet" />
-<script src="permobil-navigator-components.js"></script>
-```
 
-### 3. Configure 
+## License
 
-Options must be passed via `data-` attributes, with each component.
-
-| Option                       | Components        | Required | Description                                                    |
-| ---------------------------- |-------------------|:--------:| ---------------------------------------------------------------|
-| data-component               | *                 | Yes      | Component name. One of: "Contact", "Products", "User".         |
-| data-support-url             | Contact           | No       | URL for support menu item.                                     |
-| data-ticket-submission-url   | Contact           | No       | URL for ticket submission link.                                |
-| data-sales-contact-form-id   | Contact           | No       | Sales rep contact HS form id.                                  |
-| data-sales-contact-portal-id | Contact           | No       | Sales rep contact HS portal id.                                |
-| data-algolia-search-key      | Products, Search  | Yes      | Algolia search-only API key                                    |
-| data-algolia-app-id          | Products, Search  | Yes      | Algolia Application ID                                         |
-| data-algolia-index-name      | Products          | Yes      | Algolia index name                                             |
-| data-algolia-indices         | Search            | Yes      | Comma-separated list of Algolia indices                        |
-| data-header-height           | Search            | No       | Height of the Navigator container (header), in px. Default: 60 |
-| data-preferences-url         | User              | No       | URL for Preferencies link                                      |
-
-## Author
-
-Egor Milyukov at InboundLabs  
-egor@inboundlabs.co  
-2020
+MIT © [milukove](https://github.com/milukove)

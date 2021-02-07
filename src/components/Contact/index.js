@@ -21,7 +21,7 @@ const menuItems = [
     }
 ]
 
-const Contact = ({ domElement }) => {
+const Contact = ({ supportURL, ticketSubmissionURL, salesContactFormId, salesContactPortalId, headerHeight, showMenu }) => {
     const [expanded, setExpanded] = useState(false);
     const [zipError, setZipError] = useState(null)
     const [searching, setSearching] = useState(false)
@@ -34,12 +34,7 @@ const Contact = ({ domElement }) => {
     const [showModalForm, setShowModalForm] = useState(false)
     const [dropdownAlignment, setDropdownAlignment] = useState('left')
     const componentRef = useRef(null);
-    const supportURL = domElement.getAttribute('data-support-url')
-    const ticketSubmissionURL = domElement.getAttribute('data-ticket-submission-url')
-    const salesContactFormId = domElement.getAttribute('data-sales-contact-form-id')
-    const salesContactPortalId = domElement.getAttribute('data-sales-contact-portal-id')
-    const headerHeight = domElement.getAttribute('data-header-height');
-    const showMenu = domElement.getAttribute('data-show-menu');
+
 
     const handleZipInputChange = (event) => {
         if (!!event.target.value && event.target.value.length >= 5) {
@@ -180,7 +175,7 @@ const Contact = ({ domElement }) => {
     const renderMenu = () => !!menuItems && menuItems.length > 0 ? (
         <ul className="contact-component__dropdown-menu">
             {menuItems.map(menuItem => (
-                <li>
+                <li key={menuItem.url}>
                     <a href={menuItem.url}>
                         <span>{menuItem.label}</span>
                     </a>
@@ -276,85 +271,91 @@ const Contact = ({ domElement }) => {
 
     // Listen to window resize
     useEffect(() => {
-        function updatedropdownAlignment() {
-            const offsetRight = window.innerWidth - componentRef.current.offsetLeft - componentRef.current.offsetWidth;
-            if (offsetRight < 200) {
-                if (componentRef.current.offsetLeft < 150) {
-                    setDropdownAlignment('center');
+        if(typeof window !== 'undefined'){
+            function updatedropdownAlignment() {
+                const offsetRight = window.innerWidth - componentRef.current.offsetLeft - componentRef.current.offsetWidth;
+                if (offsetRight < 200) {
+                    if (componentRef.current.offsetLeft < 150) {
+                        setDropdownAlignment('center');
+                    } else {
+                        setDropdownAlignment('right');
+                    }
                 } else {
-                    setDropdownAlignment('right');
+                    setDropdownAlignment('left');
                 }
-            } else {
-                setDropdownAlignment('left');
             }
+            window.addEventListener('resize', updatedropdownAlignment);
+            updatedropdownAlignment();
+            return () => window.removeEventListener('resize', updatedropdownAlignment);
         }
-        window.addEventListener('resize', updatedropdownAlignment);
-        updatedropdownAlignment();
-        return () => window.removeEventListener('resize', updatedropdownAlignment);
     }, []);
 
     // Listen to post messages
     useEffect(() => {
-        const handler = event => {
-            const data = event.data
-            if (!!data) {
-                if (!!data.error && data.error === 'not_in_us') {
-                    return;
-                }
-                if (!!data.error && (data.error === 'invalid_zip' || data.error === 'Invalid zip code')) {
-                    setZipError('Invalid zip code, please try again');
-                    setSalesRep([]);
-                    setSearching(false)
-                    return;
-                }
-                if (!!data.error && data.error === 'unknown_failure') {
-                    setZipError('Unknown failure, please try again');
-                    setSalesRep([]);
-                    setSearching(false)
-                    return;
-                }
-
-
-                if (!!data.type && data.type === 'default_zip' && !!data.zip) {
-                    if (!savedZip) {
-                        setZip(data.zip);
-                        setSearching(true)
-                        localStorage.setItem('savedZip', data.zip)
+        if(typeof window !== 'undefined'){
+            const handler = event => {
+                const data = event.data
+                if (!!data) {
+                    if (!!data.error && data.error === 'not_in_us') {
+                        return;
                     }
-                    return;
-                }
+                    if (!!data.error && (data.error === 'invalid_zip' || data.error === 'Invalid zip code')) {
+                        setZipError('Invalid zip code, please try again');
+                        setSalesRep([]);
+                        setSearching(false)
+                        return;
+                    }
+                    if (!!data.error && data.error === 'unknown_failure') {
+                        setZipError('Unknown failure, please try again');
+                        setSalesRep([]);
+                        setSearching(false)
+                        return;
+                    }
 
-                if (!!data.type && data.type === 'zip_search_result_processed' && !!data.result && !!data.result.reps && data.result.reps.length > 0) {
-                    const result = data.result.reps.map(rep => ({
-                        key: rep.key,
-                        name: rep.name,
-                        jobtitle: rep.details.jobtitle,
-                        sales_image: rep.details.sales_image
-                    }))
-                    setSalesRep(result);
-                    setZipError(null);
-                    setSearching(false)
-                    localStorage.setItem('savedZip', data.zip);
-                    localStorage.setItem('savedReps', JSON.stringify(result));
-                    return;
+
+                    if (!!data.type && data.type === 'default_zip' && !!data.zip) {
+                        if (!savedZip) {
+                            setZip(data.zip);
+                            setSearching(true)
+                            localStorage.setItem('savedZip', data.zip)
+                        }
+                        return;
+                    }
+
+                    if (!!data.type && data.type === 'zip_search_result_processed' && !!data.result && !!data.result.reps && data.result.reps.length > 0) {
+                        const result = data.result.reps.map(rep => ({
+                            key: rep.key,
+                            name: rep.name,
+                            jobtitle: rep.details.jobtitle,
+                            sales_image: rep.details.sales_image
+                        }))
+                        setSalesRep(result);
+                        setZipError(null);
+                        setSearching(false)
+                        localStorage.setItem('savedZip', data.zip);
+                        localStorage.setItem('savedReps', JSON.stringify(result));
+                        return;
+                    }
                 }
             }
+            window.addEventListener("message", handler)
+            return () => window.removeEventListener("message", handler)
         }
-        window.addEventListener("message", handler)
-        return () => window.removeEventListener("message", handler)
     }, [])
 
     // Handle click outside the component
     useEffect(() => {
-        function handleClickOutside(event) {
-            if (componentRef.current && !componentRef.current.contains(event.target)) {
-                closeDropdown()
+        if(typeof window !== 'undefined'){
+            function handleClickOutside(event) {
+                if (componentRef.current && !componentRef.current.contains(event.target)) {
+                    closeDropdown()
+                }
             }
+            document.addEventListener("mousedown", handleClickOutside);
+            return () => {
+                document.removeEventListener("mousedown", handleClickOutside);
+            };
         }
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
     }, [componentRef]);
 
     return (

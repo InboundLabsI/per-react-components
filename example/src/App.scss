@@ -1,0 +1,108 @@
+
+@font-face {
+  font-family: 'GT America Trial';
+  src: url("https://f.hubspotusercontent00.net/hubfs/1624307/permobil-navigator-components/fonts/GT-America-Standard-Regular-Trial.otf") format("opentype");
+}
+@font-face {
+  font-family: 'GT America Trial';
+  font-weight: bold;
+  src: url("https://f.hubspotusercontent00.net/hubfs/1624307/permobil-navigator-components/fonts/GT-America-Standard-Bold-Trial.otf") format("opentype");
+}
+@font-face {
+  font-family: 'GT America Trial';
+  font-style: italic;
+  src: url("https://f.hubspotusercontent00.net/hubfs/1624307/permobil-navigator-components/fonts/GT-America-Standard-Regular-Italic-Trial.otf") format("opentype");
+}
+@font-face {
+  font-family: 'GT America Trial';
+  font-weight: 500;
+  src: url("https://f.hubspotusercontent00.net/hubfs/1624307/permobil-navigator-components/fonts/GT-America-Standard-Medium-Trial.otf") format("opentype");
+}
+
+:root {
+  --permobil-charcoal: #414042;
+  --permobil-royal-blue: #0067A6;
+  --permobil-light-grey: #F5F8FA;
+  --permobil-light-blue: #EDF8FF;
+  --permobil-primary: #0A1C2D;
+  --permobil-ocean: #009AC7;
+  --permobil-navigator-font-family: 'GT America Trial', 'Open Sans', sans-serif;
+}
+
+.navbar.c--standalone-header-navigation {
+  font-family: var(--permobil-navigator-font-family);
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.navbar.c--standalone-header-navigation {
+  display: none;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  height: 56px;
+  box-shadow: none;
+  background: #fff;
+}
+.permobil-navigator-component[data-component="search"] {
+  margin: 0 auto 0 0 !important;
+}
+.navbar.c--standalone-header-navigation .navbar-menu-wrapper {
+  margin: 0 auto !important;
+}
+.navbar.c--standalone-header-navigation .navbar-logo {
+  flex-grow: initial !important; 
+}
+@media (min-width: 1024px) {
+  .navbar-menu .hs-menu-wrapper > ul > li > ul {
+    top: calc(100% + 6px);
+    box-shadow: inset 0px 4px 0px #0067A6;
+    border-radius: 0;
+  }
+}
+@media(min-width: 767px){
+  .permobil-navigator-component[data-component="products"] {
+    margin-left: 40px !important;
+  }
+}
+.ais-RefinementList-checkbox:after,
+.ais-RefinementList-checkbox:before {
+  display: none !important;
+}
+@media(max-width: 767px){
+  .products-display-component__filters-body {
+    overflow: initial !important;
+    flex: none !important;
+    height: auto !important;
+  }
+  .products-display-component__results-body {
+    overflow: initial !important;
+  }
+  .products-display-component__filters {
+    height: auto !important;
+    flex: 2 !important; 
+  }
+  .search-component__searchbox input[type="search"] {
+    font-size: 16px !important; 
+    line-height: 1 !important;
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+  }
+  
+}
+.search-component__searchbox button[type="reset"] {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+.search-component__searchbox button[type="reset"][hidden]{
+  display: none !important 
+}
+.products-display-component__custom-select__value-container {
+  overflow: visible !important;
+}
+.products-display-component__category-select-value-image {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}

@@ -38,14 +38,11 @@ const menuItems = [
     }
 ]
 
-const Products = ({ domElement }) => {
+const Products = ({algoliaAppID, algoliaSearchKey, algoliaIndexName }) => {
     const [expanded, setExpanded] = useState(false);
     const [dropdownAlignment, setDropdownAlignment] = useState('left');
     const [selectedCategory, setSelectedCategory] = useState(null);
     const componentRef = useRef(null);
-    const algoliaAppID = domElement.getAttribute('data-algolia-app-id');
-    const algoliaSearchKey = domElement.getAttribute('data-algolia-search-key');
-    const algoliaIndexName = domElement.getAttribute('data-algolia-index-name');
 
     const searchClient = algoliasearch(algoliaAppID, algoliaSearchKey);
 
@@ -61,17 +58,16 @@ const Products = ({ domElement }) => {
     const handleHitClick = (event, hit) => {
         console.log('hit clicked', hit);
         closeDropdown();
-        if (!!hit.url) {
-            window.location.href = hit.url;
+        if(typeof window !== 'undefined'){
+            if (!!hit.url) {
+                window.location.href = hit.url;
+            }
         }
     }
 
     const handleMenuItemClick = (e, item) => {
         e.preventDefault();
         closeDropdown();
-        const search = window.location.search;
-        const params = new URLSearchParams(search);
-        const dev = params.get('dev');
         setSelectedCategory(item.categoryName);
     }
 
@@ -133,42 +129,46 @@ const Products = ({ domElement }) => {
 
     // Listen to window resize
     useEffect(() => {
-        function updatedropdownAlignment() {
-            if (!!componentRef.current) {
-                const offsetRight = window.innerWidth - componentRef.current.offsetLeft - componentRef.current.offsetWidth;
-                if (offsetRight < 200) {
-                    if (componentRef.current.offsetLeft < 150) {
-                        setDropdownAlignment('center');
+        if(typeof window !== 'undefined'){
+            function updatedropdownAlignment() {
+                if (!!componentRef.current) {
+                    const offsetRight = window.innerWidth - componentRef.current.offsetLeft - componentRef.current.offsetWidth;
+                    if (offsetRight < 200) {
+                        if (componentRef.current.offsetLeft < 150) {
+                            setDropdownAlignment('center');
+                        } else {
+                            setDropdownAlignment('right');
+                        }
                     } else {
-                        setDropdownAlignment('right');
+                        setDropdownAlignment('left');
                     }
-                } else {
-                    setDropdownAlignment('left');
                 }
-            }
 
+            }
+            window.addEventListener('resize', updatedropdownAlignment);
+            updatedropdownAlignment();
+            return () => window.removeEventListener('resize', updatedropdownAlignment);
         }
-        window.addEventListener('resize', updatedropdownAlignment);
-        updatedropdownAlignment();
-        return () => window.removeEventListener('resize', updatedropdownAlignment);
     }, []);
 
 
     // Handle click outside the component
     useEffect(() => {
-        function handleClickOutside(event) {
-            if (componentRef.current && !componentRef.current.contains(event.target)) {
-                closeDropdown()
+        if(typeof window !== 'undefined'){
+            function handleClickOutside(event) {
+                if (componentRef.current && !componentRef.current.contains(event.target)) {
+                    closeDropdown()
+                }
             }
+            document.addEventListener("mousedown", handleClickOutside);
+            return () => {
+                document.removeEventListener("mousedown", handleClickOutside);
+            };
         }
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
     }, [componentRef]);
 
     return !!algoliaAppID && !!algoliaSearchKey && !!algoliaIndexName ? (
-        <>
+        <React.Fragment>
             <InstantSearch searchClient={searchClient} indexName={algoliaIndexName}>
                 <div className="products-component" id="products-component" ref={componentRef}>
                     <button
@@ -196,7 +196,7 @@ const Products = ({ domElement }) => {
                     menuItems={menuItems}
                 />
             </InstantSearch>
-        </>
+        </React.Fragment>
 
     ) : null;
 }

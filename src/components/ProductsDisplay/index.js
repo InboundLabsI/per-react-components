@@ -238,7 +238,7 @@ const ProductsDisplay = (props) => {
 
 
     const CategoriesMenu = connectRefinementList(() => (
-        <>
+        <React.Fragment>
             <Select
                 placeholder="Select an option"
                 className="products-display-component__custom-select-container"
@@ -260,7 +260,7 @@ const ProductsDisplay = (props) => {
                 styles={customCategorySelectStyles}
                 components={{ SingleValue }}
             />
-        </>
+        </React.Fragment>
     ))
 
 
@@ -277,7 +277,7 @@ const ProductsDisplay = (props) => {
                 </svg>
             </div>
             <div className="products-display-component__filters-body">
-                <CategoriesMenu attribute="categories" defaultRefinement={selectedCategory} limit={100} />
+                <CategoriesMenu attribute="categories" defaultRefinement={[selectedCategory]} limit={100} />
                 {/*<div className="products-display-component__filters-select">
                     <label><span>Diagnostic</span><br /><CustomSelect attribute="filters.diagnostic" /></label>
                 </div>

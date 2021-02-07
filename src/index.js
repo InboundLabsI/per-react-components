@@ -1,14 +1,11 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
+import Contact from './components/Contact'
+import Search from './components/Search'
+import Products from './components/Products'
+import User from './components/User'
 
-const WidgetDivs = document.querySelectorAll('.permobil-navigator-component')
-
-WidgetDivs.forEach(Div => {
-  ReactDOM.render(
-    <React.StrictMode>
-      <App domElement={Div} />
-    </React.StrictMode>,
-    Div
-  );
-})
+export {
+  Contact,
+  Search,
+  Products,
+  User
+}

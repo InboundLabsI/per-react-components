@@ -110,7 +110,7 @@ body.search-results-opened {
         }
 
         &-wrapper {
-            background: rgb(10, 19, 24, 0.6);
+            background: rgba(10, 19, 24, 0.6);
             box-shadow: none;
             left: 0;
             height: calc(100vh - var(--header-height, 60px) + 10px);
@@ -163,7 +163,7 @@ body.search-results-opened {
         }
 
         &-index {
-            border-bottom: 1px solid rgba(10,28,45,.1);
+            border-bottom: 1px solid rgba(10,28,45,0.1);
             margin: 0 0 32px;
             padding: 0 0 10px;
 
@@ -214,7 +214,7 @@ body.search-results-opened {
                         }
 
                         &:hover {
-                            background: rgba(0,103,166,.1);
+                            background: rgba(0,103,166,0.1);
                             cursor: pointer;
                         }
 
