@@ -25,11 +25,8 @@ const Contact = ({ supportURL, ticketSubmissionURL, salesContactFormId, salesCon
     const [expanded, setExpanded] = useState(false);
     const [zipError, setZipError] = useState(null)
     const [searching, setSearching] = useState(false)
-    let savedReps = localStorage.getItem('savedReps');
-    if (!!savedReps) savedReps = JSON.parse(savedReps);
-    const [salesRep, setSalesRep] = useState(!!savedReps ? savedReps : []);
-    const savedZip = localStorage.getItem('savedZip');
-    const [zip, setZip] = useState(!!savedZip ? savedZip : "");
+    const [salesRep, setSalesRep] = useState([]);
+    const [zip, setZip] = useState("");
     const [selectedRep, setSelectedRep] = useState(null)
     const [showModalForm, setShowModalForm] = useState(false)
     const [dropdownAlignment, setDropdownAlignment] = useState('left')
@@ -268,6 +265,18 @@ const Contact = ({ supportURL, ticketSubmissionURL, salesContactFormId, salesCon
             <span>Contact</span>
         </button>
     )
+
+    // Set locally saved sales rep
+    useEffect(()=>{
+        let savedReps = localStorage.getItem('savedReps');
+        if (!!savedReps) setSalesRep(JSON.parse(savedReps));
+    }, [])
+
+    // Set locally saved zipcode
+    useEffect(()=>{
+        const savedZip = localStorage.getItem('savedZip');
+        if (!!savedZip) setZip(savedZip);
+    }, [])
 
     // Listen to window resize
     useEffect(() => {
