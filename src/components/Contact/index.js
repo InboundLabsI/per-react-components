@@ -27,10 +27,12 @@ const Contact = ({ supportURL, ticketSubmissionURL, salesContactFormId, salesCon
     const [searching, setSearching] = useState(false)
     const [salesRep, setSalesRep] = useState([]);
     const [zip, setZip] = useState("");
+    const [localZip, setLocalZip] = useState("");
     const [selectedRep, setSelectedRep] = useState(null)
     const [showModalForm, setShowModalForm] = useState(false)
     const [dropdownAlignment, setDropdownAlignment] = useState('left')
     const componentRef = useRef(null);
+    const [zipChecked, setZipChecked] = useState(false)
 
 
     const handleZipInputChange = (event) => {
@@ -135,7 +137,7 @@ const Contact = ({ supportURL, ticketSubmissionURL, salesContactFormId, salesCon
                         />
                     </div>
                     {!!zipError && (
-                        <p class="contact-component__sales-form-input-error">{zipError}</p>
+                        <p className="contact-component__sales-form-input-error">{zipError}</p>
                     )}
                 </div>
             )}
@@ -151,7 +153,7 @@ const Contact = ({ supportURL, ticketSubmissionURL, salesContactFormId, salesCon
                         <p className="contact-component__sales-results-title">Specialists found in <strong>{zip}</strong><br />(<span className="contact-component__sales-results-change" onClick={(e) => {
                             e.preventDefault();
                             setSalesRep([])
-                            setZip(null)
+                            setZip("")
                         }}>change zip code</span>)</p>
                         {salesRep.slice(0, 3).map(renderResult)}
                     </div>
@@ -275,7 +277,11 @@ const Contact = ({ supportURL, ticketSubmissionURL, salesContactFormId, salesCon
     // Set locally saved zipcode
     useEffect(() => {
         const savedZip = localStorage.getItem('savedZip');
-        if (!!savedZip) setZip(savedZip);
+        if (!!savedZip) {
+            setLocalZip(savedZip)
+            setZip(savedZip);
+        }
+        setZipChecked(true)
     }, [])
 
     // Listen to window resize
@@ -322,13 +328,10 @@ const Contact = ({ supportURL, ticketSubmissionURL, salesContactFormId, salesCon
                     }
 
 
-                    if (!!data.type && data.type === 'default_zip' && !!data.zip) {
-                        if (!savedZip) {
-                            setZip(data.zip);
-                            setSearching(true)
-                            localStorage.setItem('savedZip', data.zip)
-                        }
-                        return;
+                    if (!!data.type && data.type === 'default_zip' && !!data.zip && !localZip.length) {
+                        setZip(data.zip);
+                        setSearching(true)
+                        localStorage.setItem('savedZip', data.zip)
                     }
 
                     if (!!data.type && data.type === 'zip_search_result_processed' && !!data.result && !!data.result.reps && data.result.reps.length > 0) {
@@ -372,7 +375,7 @@ const Contact = ({ supportURL, ticketSubmissionURL, salesContactFormId, salesCon
 
             {renderContactButton()}
 
-            {renderDefaultZipIframe()}
+            {!!zipChecked && renderDefaultZipIframe()}
 
             {!!expanded ? renderDropdown() : null}
 
