@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react'
+import React, { useRef, useEffect } from 'react'
 import Select, { components } from 'react-select';
 import {
     connectRefinementList,
@@ -8,91 +8,19 @@ import {
     InfiniteHits
 } from 'react-instantsearch-dom';
 import './style.scss';
-
-const customSelectStyles = {
-    control: (provided, state) => {
-        const boxShadow = state.isFocused ? 'none' : 'none'
-        return { ...provided, boxShadow };
-    },
-    menu: (provided, state) => {
-        const padding = '21px 0'
-        const border = '1px solid #CCCCCC'
-        const boxShadow = '0px 0px 5px rgba(0, 0, 0, 0.17)'
-        const top = '-35px'
-        return { ...provided, padding, border, boxShadow, top };
-    },
-    option: (provided, state) => {
-        const padding = '11px 32px'
-        const fontSize = '13px'
-        const lineHeight = '16px'
-
-        return { ...provided, padding, fontSize, lineHeight };
-    },
-    singleValue: (provided, state) => {
-        const fontSize = '13px'
-        const lineHeight = '16px'
-        const borderColor = state.isFocused ? '#ccc' : '#ccc'
-        return { ...provided, fontSize, lineHeight, borderColor };
-    },
-    placeholder: (provided, state) => {
-        const fontSize = '13px'
-        const lineHeight = '16px'
-
-        return { ...provided, fontSize, lineHeight };
-    },
-}
-
-const customCategorySelectStyles = {
-    container: (provided, state) => {
-        return { ...provided, margin: '0 32px 30px' };
-    },
-    control: (provided, state) => {
-        const boxShadow = state.isFocused ? 'none' : 'none'
-        const border = '1px solid #DCDDDE'
-        return { ...provided, boxShadow, border, minHeight: 64, borderRadius: 4 };
-    },
-    indicatorSeparator: (provided, state) => {
-        return { ...provided, display: 'none' };
-    },
-    menu: (provided, state) => {
-        const padding = '21px 0'
-        const border = '1px solid #CCCCCC'
-        const boxShadow = '0px 0px 5px rgba(0, 0, 0, 0.17)'
-        const top = '100%'
-        return { ...provided, padding, border, boxShadow, top };
-    },
-    option: (provided, state) => {
-        const padding = '11px 32px'
-        const fontSize = '13px'
-        const lineHeight = '16px'
-        console.log('option state', state);
-        return { ...provided, padding, fontSize, lineHeight, backgroundColor: state.isFocused ? '#F5F8FA' : state.isSelected ? '#F5F8FA' : 'transparent', color: '#191919' };
-    },
-    singleValue: (provided, state) => {
-        const fontSize = '13px'
-        const lineHeight = '16px'
-        const borderColor = state.isFocused ? '#ccc' : '#ccc'
-        return { ...provided, fontSize, lineHeight, borderColor };
-    },
-    placeholder: (provided, state) => {
-        const fontSize = '13px'
-        const lineHeight = '16px'
-
-        return { ...provided, fontSize, lineHeight };
-    },
-}
+import { customSelectStyles, customCategorySelectStyles } from './selectStyles'
 
 const ProductsDisplay = (props) => {
     const { isOpened, onClose, selectedCategory, menuItems, setSelectedCategory } = props;
     const componentRef = useRef(null);
-    const [productFilters, setProductFilters] = useState(['filters.seatingMinWidth <= 100'])
-    const [isFeaturesOpened, setIsFeaturesOpened] = useState(false)
+    //const [productFilters, setProductFilters] = useState(['filters.seatingMinWidth <= 100'])
+    //const [isFeaturesOpened, setIsFeaturesOpened] = useState(false)
 
     const closeFilters = () => {
         onClose();
     }
 
-    const CustomSelect = connectMenu(({ items, currentRefinement, refine }) => {
+    /*const CustomSelect = connectMenu(({ items, currentRefinement, refine }) => {
         return (
             <Select
                 placeholder="Select an option"
@@ -115,7 +43,7 @@ const ProductsDisplay = (props) => {
                 styles={customSelectStyles}
             />
         )
-    })
+    })*/
 
     const renderHit = ({ hit }) => {
         const hitImage = !!hit.media && !!hit.media.thumbnails && !!hit.media.thumbnails.large ? hit.media.thumbnails.large : '';
@@ -134,8 +62,6 @@ const ProductsDisplay = (props) => {
     })
 
     const CurrentRefinements = connectCurrentRefinements(({ items, refine }) => {
-        console.log('CurrentRefinements', items);
-
         return items.length > 0 ? <div className="products-display-component__results-refinements">
             {items.filter(item => item.attribute !== 'tags.ID').map(item => (
                 <button key={item.label} onClick={(e) => {
@@ -162,7 +88,6 @@ const ProductsDisplay = (props) => {
                         </button>
                     ))}
                 </React.Fragment>
-
             ))}
         </div> : null
     })
@@ -182,7 +107,7 @@ const ProductsDisplay = (props) => {
                             },
                         }}
                     />
-                    {selectedCategory.find(c => c.charAt(0) !== '-')}
+                    {selectedCategory}
                     {/*<ProductsTitle transformItems={items =>
                         items.filter(item => item.attribute === 'categories')
                     } />*/}
@@ -205,24 +130,45 @@ const ProductsDisplay = (props) => {
             }
         })
 
+        const sortTags = (a, b) => (a.label.split('::')[0] > b.label.split('::')[0]) ? 1 : ((b.label.split('::')[0] > a.label.split('::')[0]) ? -1 : 0)
 
-        return !!tags && tags.length > 0 && tags.sort((a, b) => (a > b) ? 1 : ((b > a) ? -1 : 0)).map(tag => (
-            <div key={tag}>
-                <span className="products-display-component__filters-checkbox-list-title">{tag}</span>
-                <ul className="products-display-component__filters-checkbox-list">
-                    {items.filter(item => item.label.split("::")[1] === tag).sort((a, b) => (a.label.split('::')[0] > b.label.split('::')[0]) ? 1 : ((b.label.split('::')[0] > a.label.split('::')[0]) ? -1 : 0)).map(item => (
-                        <li key={tag + '-' + item.label}>
-                            <label className="ais-RefinementList-label">
-                                <input className="ais-RefinementList-checkbox" type="checkbox" checked={currentRefinement.includes(item.label)} value={item.value} onChange={event => {
-                                    refine(item.value);
-                                }} />
-                                <span className="ais-RefinementList-labelText">{item.label.split('::')[0]} ({item.count})</span>
-                            </label>
-                        </li>
-                    ))}
-                </ul>
+        return !!tags && tags.length > 0 ? (
+            <div className={`products-display-component__filters-features opened`}>
+                <div className="products-display-component__filters-features-container">
+                    <div className="products-display-component__filters-features-title">
+                        <span>Features</span>
+                    </div>
+                    <div className="products-display-component__filters-features-wrapper">
+                        {tags.sort((a, b) => (a > b) ? 1 : ((b > a) ? -1 : 0)).map(tag => (
+                            <div key={tag}>
+                                <span className="products-display-component__filters-checkbox-list-title">{tag}</span>
+                                <ul className="products-display-component__filters-checkbox-list">
+                                    {items.filter(
+                                        item => item.label.split("::")[1] === tag
+                                    ).sort(sortTags).map(item => (
+                                        <li key={tag + '-' + item.label}>
+                                            <label className="ais-RefinementList-label">
+                                                <input
+                                                    className="ais-RefinementList-checkbox"
+                                                    type="checkbox"
+                                                    checked={currentRefinement.includes(item.label)}
+                                                    value={item.value}
+                                                    onChange={event => {
+                                                        refine(item.value);
+                                                    }}
+                                                />
+                                                <span className="ais-RefinementList-labelText">{item.label.split('::')[0]} ({item.count})</span>
+                                            </label>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        ))}
+                    </div>
+                </div>
             </div>
-        ))
+        ) : null
+
     })
 
     const SingleValue = ({ children, ...props }) => {
@@ -245,12 +191,16 @@ const ProductsDisplay = (props) => {
                 placeholder="Select an option"
                 className="products-display-component__custom-select-container"
                 classNamePrefix="products-display-component__custom-select"
-                value={menuItems.filter(item => selectedCategory.includes(item.categoryName))}
+                value={menuItems.find(item => item.categoryName === selectedCategory)}
                 onChange={(value, action) => {
-                    setSelectedCategory([value.categoryName, ...menuItems.filter(i =>
-                        i.categoryName !== value.categoryName
-                    ).map(i => (`-${i.categoryName}`))])
-                    //refine([value.categoryName])
+                    setSelectedCategory(value.categoryName)
+                    refine([
+                        selectedCategory,
+                        ...menuItems.filter(i =>
+                            i.categoryName !== selectedCategory
+                        ).map(i =>
+                            (`${selectedCategory === 'Accessories' && i.categoryName === 'Power Wheelchairs' ? '' : '-'}${i.categoryName}`)
+                        )])
                 }}
                 options={menuItems}
                 theme={theme => ({
@@ -282,7 +232,18 @@ const ProductsDisplay = (props) => {
                 </svg>
             </div>
             <div className="products-display-component__filters-body">
-                <CategoriesMenu attribute="categories" defaultRefinement={selectedCategory} limit={100} operator="and" />
+                <CategoriesMenu
+                    attribute="categories"
+                    defaultRefinement={[
+                        selectedCategory,
+                        ...menuItems.filter(i =>
+                            i.categoryName !== selectedCategory
+                        ).map(i =>
+                            (`${selectedCategory === 'Accessories' && i.categoryName === 'Power Wheelchairs' ? '' : '-'}${i.categoryName}`)
+                        )]}
+                    limit={100}
+                    operator="and"
+                />
                 {/*<div className="products-display-component__filters-select">
                     <label><span>Diagnostic</span><br /><CustomSelect attribute="filters.diagnostic" /></label>
                 </div>
@@ -292,20 +253,11 @@ const ProductsDisplay = (props) => {
                 <div className="products-display-component__filters-select">
                     <label><span>Your Weight</span><br /><CustomSelect attribute="filters.weight" /></label>
                 </div>*/}
-                <div className={`products-display-component__filters-features opened`}>
-                    <div className="products-display-component__filters-features-container">
-                        <div className="products-display-component__filters-features-title">
-                            <span>Features</span>
-                        </div>
-                        <div className="products-display-component__filters-features-wrapper">
-                            <FeaturesList
-                                limit={100}
-                                attribute="tags.ID"
-                                operator="and"
-                            />
-                        </div>
-                    </div>
-                </div>
+                <FeaturesList
+                    limit={100}
+                    attribute="tags.ID"
+                    operator="and"
+                />
 
 
             </div>

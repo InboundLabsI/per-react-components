@@ -41,8 +41,8 @@ const menuItems = [
         title: 'Accessories',
         label: 'Accessories',
         value: 'Accessories',
-        image: 'https://f.hubspotusercontent00.net/hubfs/1624307/social-suggested-images/seat.png',
-        url: 'https://permobilus.com/products/seating-and-positioning-by-roho/',
+        image: 'https://f.hubspotusercontent00.net/hubfs/1624307/social-suggested-images/accessories.png',
+        url: 'https://permobilus.com/products/power-wheelchairs-by-permobil/accessories/',
         categoryName: 'Accessories',
         order: 4
     }
@@ -51,7 +51,7 @@ const menuItems = [
 const Products = ({ algoliaAppID, algoliaSearchKey, algoliaIndexName }) => {
     const [expanded, setExpanded] = useState(false);
     const [dropdownAlignment, setDropdownAlignment] = useState('left');
-    const [selectedCategory, setSelectedCategory] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState(null);
     const componentRef = useRef(null);
 
     const searchClient = algoliasearch(algoliaAppID, algoliaSearchKey);
@@ -66,7 +66,6 @@ const Products = ({ algoliaAppID, algoliaSearchKey, algoliaIndexName }) => {
     }
 
     const handleHitClick = (event, hit) => {
-        console.log('hit clicked', hit);
         closeDropdown();
         if (typeof window !== 'undefined') {
             if (!!hit.url) {
@@ -78,7 +77,7 @@ const Products = ({ algoliaAppID, algoliaSearchKey, algoliaIndexName }) => {
     const handleMenuItemClick = (e, item) => {
         e.preventDefault();
         closeDropdown();
-        setSelectedCategory([item.categoryName]);
+        setSelectedCategory(item.categoryName);
     }
 
     const onHitKeyUp = (event, hit) => {
@@ -95,7 +94,7 @@ const Products = ({ algoliaAppID, algoliaSearchKey, algoliaIndexName }) => {
         setExpanded(true);
     }
 
-    const renderHit = ({ hit }) => <p tabindex="0" onKeyPress={e => { onHitKeyUp(e, hit) }} onClick={(e) => { handleHitClick(e, hit) }}>{hit.title}</p>;
+    const renderHit = ({ hit }) => <p tabIndex="0" onKeyPress={e => { onHitKeyUp(e, hit) }} onClick={(e) => { handleHitClick(e, hit) }}>{hit.title}</p>;
 
     const renderResults = connectStateResults(({ searchState, searchResults }) =>
         searchState && searchState.query ? (
@@ -110,7 +109,7 @@ const Products = ({ algoliaAppID, algoliaSearchKey, algoliaIndexName }) => {
             resetTitle: 'Clear your search query.',
             placeholder: 'Search a product...',
         }} onReset={() => {
-            console.log('reset');
+            // console.log('reset');
         }} />
     )
 
@@ -197,9 +196,9 @@ const Products = ({ algoliaAppID, algoliaSearchKey, algoliaIndexName }) => {
             </InstantSearch>
             <InstantSearch searchClient={searchClient} indexName={algoliaIndexName}>
                 <ProductsDisplay
-                    isOpened={!!selectedCategory && selectedCategory.length > 0}
+                    isOpened={!!selectedCategory}
                     onClose={() => {
-                        setSelectedCategory([]);
+                        setSelectedCategory(null);
                     }}
                     selectedCategory={selectedCategory}
                     setSelectedCategory={setSelectedCategory}

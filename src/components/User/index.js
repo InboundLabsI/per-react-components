@@ -120,7 +120,7 @@ const User = ({ preferencesURL }) => {
 
     // Listen to window resize
     useEffect(() => {
-        if(typeof window !== 'undefined'){
+        if (typeof window !== 'undefined') {
             function updatedropdownAlignment() {
                 const offsetRight = window.innerWidth - componentRef.current.offsetLeft - componentRef.current.offsetWidth;
                 if (offsetRight < 200) {
@@ -158,8 +158,6 @@ const User = ({ preferencesURL }) => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, [componentRef]);
-
-    console.log('user', user);
 
     return !!booya ? (
         <div className="user-component" id="contact-component" ref={componentRef}>

@@ -267,20 +267,20 @@ const Contact = ({ supportURL, ticketSubmissionURL, salesContactFormId, salesCon
     )
 
     // Set locally saved sales rep
-    useEffect(()=>{
+    useEffect(() => {
         let savedReps = localStorage.getItem('savedReps');
         if (!!savedReps) setSalesRep(JSON.parse(savedReps));
     }, [])
 
     // Set locally saved zipcode
-    useEffect(()=>{
+    useEffect(() => {
         const savedZip = localStorage.getItem('savedZip');
         if (!!savedZip) setZip(savedZip);
     }, [])
 
     // Listen to window resize
     useEffect(() => {
-        if(typeof window !== 'undefined'){
+        if (typeof window !== 'undefined') {
             function updatedropdownAlignment() {
                 const offsetRight = window.innerWidth - componentRef.current.offsetLeft - componentRef.current.offsetWidth;
                 if (offsetRight < 200) {
@@ -301,7 +301,7 @@ const Contact = ({ supportURL, ticketSubmissionURL, salesContactFormId, salesCon
 
     // Listen to post messages
     useEffect(() => {
-        if(typeof window !== 'undefined'){
+        if (typeof window !== 'undefined') {
             const handler = event => {
                 const data = event.data
                 if (!!data) {
@@ -354,7 +354,7 @@ const Contact = ({ supportURL, ticketSubmissionURL, salesContactFormId, salesCon
 
     // Handle click outside the component
     useEffect(() => {
-        if(typeof window !== 'undefined'){
+        if (typeof window !== 'undefined') {
             function handleClickOutside(event) {
                 if (componentRef.current && !componentRef.current.contains(event.target)) {
                     closeDropdown()
