@@ -1,8 +1,4 @@
-# Permobil Navigator 1.1 - React Components
-
-## Build
-
-`yarn build:widget`
+# Permobil Navigator 1.1 - React Components for HS and WP sites
 
 ## How to use
 
@@ -40,6 +36,51 @@ Options must be passed via `data-` attributes, with each component.
 | data-algolia-indices         | Search            | Yes      | Comma-separated list of Algolia indices                        |
 | data-header-height           | Search            | No       | Height of the Navigator container (header), in px. Default: 60 |
 | data-preferences-url         | User              | No       | URL for Preferencies link                                      |
+
+
+## Development
+### Components library development
+
+To develop library localy link library dependencies to example project first. 
+
+To install project run following commands in the library root directory:
+
+```bash
+link
+yarn
+cd node_modules/react
+link
+cd ../react-dom
+link
+cd ../../example
+link il-per-react-components
+link react
+link react-dom
+yarn
+```
+
+To watch locally run following commands in the library root directory
+
+```bash
+yarn start
+```
+
+And in a separate terminal window run:
+
+```bash
+cd example
+yarn start
+```
+
+### Build widgets for browser
+
+To build browser widgets run following commands in the library root directory
+
+```bash
+yarn build
+cd example
+yarn build:widget
+```
 
 ## Author
 
