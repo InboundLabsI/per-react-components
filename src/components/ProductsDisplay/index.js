@@ -134,6 +134,7 @@ const ProductsDisplay = (props) => {
     })
 
     const CurrentRefinements = connectCurrentRefinements(({ items, refine }) => {
+        console.log('CurrentRefinements', items);
 
         return items.length > 0 ? <div className="products-display-component__results-refinements">
             {items.filter(item => item.attribute !== 'tags.ID').map(item => (
@@ -181,9 +182,10 @@ const ProductsDisplay = (props) => {
                             },
                         }}
                     />
-                    <ProductsTitle transformItems={items =>
+                    {selectedCategory.find(c => c.charAt(0) !== '-')}
+                    {/*<ProductsTitle transformItems={items =>
                         items.filter(item => item.attribute === 'categories')
-                    } />
+                    } />*/}
                 </div>
             </div>
             <div className="products-display-component__results-body">
@@ -237,15 +239,18 @@ const ProductsDisplay = (props) => {
     }
 
 
-    const CategoriesMenu = connectRefinementList(() => (
+    const CategoriesMenu = connectRefinementList(({ items, refine }) => (
         <React.Fragment>
             <Select
                 placeholder="Select an option"
                 className="products-display-component__custom-select-container"
                 classNamePrefix="products-display-component__custom-select"
-                value={menuItems.filter(item => item.categoryName === selectedCategory)}
+                value={menuItems.filter(item => selectedCategory.includes(item.categoryName))}
                 onChange={(value, action) => {
-                    setSelectedCategory(value.categoryName)
+                    setSelectedCategory([value.categoryName, ...menuItems.filter(i =>
+                        i.categoryName !== value.categoryName
+                    ).map(i => (`-${i.categoryName}`))])
+                    //refine([value.categoryName])
                 }}
                 options={menuItems}
                 theme={theme => ({
@@ -277,7 +282,7 @@ const ProductsDisplay = (props) => {
                 </svg>
             </div>
             <div className="products-display-component__filters-body">
-                <CategoriesMenu attribute="categories" defaultRefinement={[selectedCategory]} limit={100} />
+                <CategoriesMenu attribute="categories" defaultRefinement={selectedCategory} limit={100} operator="and" />
                 {/*<div className="products-display-component__filters-select">
                     <label><span>Diagnostic</span><br /><CustomSelect attribute="filters.diagnostic" /></label>
                 </div>

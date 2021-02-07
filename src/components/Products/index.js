@@ -35,13 +35,23 @@ const menuItems = [
         url: 'https://permobilus.com/products/seating-and-positioning-by-roho/',
         categoryName: 'Seating and Positioning',
         order: 3
+    },
+    {
+        subtitle: 'EXPLORE',
+        title: 'Accessories',
+        label: 'Accessories',
+        value: 'Accessories',
+        image: 'https://f.hubspotusercontent00.net/hubfs/1624307/social-suggested-images/seat.png',
+        url: 'https://permobilus.com/products/seating-and-positioning-by-roho/',
+        categoryName: 'Accessories',
+        order: 4
     }
 ]
 
-const Products = ({algoliaAppID, algoliaSearchKey, algoliaIndexName }) => {
+const Products = ({ algoliaAppID, algoliaSearchKey, algoliaIndexName }) => {
     const [expanded, setExpanded] = useState(false);
     const [dropdownAlignment, setDropdownAlignment] = useState('left');
-    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [selectedCategory, setSelectedCategory] = useState([]);
     const componentRef = useRef(null);
 
     const searchClient = algoliasearch(algoliaAppID, algoliaSearchKey);
@@ -58,7 +68,7 @@ const Products = ({algoliaAppID, algoliaSearchKey, algoliaIndexName }) => {
     const handleHitClick = (event, hit) => {
         console.log('hit clicked', hit);
         closeDropdown();
-        if(typeof window !== 'undefined'){
+        if (typeof window !== 'undefined') {
             if (!!hit.url) {
                 window.location.href = hit.url;
             }
@@ -68,7 +78,7 @@ const Products = ({algoliaAppID, algoliaSearchKey, algoliaIndexName }) => {
     const handleMenuItemClick = (e, item) => {
         e.preventDefault();
         closeDropdown();
-        setSelectedCategory(item.categoryName);
+        setSelectedCategory([item.categoryName]);
     }
 
     const onHitKeyUp = (event, hit) => {
@@ -129,7 +139,7 @@ const Products = ({algoliaAppID, algoliaSearchKey, algoliaIndexName }) => {
 
     // Listen to window resize
     useEffect(() => {
-        if(typeof window !== 'undefined'){
+        if (typeof window !== 'undefined') {
             function updatedropdownAlignment() {
                 if (!!componentRef.current) {
                     const offsetRight = window.innerWidth - componentRef.current.offsetLeft - componentRef.current.offsetWidth;
@@ -154,7 +164,7 @@ const Products = ({algoliaAppID, algoliaSearchKey, algoliaIndexName }) => {
 
     // Handle click outside the component
     useEffect(() => {
-        if(typeof window !== 'undefined'){
+        if (typeof window !== 'undefined') {
             function handleClickOutside(event) {
                 if (componentRef.current && !componentRef.current.contains(event.target)) {
                     closeDropdown()
@@ -187,9 +197,9 @@ const Products = ({algoliaAppID, algoliaSearchKey, algoliaIndexName }) => {
             </InstantSearch>
             <InstantSearch searchClient={searchClient} indexName={algoliaIndexName}>
                 <ProductsDisplay
-                    isOpened={!!selectedCategory}
+                    isOpened={!!selectedCategory && selectedCategory.length > 0}
                     onClose={() => {
-                        setSelectedCategory(null);
+                        setSelectedCategory([]);
                     }}
                     selectedCategory={selectedCategory}
                     setSelectedCategory={setSelectedCategory}
