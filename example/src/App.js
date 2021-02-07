@@ -17,7 +17,8 @@ function App({ domElement }) {
       salesContactFormId: domElement.getAttribute('data-sales-contact-form-id'),
       salesContactPortalId: domElement.getAttribute('data-sales-contact-portal-id'),
       headerHeight: domElement.getAttribute('data-header-height'),
-      showMenu: domElement.getAttribute('data-show-menu')
+      showMenu: domElement.getAttribute('data-show-menu'),
+      supportURL: domElement.getAttribute('data-support-url')
     }
     return <Contact {...options} />
   }

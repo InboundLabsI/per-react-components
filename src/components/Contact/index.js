@@ -27,12 +27,10 @@ const Contact = ({ supportURL, ticketSubmissionURL, salesContactFormId, salesCon
     const [searching, setSearching] = useState(false)
     const [salesRep, setSalesRep] = useState([]);
     const [zip, setZip] = useState("");
-    const [localZip, setLocalZip] = useState("");
     const [selectedRep, setSelectedRep] = useState(null)
     const [showModalForm, setShowModalForm] = useState(false)
     const [dropdownAlignment, setDropdownAlignment] = useState('left')
     const componentRef = useRef(null);
-    const [zipChecked, setZipChecked] = useState(false)
 
 
     const handleZipInputChange = (event) => {
@@ -278,10 +276,8 @@ const Contact = ({ supportURL, ticketSubmissionURL, salesContactFormId, salesCon
     useEffect(() => {
         const savedZip = localStorage.getItem('savedZip');
         if (!!savedZip) {
-            setLocalZip(savedZip)
             setZip(savedZip);
         }
-        setZipChecked(true)
     }, [])
 
     // Listen to window resize
@@ -328,10 +324,13 @@ const Contact = ({ supportURL, ticketSubmissionURL, salesContactFormId, salesCon
                     }
 
 
-                    if (!!data.type && data.type === 'default_zip' && !!data.zip && !localZip.length) {
-                        setZip(data.zip);
-                        setSearching(true)
-                        localStorage.setItem('savedZip', data.zip)
+                    if (!!data.type && data.type === 'default_zip' && !!data.zip) {
+                        const savedZip = localStorage.getItem('savedZip');
+                        if (!savedZip) {
+                            setZip(data.zip);
+                            setSearching(true)
+                            localStorage.setItem('savedZip', data.zip)
+                        }
                     }
 
                     if (!!data.type && data.type === 'zip_search_result_processed' && !!data.result && !!data.result.reps && data.result.reps.length > 0) {
@@ -375,7 +374,7 @@ const Contact = ({ supportURL, ticketSubmissionURL, salesContactFormId, salesCon
 
             {renderContactButton()}
 
-            {!!zipChecked && renderDefaultZipIframe()}
+            {renderDefaultZipIframe()}
 
             {!!expanded ? renderDropdown() : null}
 
