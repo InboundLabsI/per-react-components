@@ -1,4 +1,4 @@
-# il-per-react-components
+# @inboundlabs/per-react-components
 
 > React components by InboundLabs
 
