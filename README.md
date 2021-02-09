@@ -18,7 +18,7 @@ import '@inboundlabs/per-react-components/dist/index.css'
 const searchOptions = {
   algoliaAppID: "", // Algolia Application ID | required
   algoliaSearchKey: "", // Algolia search-only API key | required
-  algoliaIndices: "", // Comma-separated list of Algolia indices | required
+  algoliaIndices: [], // Array of Algolia index names | required
   headerHeight: "", // Height of the Navigator container (header), in px. | optional
 }
 
