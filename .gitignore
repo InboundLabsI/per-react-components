@@ -30,3 +30,6 @@ yarn-error.log*
 hubspot.config.yml
 
 .eslintcache
+
+yarn.lock
+package-lock.json

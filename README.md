@@ -5,15 +5,15 @@
 ## Install
 
 ```bash
-yarn add il-per-react-components
+yarn add https://github.com/InboundLabsI/per-react-components#master
 ```
 
 ## Usage
 
 ```jsx
 import React from 'react'
-import { Contact, Products, Search } from 'il-per-react-components'
-import 'il-per-react-components/dist/index.css'
+import { Contact, Products, Search } from '@inboundlabs/per-react-components'
+import '@inboundlabs/per-react-components/dist/index.css'
 
 const searchOptions = {
   algoliaAppID: "", // Algolia Application ID | required

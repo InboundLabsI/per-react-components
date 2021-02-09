@@ -4,7 +4,7 @@
   "private": true,
   "source": "src/index.js",
   "dependencies": {
-    "il-per-react-components": "file:../",
+    "@inboundlabs/per-react-components": "file:../",
     "react": "file:../node_modules/react",
     "react-dom": "file:../node_modules/react-dom",
     "react-scripts": "file:../node_modules/react-scripts"

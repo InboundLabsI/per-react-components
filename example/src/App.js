@@ -1,7 +1,7 @@
 import React from 'react'
 import './App.scss';
-import { Contact, Products, Search, User } from 'il-per-react-components'
-import 'il-per-react-components/dist/index.css'
+import { Contact, Products, Search, User } from '@inboundlabs/per-react-components'
+import '@inboundlabs/per-react-components/dist/index.css'
 
 function App({ domElement }) {
   const component = domElement.getAttribute("data-component")
