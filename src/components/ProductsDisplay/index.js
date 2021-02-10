@@ -10,6 +10,19 @@ import {
 import './style.scss';
 import { customSelectStyles, customCategorySelectStyles } from './selectStyles'
 
+const subcategoriesList = [
+    "Power Wheelchairs",
+    "Seating and Positioning",
+    "Electronics",
+    "Mounts",
+    "Drive Controls",
+    "Storage",
+    "Laterals",
+    "Headrests",
+    "Handles",
+    "Hydrographics"
+]
+
 const ProductsDisplay = (props) => {
     const { isOpened, onClose, selectedCategory, menuItems, setSelectedCategory } = props;
     const componentRef = useRef(null);
@@ -19,6 +32,7 @@ const ProductsDisplay = (props) => {
 
     const closeFilters = () => {
         onClose();
+        setSubcategories([])
     }
 
     /*const CustomSelect = connectMenu(({ items, currentRefinement, refine }) => {
@@ -63,7 +77,7 @@ const ProductsDisplay = (props) => {
     })
 
     const CurrentRefinements = connectCurrentRefinements(({ items, refine }) => {
-        return items.length > 0 ? <div className="products-display-component__results-refinements">
+        return (items.length > 0 || subcategories.length > 0) ? <div className="products-display-component__results-refinements">
             {items.filter(item => item.attribute !== 'tags.ID').map(item => (
                 <button key={item.label} onClick={(e) => {
                     e.preventDefault();
@@ -89,6 +103,17 @@ const ProductsDisplay = (props) => {
                         </button>
                     ))}
                 </React.Fragment>
+            ))}
+            {selectedCategory === 'Accessories' && subcategories.map(item => (
+                <button key={item} onClick={(e) => {
+                    e.preventDefault();
+                    setSubcategories([...subcategories.filter(s => s !== item)])
+                }}>
+                    <span>{item}</span>
+                    <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5.14648 3.875L7.35938 1.68359L7.81055 1.23242C7.875 1.16797 7.875 1.06055 7.81055 0.974609L7.33789 0.501953C7.25195 0.4375 7.14453 0.4375 7.08008 0.501953L4.4375 3.16602L1.77344 0.501953C1.70898 0.4375 1.60156 0.4375 1.51562 0.501953L1.04297 0.974609C0.978516 1.06055 0.978516 1.16797 1.04297 1.23242L3.70703 3.875L1.04297 6.53906C0.978516 6.60352 0.978516 6.71094 1.04297 6.79688L1.51562 7.26953C1.60156 7.33398 1.70898 7.33398 1.77344 7.26953L4.4375 4.60547L6.62891 6.81836L7.08008 7.26953C7.14453 7.33398 7.25195 7.33398 7.33789 7.26953L7.81055 6.79688C7.875 6.71094 7.875 6.60352 7.81055 6.53906L5.14648 3.875Z" fill="#A7A9AC" />
+                    </svg>
+                </button>
             ))}
         </div> : null
     })
@@ -195,6 +220,7 @@ const ProductsDisplay = (props) => {
                 value={menuItems.find(item => item.categoryName === selectedCategory)}
                 onChange={(value, action) => {
                     setSelectedCategory(value.categoryName)
+                    setSubcategories([])
                     refine([
                         selectedCategory,
                         ...menuItems.filter(i =>
@@ -219,20 +245,44 @@ const ProductsDisplay = (props) => {
         </React.Fragment>
     ))
 
-    const Subcategories = connectRefinementList(({ items }) => {
+    const Subcategories = () => {
 
         //menuItems
         // subcategories
         return (
-            <div>
-                {menuItems.filter(i => i.categoryName !== 'Accessories').map(item => (
-                    <div>
-                        {item.categoryName}
+            <div className={`products-display-component__filters-features opened`}>
+                <div className="products-display-component__filters-features-container">
+                    <div className="products-display-component__filters-features-wrapper">
+
+                        <div >
+                            <span className="products-display-component__filters-checkbox-list-title">Categories</span>
+                            <ul className="products-display-component__filters-checkbox-list">
+                                {subcategoriesList.map(item => (
+                                    <li key={item}>
+                                        <label className="ais-RefinementList-label">
+                                            <input
+                                                className="ais-RefinementList-checkbox"
+                                                type="checkbox"
+                                                checked={subcategories.includes(item)}
+                                                onChange={event => {
+                                                    if (event.target.checked) {
+                                                        setSubcategories([...subcategories, item])
+                                                    } else {
+                                                        setSubcategories([...subcategories.filter(i => i !== item)])
+                                                    }
+                                                }}
+                                            />
+                                            <span className="ais-RefinementList-labelText">{item}</span>
+                                        </label>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
                     </div>
-                ))}
+                </div>
             </div>
         );
-    })
+    }
 
 
     const renderFilters = () => (
@@ -250,17 +300,16 @@ const ProductsDisplay = (props) => {
             <div className="products-display-component__filters-body">
                 <CategoriesMenu
                     attribute="categories"
-                    defaultRefinement={
-                        selectedCategory === "Accessories" && subcategories.length < 1 ? [
-                            selectedCategory] : [
-                                selectedCategory,
-                                ...menuItems.filter(i =>
-                                    i.categoryName !== selectedCategory
-                                ).map(i =>
-                                    (`${selectedCategory === 'Accessories' && i.categoryName === 'Power Wheelchairs' ? '' : '-'}${i.categoryName}`)
-                                )]}
+                    defaultRefinement={["-Connect", ...selectedCategory === "Accessories" && subcategories.length < 1 ? [
+                        selectedCategory] : selectedCategory === "Accessories" && subcategories.length > 0 ? [selectedCategory, ...subcategories] : [
+                            selectedCategory,
+                            ...menuItems.filter(i =>
+                                i.categoryName !== selectedCategory
+                            ).map(i =>
+                                (`-${i.categoryName}`)
+                            )]]}
                     limit={100}
-                    operator={selectedCategory === "Accessories" && subcategories.length < 1 ? "or" : "and"}
+                    operator="and"
                 />
                 {/*<div className="products-display-component__filters-select">
                     <label><span>Diagnostic</span><br /><CustomSelect attribute="filters.diagnostic" /></label>
@@ -276,7 +325,10 @@ const ProductsDisplay = (props) => {
                     attribute="tags.ID"
                     operator="and"
                 />
-                <Subcategories />
+                {selectedCategory === 'Accessories' && (
+                    <Subcategories />
+                )}
+
 
             </div>
         </div >
