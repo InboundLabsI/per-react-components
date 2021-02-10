@@ -47,7 +47,8 @@ function App({ domElement }) {
       algoliaAppID: domElement.getAttribute('data-algolia-app-id'),
       algoliaSearchKey: domElement.getAttribute('data-algolia-search-key'),
       algoliaIndices: domElement.getAttribute('data-algolia-indices').split(','),
-      headerHeight: domElement.getAttribute('data-header-height')
+      headerHeight: domElement.getAttribute('data-header-height'),
+      hsPortalId: domElement.getAttribute('data-hs-portal-id')
     }
     return <Search {...options} />
   }

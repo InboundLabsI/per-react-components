@@ -48,7 +48,7 @@ const menuItems = [
     }
 ]
 
-const Products = ({ algoliaAppID, algoliaSearchKey, algoliaIndexName }) => {
+const Products = ({ algoliaAppID, algoliaSearchKey, algoliaIndexName, hsPortalId }) => {
     const [expanded, setExpanded] = useState(false);
     const [dropdownAlignment, setDropdownAlignment] = useState('left');
     const [selectedCategory, setSelectedCategory] = useState(null);
@@ -203,6 +203,7 @@ const Products = ({ algoliaAppID, algoliaSearchKey, algoliaIndexName }) => {
                     selectedCategory={selectedCategory}
                     setSelectedCategory={setSelectedCategory}
                     menuItems={menuItems}
+                    hsPortalId={hsPortalId}
                 />
             </InstantSearch>
         </React.Fragment>

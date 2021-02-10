@@ -6,6 +6,8 @@ import CloseIcon from '../Icons/CloseIcon'
 import DocumentIcon from '../Icons/DocumentIcon'
 import ProductIcon from '../Icons/ProductIcon'
 import ChevronLeftIcon from '../Icons/ChevronLeftIcon'
+import BlogIcon from '../Icons/BlogIcon'
+import WebsiteIcon from '../Icons/WebsiteIcon'
 
 const indexTitles = {
     'products-at': 'Product pages',
@@ -13,11 +15,16 @@ const indexTitles = {
 }
 
 
-const Search = ({ algoliaAppID, algoliaSearchKey, algoliaIndices, headerHeight }) => {
+const Search = ({ algoliaAppID, algoliaSearchKey, algoliaIndices, headerHeight, hsPortalId }) => {
     const componentRef = useRef(null);
     const [isResultsVisible, setIsResultsVisible] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(false);
     const searchClient = algoliasearch(algoliaAppID, algoliaSearchKey);
+    const [blogResults, setBlogResults] = useState([])
+    const [blogTotal, setBlogTotal] = useState(0)
+    const [sitePages, setSitePages] = useState([])
+    const [siteTotal, setSiteTotal] = useState(0)
+    const [searchTerm, setSearchTerm] = useState("")
 
     const handleHitClick = (url) => {
         if (!!url) {
@@ -27,12 +34,37 @@ const Search = ({ algoliaAppID, algoliaSearchKey, algoliaIndices, headerHeight }
 
     const handleSeeAllClick = (e, idx) => {
         e.preventDefault();
+        
         setSelectedIndex(idx);
     }
 
     const handleBackToResultsClick = (e) => {
         e.preventDefault();
         setSelectedIndex(false);
+    }
+
+    const searchBlogPosts = async (term, limit = 4) => {
+        const res = await fetch(`https://api.hubapi.com/contentsearch/v2/search?portalId=${hsPortalId}&term=${term}&type=BLOG_POST&length=SHORT&limit=${limit}`);
+        const data = await res.json();
+        if(!!data && !!data.results){
+            setBlogResults(data.results);
+            setBlogTotal(data.total)
+        } else {
+            setBlogResults([]);
+            setBlogTotal(0)
+        }
+    }
+
+    const searchSitePages = async (term, limit = 4) => {
+        const res = await fetch(`https://api.hubapi.com/contentsearch/v2/search?portalId=${hsPortalId}&term=${term}&type=SITE_PAGE&type=LANDING_PAGE&length=SHORT&limit=${limit}`);
+        const data = await res.json();
+        if(!!data && !!data.results){
+            setSitePages(data.results);
+            setSiteTotal(data.total)
+        } else {
+            setSitePages([]);
+            setSiteTotal(0)
+        }
     }
 
     const renderProductsHit = ({ hit }) => {
@@ -48,6 +80,7 @@ const Search = ({ algoliaAppID, algoliaSearchKey, algoliaIndices, headerHeight }
     }
 
     const renderAcademyHit = ({ hit }) => {
+        
         return (
             <span className="search-component__results-hit" onClick={() => { handleHitClick(hit.cta_url) }}>
                 <span className="search-component__results-hit-icon"><DocumentIcon /></span>
@@ -111,6 +144,104 @@ const Search = ({ algoliaAppID, algoliaSearchKey, algoliaIndices, headerHeight }
         </button>
     ));
 
+    const renderBlogResults = connectStateResults(
+        ({ searchState}) => {
+
+        const hits = !!selectedIndex && selectedIndex === 'blog' ? blogResults : blogResults.slice(0,4);
+
+        return !!blogResults && (!selectedIndex || selectedIndex === 'blog') ? (
+            <div className="search-component__results-index" >
+                
+                <p className="search-component__results-index-title">Blog</p>
+                
+                <div className="search-component__results-index-hits">
+
+                
+                    {blogResults && blogResults.length > 0 ? (
+                        <div>
+                            <ul>
+                                {hits.map(hit=>(
+                                    <li key={`${hit.url}${!!hit.rowId ? '-'+hit.rowId : ''}`}>
+                                    <span className="search-component__results-hit" onClick={() => { handleHitClick(hit.url) }}>
+                                        <span className="search-component__results-hit-icon"><BlogIcon /></span>
+                                        <span className="search-component__results-hit-details">
+                                            <span className="search-component__results-hit-title">{hit.title.replace(/(<([^>]+)>)/gi, "")}</span>
+                                            <span className="search-component__results-hit-url">{hit.url}</span>
+                                        </span>
+                                    </span>
+                                    </li>
+                                ))}
+                            </ul>
+                            <div>
+                                {blogTotal > 4 && !selectedIndex && (
+                                    <div className="search-component__results-see-all">
+                                        <button onClick={(e)=>{
+                                            handleSeeAllClick(e, 'blog')
+                                        }}>See all</button>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="search-component__results-empty">
+                            No results have been found for "{searchState.query}" in Blog
+                        </div>
+                    )}
+                </div>
+            </div>
+        ) : null
+    })
+
+    const renderSiteResults = connectStateResults(
+        ({ searchState}) => {
+
+        const hits = !!selectedIndex && selectedIndex === 'site' ? sitePages : sitePages.slice(0,4);
+        console.log('hits', hits);
+
+        return !!sitePages && (!selectedIndex || selectedIndex === 'site') ? (
+            <div className="search-component__results-index" >
+                
+                <p className="search-component__results-index-title">Website pages</p>
+                
+                <div className="search-component__results-index-hits">
+
+                
+                    {sitePages && sitePages.length > 0 ? (
+                        <div>
+                            <ul>
+                                {hits.map(hit=>(
+                                    <li key={`${hit.url}${!!hit.rowId ? '-'+hit.rowId : ''}`}>
+                                    <span className="search-component__results-hit" onClick={() => { handleHitClick(hit.url) }}>
+                                        <span className="search-component__results-hit-icon"><WebsiteIcon /></span>
+                                        <span className="search-component__results-hit-details">
+                                            <span className="search-component__results-hit-title">{hit.title.replace(/(<([^>]+)>)/gi, "")}</span>
+                                            <span className="search-component__results-hit-url">{hit.url}</span>
+                                        </span>
+                                    </span>
+                                    </li>
+                                ))}
+                            </ul>
+                            <div>
+                                {siteTotal > 4 && !selectedIndex && (
+                                    <div className="search-component__results-see-all">
+                                        <button onClick={(e)=>{
+                                            handleSeeAllClick(e, 'site')
+                                        }}>See all</button>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="search-component__results-empty">
+                            No results have been found for "{searchState.query}" in Website Pages
+                        </div>
+                    )}
+                </div>
+            </div>
+        ) : null
+    })
+
+
     const renderResults = connectStateResults(({ searchState }) =>
         searchState && searchState.query ? (
             <div className="search-component__results-wrapper">
@@ -138,6 +269,8 @@ const Search = ({ algoliaAppID, algoliaSearchKey, algoliaIndices, headerHeight }
                         }).map(idx => (
                             <React.Fragment key={idx}>{renderIndexResults(idx)}</React.Fragment>
                         ))}
+                        {renderBlogResults()}
+                        {renderSiteResults()}
                     </div>
                 </div>
             </div>
@@ -156,12 +289,24 @@ const Search = ({ algoliaAppID, algoliaSearchKey, algoliaIndices, headerHeight }
                 onFocus={() => {
                     setIsResultsVisible(true);
                 }}
-                onChange={()=>{
+                onChange={(e)=>{
                     setIsResultsVisible(true)
+                    if(!!hsPortalId){
+                        if(!!e.target.value){
+                            searchBlogPosts(e.target.value);
+                            searchSitePages(e.target.value);
+                        } else {
+                            setBlogResults([]);
+                            setSitePages([])
+                        }
+                    }
+                    setSearchTerm(e.target.value)
                 }}
                 onReset={()=>{
                     setSelectedIndex(false);
                     setIsResultsVisible(false)
+                    setBlogResults([]);
+                    setSitePages([])
                 }}
             />
         </div>
@@ -172,6 +317,15 @@ const Search = ({ algoliaAppID, algoliaSearchKey, algoliaIndices, headerHeight }
             setIsResultsVisible(false);
         }
     }
+
+    useEffect(()=>{
+        if(selectedIndex === 'blog'){
+            searchBlogPosts(searchTerm, 100)
+        }
+        if(selectedIndex === 'site'){
+            searchSitePages(searchTerm, 100)
+        }
+    }, [selectedIndex])
 
     // Handle click outside the component
     useEffect(() => {
