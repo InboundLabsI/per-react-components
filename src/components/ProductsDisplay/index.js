@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import Select, { components } from 'react-select';
 import {
     connectRefinementList,
@@ -15,6 +15,7 @@ const ProductsDisplay = (props) => {
     const componentRef = useRef(null);
     //const [productFilters, setProductFilters] = useState(['filters.seatingMinWidth <= 100'])
     //const [isFeaturesOpened, setIsFeaturesOpened] = useState(false)
+    const [subcategories, setSubcategories] = useState([]);
 
     const closeFilters = () => {
         onClose();
@@ -218,6 +219,21 @@ const ProductsDisplay = (props) => {
         </React.Fragment>
     ))
 
+    const Subcategories = connectRefinementList(({ items }) => {
+
+        //menuItems
+        // subcategories
+        return (
+            <div>
+                {menuItems.filter(i => i.categoryName !== 'Accessories').map(item => (
+                    <div>
+                        {item.categoryName}
+                    </div>
+                ))}
+            </div>
+        );
+    })
+
 
     const renderFilters = () => (
         <div className="products-display-component__filters">
@@ -234,15 +250,17 @@ const ProductsDisplay = (props) => {
             <div className="products-display-component__filters-body">
                 <CategoriesMenu
                     attribute="categories"
-                    defaultRefinement={[
-                        selectedCategory,
-                        ...menuItems.filter(i =>
-                            i.categoryName !== selectedCategory
-                        ).map(i =>
-                            (`${selectedCategory === 'Accessories' && i.categoryName === 'Power Wheelchairs' ? '' : '-'}${i.categoryName}`)
-                        )]}
+                    defaultRefinement={
+                        selectedCategory === "Accessories" && subcategories.length < 1 ? [
+                            selectedCategory] : [
+                                selectedCategory,
+                                ...menuItems.filter(i =>
+                                    i.categoryName !== selectedCategory
+                                ).map(i =>
+                                    (`${selectedCategory === 'Accessories' && i.categoryName === 'Power Wheelchairs' ? '' : '-'}${i.categoryName}`)
+                                )]}
                     limit={100}
-                    operator="and"
+                    operator={selectedCategory === "Accessories" && subcategories.length < 1 ? "or" : "and"}
                 />
                 {/*<div className="products-display-component__filters-select">
                     <label><span>Diagnostic</span><br /><CustomSelect attribute="filters.diagnostic" /></label>
@@ -258,7 +276,7 @@ const ProductsDisplay = (props) => {
                     attribute="tags.ID"
                     operator="and"
                 />
-
+                <Subcategories />
 
             </div>
         </div >
