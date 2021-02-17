@@ -325,10 +325,6 @@ const ProductsDisplay = (props) => {
                     attribute="tags.ID"
                     operator="and"
                 />
-                {selectedCategory === 'Accessories' && (
-                    <Subcategories />
-                )}
-
 
             </div>
         </div >
