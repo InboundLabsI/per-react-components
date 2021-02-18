@@ -45,6 +45,16 @@ const menuItems = [
         url: 'https://permobilus.com/products/power-wheelchairs-by-permobil/accessories/',
         categoryName: 'Accessories',
         order: 4
+    },
+    {
+        subtitle: 'EXPLORE',
+        title: 'Power Assist',
+        label: 'Power Assist',
+        value: 'Power Assist',
+        image: 'https://f.hubspotusercontent00.net/hubfs/1624307/PowerAssistImage.png',
+        url: 'https://permobilus.com/products/tilite-manual-wheelchairs-smartdrive-power-assist/smart-drive/',
+        categoryName: 'SmartDrive',
+        order: 5
     }
 ]
 
