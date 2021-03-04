@@ -28,33 +28,43 @@ const menuItems = [
     },
     {
         subtitle: 'EXPLORE',
-        title: 'Seating / Positioning',
-        label: 'Seating and Positioning',
-        value: 'Seating and Positioning',
+        title: 'Cushions',
+        label: 'Cushions',
+        value: 'Cushions',
         image: 'https://f.hubspotusercontent00.net/hubfs/1624307/social-suggested-images/seat.png',
         url: 'https://permobilus.com/products/seating-and-positioning-by-roho/',
-        categoryName: 'Seating and Positioning',
+        categoryName: 'Cushions',
         order: 3
+    },
+    {
+        subtitle: 'EXPLORE',
+        title: 'Backs',
+        label: 'Backs',
+        value: 'Backs',
+        image: 'https://f.hubspotusercontent00.net/hubfs/1624307/backs-2.png',
+        url: 'https://permobilus.com/products/seating-and-positioning-by-roho/',
+        categoryName: 'Backs',
+        order: 4
     },
     {
         subtitle: 'EXPLORE',
         title: 'Accessories',
         label: 'Accessories',
         value: 'Accessories',
-        image: 'https://f.hubspotusercontent00.net/hubfs/1624307/social-suggested-images/accessories.png',
+        image: 'https://f.hubspotusercontent00.net/hubfs/1624307/acc-2.png',
         url: 'https://permobilus.com/products/power-wheelchairs-by-permobil/accessories/',
         categoryName: 'Accessories',
-        order: 4
+        order: 5
     },
     {
         subtitle: 'EXPLORE',
         title: 'Power Assist',
         label: 'Power Assist',
         value: 'Power Assist',
-        image: 'https://f.hubspotusercontent00.net/hubfs/1624307/PowerAssistImage.png',
+        image: 'https://f.hubspotusercontent00.net/hubfs/1624307/PowerAssistImage2.png',
         url: 'https://permobilus.com/products/tilite-manual-wheelchairs-smartdrive-power-assist/smart-drive/',
         categoryName: 'SmartDrive',
-        order: 5
+        order: 6
     }
 ]
 
