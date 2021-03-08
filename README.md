@@ -5,7 +5,7 @@
 ## Install
 
 ```bash
-yarn add https://github.com/InboundLabsI/per-react-components#v1.0.0
+yarn add https://github.com/InboundLabsI/per-react-components#v1.2.0
 ```
 
 ## Usage
@@ -20,6 +20,7 @@ const searchOptions = {
   algoliaSearchKey: "", // Algolia search-only API key | required
   algoliaIndices: [], // Array of Algolia index names | required
   headerHeight: "", // Height of the Navigator container (header), in px. | optional
+  hsPortalId: "", // Hubspot Portal ID, where to search pages and blog
 }
 
 const productsOptions = {

@@ -33,7 +33,7 @@ const customSelectStyles = {
 
 const customCategorySelectStyles = {
     container: (provided, state) => {
-        return { ...provided, margin: '0 32px 30px' };
+        return { ...provided, margin: '0 16px 0 0', flex: 1 };
     },
     control: (provided, state) => {
         const boxShadow = state.isFocused ? 'none' : 'none'
