@@ -29,6 +29,7 @@ const Contact = ({ supportURL, ticketSubmissionURL, salesContactFormId, salesCon
     const [zip, setZip] = useState("");
     const [selectedRep, setSelectedRep] = useState(null)
     const [showModalForm, setShowModalForm] = useState(false)
+    const [showIframe, setShowIframe] = useState(false)
     const [dropdownAlignment, setDropdownAlignment] = useState('left')
     const componentRef = useRef(null);
 
@@ -369,12 +370,20 @@ const Contact = ({ supportURL, ticketSubmissionURL, salesContactFormId, salesCon
         }
     }, [componentRef]);
 
+    // get user zipcode by IP
+    useEffect(() => {
+        setTimeout(() => {
+            setShowIframe(true)
+        }, 500)
+
+    }, [])
+
     return (
         <div className="contact-component" id="contact-component" ref={componentRef} style={{ '--header-height': !!headerHeight ? headerHeight + 'px' : '60px' }}>
 
             {renderContactButton()}
 
-            {renderDefaultZipIframe()}
+            {!!showIframe && renderDefaultZipIframe()}
 
             {!!expanded ? renderDropdown() : null}
 

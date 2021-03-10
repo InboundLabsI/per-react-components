@@ -8,12 +8,17 @@ import ProductIcon from '../Icons/ProductIcon'
 import ChevronLeftIcon from '../Icons/ChevronLeftIcon'
 import BlogIcon from '../Icons/BlogIcon'
 import WebsiteIcon from '../Icons/WebsiteIcon'
+import LANGUAGE_BY_LOCALE from './languages'
 
 const indexTitles = {
     'products-at': 'Product pages',
     'academy_resources_production': 'Academy Resources'
 }
 
+const hsDomainsToSearch = `domain=hub.permobil.com&domain=permobil.com&domain=academy.permobil.com`
+
+
+const excludeLanguages = Object.keys(LANGUAGE_BY_LOCALE).filter(l=>l!=='en_US').map(l=>`pathPrefix=${l.toLowerCase().replace("_", "-")}`).join('&')
 
 const Search = ({ algoliaAppID, algoliaSearchKey, algoliaIndices, headerHeight, hsPortalId }) => {
     const componentRef = useRef(null);
@@ -44,7 +49,7 @@ const Search = ({ algoliaAppID, algoliaSearchKey, algoliaIndices, headerHeight, 
     }
 
     const searchBlogPosts = async (term, limit = 4) => {
-        const res = await fetch(`https://api.hubapi.com/contentsearch/v2/search?portalId=${hsPortalId}&term=${term}&type=BLOG_POST&length=SHORT&limit=${limit}`);
+        const res = await fetch(`https://api.hubapi.com/contentsearch/v2/search?portalId=${hsPortalId}&term=${term}&type=BLOG_POST&length=SHORT&limit=${limit}&${hsDomainsToSearch}&${excludeLanguages}&matchPrefix=false`);
         const data = await res.json();
         if(!!data && !!data.results){
             setBlogResults(data.results);
@@ -56,7 +61,7 @@ const Search = ({ algoliaAppID, algoliaSearchKey, algoliaIndices, headerHeight, 
     }
 
     const searchSitePages = async (term, limit = 4) => {
-        const res = await fetch(`https://api.hubapi.com/contentsearch/v2/search?portalId=${hsPortalId}&term=${term}&type=SITE_PAGE&type=LANDING_PAGE&length=SHORT&limit=${limit}`);
+        const res = await fetch(`https://api.hubapi.com/contentsearch/v2/search?portalId=${hsPortalId}&term=${term}&type=SITE_PAGE&type=LANDING_PAGE&length=SHORT&limit=${limit}&${hsDomainsToSearch}&${excludeLanguages}&matchPrefix=false`);
         const data = await res.json();
         if(!!data && !!data.results){
             setSitePages(data.results);
@@ -123,7 +128,7 @@ const Search = ({ algoliaAppID, algoliaSearchKey, algoliaIndices, headerHeight, 
                 <div className="search-component__results-index-hits">
                     <Index indexName={idx}>
                         <IndexResults idx={idx}>
-                            <Configure hitsPerPage={!!selectedIndex ? 1000 : 4} filters={idx === 'academy_resources_production' ? 'published:1' : undefined} />
+                            <Configure hitsPerPage={!!selectedIndex ? 1000 : 4} filters={idx === 'academy_resources_production' ? 'published:1 AND market.name:USA' : undefined} />
                             <Hits hitComponent={renderFuntions[idx]} />
                         </IndexResults>
                     </Index>
