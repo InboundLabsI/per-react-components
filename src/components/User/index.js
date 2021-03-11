@@ -11,7 +11,7 @@ const User = ({ preferencesURL }) => {
     const [expanded, setExpanded] = useState(false)
     const [modalOpened, setModalOpened] = useState(false);
     const [dropdownAlignment, setDropdownAlignment] = useState('left')
-    const booya = typeof window !== 'undefined' && !!window && !!window.booya ? window.booya : undefined;
+    const [booya, setBooya] = useState(null);
 
 
     const handleBooyaEvents = () => {
@@ -139,12 +139,21 @@ const User = ({ preferencesURL }) => {
         }
     }, []);
 
+    // Wait for booya ready event and get instance
+    useEffect(() => {
+        if (typeof window !== 'undefined' && !!window && !!window.booya) {
+            window.booya.ready(function () {
+                setBooya(window.booya);
+            });
+        }
+    }, []);
+
     // Listen for booya events
     useEffect(() => {
-        if (!!booya) {
+        if(booya) {
             handleBooyaEvents();
         }
-    }, [])
+    }, [booya]);
 
     // Handle click outside the component
     useEffect(() => {
@@ -159,7 +168,7 @@ const User = ({ preferencesURL }) => {
         };
     }, [componentRef]);
 
-    return !!booya ? (
+    return (
         <div className="user-component" id="contact-component" ref={componentRef}>
             {!!user && !!user.id ? renderUserButton() : (
                 <React.Fragment>
@@ -179,7 +188,7 @@ const User = ({ preferencesURL }) => {
                 </div>
             </Modal>
         </div>
-    ) : null;
+    );
 }
 
 export default User;
