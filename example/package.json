@@ -1,6 +1,6 @@
 {
   "name": "permobil-navigator-components",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "private": true,
   "source": "src/index.js",
   "dependencies": {

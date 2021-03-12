@@ -15,24 +15,19 @@ const User = ({ preferencesURL }) => {
 
 
     const handleBooyaEvents = () => {
-        booya.ready(function () {
-            booya.on(booya.events.IDENTIFY_FAILED, function (e) {
-                console.log('auth failed');
-                setUser(null);
-            });
 
-            booya.on(booya.events.IDENTIFY_SUCCESS, function (e) {
-                console.log('auth success');
-                setUser(e.user);
-                setModalOpened(false);
-            });
-
-            booya.on(booya.events.IDENTIFY_SUCCESS, function (e) {
-                console.log('auth success');
-                setUser(e.user);
-                setModalOpened(false);
-            });
+        booya.on(booya.events.IDENTIFY_FAILED, function (e) {
+            console.log('auth failed');
+            setUser(null);
         });
+
+        booya.on(booya.events.IDENTIFY_SUCCESS, function (e) {
+            console.log('auth success');
+            setUser(e.user);
+            setModalOpened(false);
+        });
+
+
     }
 
     const handleSignUpClick = (e) => {
@@ -150,7 +145,7 @@ const User = ({ preferencesURL }) => {
 
     // Listen for booya events
     useEffect(() => {
-        if(booya) {
+        if (booya) {
             handleBooyaEvents();
         }
     }, [booya]);

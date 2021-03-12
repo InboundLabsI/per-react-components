@@ -1,4 +1,4 @@
-# Permobil Navigator 1.1 - React Components for HS and WP sites
+# Permobil Navigator 1.2.2 - React Components for HS and WP sites
 
 ## How to use
 
@@ -35,6 +35,7 @@ Options must be passed via `data-` attributes, with each component.
 | data-algolia-index-name      | Products          | Yes      | Algolia index name                                             |
 | data-algolia-indices         | Search            | Yes      | Comma-separated list of Algolia indices                        |
 | data-header-height           | Search            | No       | Height of the Navigator container (header), in px. Default: 60 |
+| data-hs-portal-id            | Search            | No       | Hubspot Portal ID, where to search pages and blog              |
 | data-preferences-url         | User              | No       | URL for Preferencies link                                      |
 
 

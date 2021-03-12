@@ -5,7 +5,7 @@
 ## Install
 
 ```bash
-yarn add https://github.com/InboundLabsI/per-react-components#v1.2.0
+yarn add https://github.com/InboundLabsI/per-react-components#v1.2.2
 ```
 
 ## Usage
