@@ -9,19 +9,16 @@ import Modal from '../Modal'
 import LoadingIcon from '../Icons/LoadingIcon';
 import CloseIcon from '../Icons/CloseIcon'
 import ArrowRightIcon from '../Icons/ArrowRightIcon'
+import PhoneIcon from '../Icons/PhoneIcon'
 
 const menuItems = [
     {
-        url: "https://permobilus.com/dealer-locator/international-dealers",
-        label: "Roho International Dealers"
-    },
-    {
-        url: "https://permobilus.com/dealer-locator/online-retailers",
-        label: "Roho Online Dealers"
+        url: "tel:8007360925",
+        label: "800-736-0925"
     }
 ]
 
-const Contact = ({ supportURL, ticketSubmissionURL, salesContactFormId, salesContactPortalId, headerHeight, showMenu }) => {
+const Contact = ({ supportURL, ticketSubmissionURL, salesContactFormId, salesContactPortalId, headerHeight, showTel }) => {
     const [expanded, setExpanded] = useState(false);
     const [zipError, setZipError] = useState(null)
     const [searching, setSearching] = useState(false)
@@ -175,6 +172,7 @@ const Contact = ({ supportURL, ticketSubmissionURL, salesContactFormId, salesCon
             {menuItems.map(menuItem => (
                 <li key={menuItem.url}>
                     <a href={menuItem.url}>
+                        <PhoneIcon />
                         <span>{menuItem.label}</span>
                     </a>
                 </li>
@@ -186,7 +184,7 @@ const Contact = ({ supportURL, ticketSubmissionURL, salesContactFormId, salesCon
         <div className={`contact-component__dropdown contact-component__dropdown--${dropdownAlignment}`}>
             {renderSalesNavigator()}
             {renderSupportLink()}
-            {!!showMenu && showMenu === 'true' ? renderMenu() : null}
+            {!!showTel && showTel === 'true' ? renderMenu() : null}
         </div>
     )
 
