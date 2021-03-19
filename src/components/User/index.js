@@ -31,28 +31,31 @@ const User = ({ preferencesURL }) => {
     }
 
     const handleSignUpClick = (e) => {
-        setModalOpened(false);
+        //setModalOpened(false);
         if (!!booya) {
-            setModalOpened(true);
+            //setModalOpened(true);
             setTimeout(() => {
                 booya.widgets.renderAuthWidgets({
-                    target: '#booya-wrapper',
-                    signIn: false,
-                    signUp: true
+                    modal: {isOpen: true},
+                    section: booya.widgets.sections.SIGNUP,
+                    //target: '#booya-wrapper',
+                    //signIn: false,
+                    //signUp: true
                 })
             }, 100);
         }
     }
 
     const handleLogInClick = (e) => {
-        setModalOpened(false);
+        //setModalOpened(false);
         if (!!booya) {
-            setModalOpened(true);
+            //setModalOpened(true);
             setTimeout(() => {
                 booya.widgets.renderAuthWidgets({
-                    target: '#booya-wrapper',
-                    signUp: false,
-                    signIn: true
+                    modal: {isOpen: true},
+                    //target: '#booya-wrapper',
+                    //signUp: false,
+                    //signIn: true
                 })
             }, 100);
         }
