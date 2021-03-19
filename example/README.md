@@ -1,4 +1,4 @@
-# Permobil Navigator 1.2.2 - React Components for HS and WP sites
+# Permobil Navigator 1.2.3 - React Components for HS and WP sites
 
 ## How to use
 

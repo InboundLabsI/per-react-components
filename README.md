@@ -5,7 +5,7 @@
 ## Install
 
 ```bash
-yarn add https://github.com/InboundLabsI/per-react-components#v1.2.2
+yarn add https://github.com/InboundLabsI/per-react-components#v1.2.3
 ```
 
 ## Usage
@@ -35,6 +35,7 @@ const contactOptions = {
   salesContactPortalId: "", // Sales rep contact HS portal id. | optional
   supportUrl: "", // URL for support menu item. | optional
   headerHeight: "", // Height of the Navigator container (header), in px. | optional
+  showTel: "", // Show support phone number in Contact dropdown, | optional | string (phone number)
 }
 
 const Example = () => {

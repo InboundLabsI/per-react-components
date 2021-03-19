@@ -11,12 +11,7 @@ import CloseIcon from '../Icons/CloseIcon'
 import ArrowRightIcon from '../Icons/ArrowRightIcon'
 import PhoneIcon from '../Icons/PhoneIcon'
 
-const menuItems = [
-    {
-        url: "tel:8007360925",
-        label: "800-736-0925"
-    }
-]
+
 
 const Contact = ({ supportURL, ticketSubmissionURL, salesContactFormId, salesContactPortalId, headerHeight, showTel }) => {
     const [expanded, setExpanded] = useState(false);
@@ -29,6 +24,13 @@ const Contact = ({ supportURL, ticketSubmissionURL, salesContactFormId, salesCon
     const [showIframe, setShowIframe] = useState(false)
     const [dropdownAlignment, setDropdownAlignment] = useState('left')
     const componentRef = useRef(null);
+
+    const menuItems = [
+        {
+            url: `tel:${showTel.replace(/ /g, '').replace(/-/g, "").trim()}`,
+            label: showTel
+        }
+    ]
 
 
     const handleZipInputChange = (event) => {
@@ -184,7 +186,7 @@ const Contact = ({ supportURL, ticketSubmissionURL, salesContactFormId, salesCon
         <div className={`contact-component__dropdown contact-component__dropdown--${dropdownAlignment}`}>
             {renderSalesNavigator()}
             {renderSupportLink()}
-            {!!showTel && showTel === 'true' ? renderMenu() : null}
+            {!!showTel ? renderMenu() : null}
         </div>
     )
 
