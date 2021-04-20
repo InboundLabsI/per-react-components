@@ -28,13 +28,23 @@ const menuItems = [
     },
     {
         subtitle: 'EXPLORE',
+        title: 'Power Assist',
+        label: 'Power Assist',
+        value: 'Power Assist',
+        image: 'https://f.hubspotusercontent00.net/hubfs/1624307/PowerAssistImage2.png',
+        url: 'https://permobilus.com/products/tilite-manual-wheelchairs-smartdrive-power-assist/smart-drive/',
+        categoryName: 'SmartDrive',
+        order: 3
+    },
+    {
+        subtitle: 'EXPLORE',
         title: 'Cushions',
         label: 'Cushions',
         value: 'Cushions',
         image: 'https://f.hubspotusercontent00.net/hubfs/1624307/social-suggested-images/seat.png',
         url: 'https://permobilus.com/products/seating-and-positioning-by-roho/',
         categoryName: 'Cushions',
-        order: 3
+        order: 4
     },
     {
         subtitle: 'EXPLORE',
@@ -44,7 +54,17 @@ const menuItems = [
         image: 'https://f.hubspotusercontent00.net/hubfs/1624307/backs-2.png',
         url: 'https://permobilus.com/products/seating-and-positioning-by-roho/',
         categoryName: 'Backs',
-        order: 4
+        order: 5
+    },
+    {
+        subtitle: 'EXPLORE',
+        title: 'Permobil Connect',
+        label: 'Permobil Connect',
+        value: 'Permobil Connect',
+        image: 'https://f.hubspotusercontent00.net/hubfs/1624307/PermobilConnect.png',
+        url: 'https://permobilus.com/product/connect/',
+        categoryName: 'Connect',
+        order: 6
     },
     {
         subtitle: 'EXPLORE',
@@ -54,18 +74,8 @@ const menuItems = [
         image: 'https://f.hubspotusercontent00.net/hubfs/1624307/acc-2.png',
         url: 'https://permobilus.com/products/power-wheelchairs-by-permobil/accessories/',
         categoryName: 'Accessories',
-        order: 5
+        order: 7
     },
-    {
-        subtitle: 'EXPLORE',
-        title: 'Power Assist',
-        label: 'Power Assist',
-        value: 'Power Assist',
-        image: 'https://f.hubspotusercontent00.net/hubfs/1624307/PowerAssistImage2.png',
-        url: 'https://permobilus.com/products/tilite-manual-wheelchairs-smartdrive-power-assist/smart-drive/',
-        categoryName: 'SmartDrive',
-        order: 6
-    }
 ]
 
 const Products = ({ algoliaAppID, algoliaSearchKey, algoliaIndexName, hsPortalId }) => {

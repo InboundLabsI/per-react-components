@@ -290,8 +290,8 @@ const ProductsDisplay = (props) => {
             <div className="products-display-component__filters-header">
                 <CategoriesMenu
                     attribute="categories"
-                    defaultRefinement={["-Connect", ...selectedCategory === "Accessories" && subcategories.length < 1 ? [
-                        selectedCategory] : selectedCategory === "Accessories" && subcategories.length > 0 ? [selectedCategory, ...subcategories] : selectedCategory === "SmartDrive" ? [selectedCategory] : [
+                    defaultRefinement={[...selectedCategory === "Accessories" && subcategories.length < 1 ? [
+                        selectedCategory] : selectedCategory === "Accessories" && subcategories.length > 0 ? [selectedCategory, ...subcategories] : selectedCategory === "SmartDrive" ? [selectedCategory] : selectedCategory === "Connect" ? [selectedCategory] : [
                             selectedCategory,
                             ...menuItems.filter(i =>
                                 i.categoryName !== selectedCategory

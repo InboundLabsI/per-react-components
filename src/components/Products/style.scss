@@ -71,9 +71,11 @@
         border-radius: 0px;
         box-shadow: inset 0px 4px 0px #0067A6;
         left: 0;
-        padding: 32px;
+        padding: 20px 32px;
         position: absolute;
         top: calc(100% + 4px);
+        max-height: 600px;
+        overflow: auto;
 
         @media(max-width: 1023px) { 
             padding: 24px;
@@ -86,8 +88,8 @@
             li {
                 border-bottom: 1px solid rgba(65,64,66,0.1);
                 list-style-type: none;
-                margin: 0 0 10px;
-                padding: 0 0 10px;
+                margin: 0 0 5px;
+                padding: 0 0 5px;
                 width: 260px;
 
                 &:last-of-type {
@@ -116,8 +118,8 @@
                     background-repeat: no-repeat;
                     background-size: contain;
                     margin-right: 12px;
-                    min-width: 64px;
-                    height: 64px;
+                    min-width: 60px;
+                    height: 60px;
                 }
 
                 &-subtitle {
