@@ -29,6 +29,7 @@ const ProductsDisplay = (props) => {
     //const [productFilters, setProductFilters] = useState(['filters.seatingMinWidth <= 100'])
     //const [isFeaturesOpened, setIsFeaturesOpened] = useState(false)
     const [subcategories, setSubcategories] = useState([]);
+    const filtersBodyRef = useRef();
 
     const closeFilters = () => {
         onClose();
@@ -158,6 +159,11 @@ const ProductsDisplay = (props) => {
 
         const sortTags = (a, b) => (a.label.split('::')[0] > b.label.split('::')[0]) ? 1 : ((b.label.split('::')[0] > a.label.split('::')[0]) ? -1 : 0)
 
+        const sortedTags = tags.sort((a, b) => (a > b) ? 1 : ((b > a) ? -1 : 0));
+
+        // "Categories" filter always on top
+        const manuallySortedTags = !!sortedTags.find(t => t === "Categories") ? ["Categories", ...sortedTags.filter(t => t !== "Categories")] : sortedTags;
+
         return !!tags && tags.length > 0 ? (
             <div className={`products-display-component__filters-features opened`}>
                 <div className="products-display-component__filters-features-container">
@@ -165,7 +171,7 @@ const ProductsDisplay = (props) => {
                         <span>Features</span>
                     </div>*/}
                     <div className="products-display-component__filters-features-wrapper">
-                        {tags.sort((a, b) => (a > b) ? 1 : ((b > a) ? -1 : 0)).map(tag => (
+                        {manuallySortedTags.map(tag => (
                             <div key={tag}>
                                 <span className="products-display-component__filters-checkbox-list-title">{tag}</span>
                                 <ul className="products-display-component__filters-checkbox-list">
@@ -228,6 +234,10 @@ const ProductsDisplay = (props) => {
                         ).map(i =>
                             (`${selectedCategory === 'Accessories' && i.categoryName === 'Power Wheelchairs' ? '' : '-'}${i.categoryName}`)
                         )])
+                    if (!!filtersBodyRef.current) {
+                        filtersBodyRef.current.scrollTop = 0
+                    }
+
                 }}
                 options={menuItems}
                 theme={theme => ({
@@ -305,7 +315,7 @@ const ProductsDisplay = (props) => {
                     <path d="M10.0469 8L14.875 3.21875L15.8594 2.23438C16 2.09375 16 1.85938 15.8594 1.67188L14.8281 0.640625C14.6406 0.5 14.4062 0.5 14.2656 0.640625L8.5 6.45312L2.6875 0.640625C2.54688 0.5 2.3125 0.5 2.125 0.640625L1.09375 1.67188C0.953125 1.85938 0.953125 2.09375 1.09375 2.23438L6.90625 8L1.09375 13.8125C0.953125 13.9531 0.953125 14.1875 1.09375 14.375L2.125 15.4062C2.3125 15.5469 2.54688 15.5469 2.6875 15.4062L8.5 9.59375L13.2812 14.4219L14.2656 15.4062C14.4062 15.5469 14.6406 15.5469 14.8281 15.4062L15.8594 14.375C16 14.1875 16 13.9531 15.8594 13.8125L10.0469 8Z" fill="currentColor" />
                 </svg>
             </div>
-            <div className="products-display-component__filters-body">
+            <div className="products-display-component__filters-body" ref={filtersBodyRef}>
 
                 {/*<div className="products-display-component__filters-select">
                     <label><span>Diagnostic</span><br /><CustomSelect attribute="filters.diagnostic" /></label>

@@ -31,7 +31,7 @@ const menuItems = [
         title: 'Power Assist',
         label: 'Power Assist',
         value: 'Power Assist',
-        image: 'https://f.hubspotusercontent00.net/hubfs/1624307/PowerAssistImage2.png',
+        image: 'https://f.hubspotusercontent00.net/hubfs/1624307/powerAssist.png',
         url: 'https://permobilus.com/products/tilite-manual-wheelchairs-smartdrive-power-assist/smart-drive/',
         categoryName: 'SmartDrive',
         order: 3
@@ -56,7 +56,7 @@ const menuItems = [
         categoryName: 'Backs',
         order: 5
     },
-    {
+    /*{
         subtitle: 'EXPLORE',
         title: 'Permobil Connect',
         label: 'Permobil Connect',
@@ -65,7 +65,7 @@ const menuItems = [
         url: 'https://permobilus.com/product/connect/',
         categoryName: 'Connect',
         order: 6
-    },
+    },*/
     {
         subtitle: 'EXPLORE',
         title: 'Accessories',
@@ -74,7 +74,7 @@ const menuItems = [
         image: 'https://f.hubspotusercontent00.net/hubfs/1624307/acc-2.png',
         url: 'https://permobilus.com/products/power-wheelchairs-by-permobil/accessories/',
         categoryName: 'Accessories',
-        order: 7
+        order: 6
     },
 ]
 
