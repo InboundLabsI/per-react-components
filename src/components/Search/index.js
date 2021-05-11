@@ -24,12 +24,30 @@ const Search = ({ algoliaAppID, algoliaSearchKey, algoliaIndices, headerHeight, 
     const componentRef = useRef(null);
     const [isResultsVisible, setIsResultsVisible] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(false);
-    const searchClient = algoliasearch(algoliaAppID, algoliaSearchKey);
     const [blogResults, setBlogResults] = useState([])
     const [blogTotal, setBlogTotal] = useState(0)
     const [sitePages, setSitePages] = useState([])
     const [siteTotal, setSiteTotal] = useState(0)
     const [searchTerm, setSearchTerm] = useState("")
+    
+    const algoliaClient = algoliasearch(algoliaAppID, algoliaSearchKey);
+    const searchClient = {
+        ...algoliaClient,
+        search(requests) {
+            if (requests.every(({ params }) => !params.query)) {
+                return Promise.resolve({
+                    results: requests.map(() => ({
+                        hits: [],
+                        nbHits: 0,
+                        nbPages: 0,
+                        page: 0,
+                        processingTimeMS: 0,
+                    })),
+                });
+            }
+            return algoliaClient.search(requests);
+        },
+    };
 
     const handleHitClick = (url) => {
         if (!!url) {

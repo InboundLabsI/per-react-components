@@ -84,7 +84,25 @@ const Products = ({ algoliaAppID, algoliaSearchKey, algoliaIndexName, hsPortalId
     const [selectedCategory, setSelectedCategory] = useState(null);
     const componentRef = useRef(null);
 
-    const searchClient = algoliasearch(algoliaAppID, algoliaSearchKey);
+    const algoliaClient = algoliasearch(algoliaAppID, algoliaSearchKey);
+
+    const searchClient = {
+        ...algoliaClient,
+        search(requests) {
+            if (requests.every(({ params }) => !params.query && (!params.facets || !params.facets.length) && !params.facetFilters)) {
+                return Promise.resolve({
+                    results: requests.map(() => ({
+                        hits: [],
+                        nbHits: 0,
+                        nbPages: 0,
+                        page: 0,
+                        processingTimeMS: 0,
+                    })),
+                });
+            }
+            return algoliaClient.search(requests);
+        },
+    };
 
     // Handle main button click
     const handleButtonClick = (event) => {

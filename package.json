@@ -1,6 +1,6 @@
 {
   "name": "@inboundlabs/per-react-components",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "description": "React components by InboundLabs",
   "license": "MIT",
   "main": "dist/index.js",
