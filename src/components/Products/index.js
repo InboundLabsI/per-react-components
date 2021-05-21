@@ -4,8 +4,9 @@ import { InstantSearch, SearchBox, Hits, connectStateResults } from 'react-insta
 import './style.scss';
 import ProductsIcon from '../Icons/ProductsIcon'
 import ProductsDisplay from '../ProductsDisplay'
+import useProductMenu from '../../hooks/useProductMenu'
 
-const menuItems = [
+/*const menuItems = [
     {
         subtitle: 'EXPLORE',
         title: 'Power Wheelchairs',
@@ -56,16 +57,16 @@ const menuItems = [
         categoryName: 'Backs',
         order: 5
     },
-    /*{
-        subtitle: 'EXPLORE',
-        title: 'Permobil Connect',
-        label: 'Permobil Connect',
-        value: 'Permobil Connect',
-        image: 'https://f.hubspotusercontent00.net/hubfs/1624307/PermobilConnect.png',
-        url: 'https://permobilus.com/product/connect/',
-        categoryName: 'Connect',
-        order: 6
-    },*/
+    //{
+      //  subtitle: 'EXPLORE',
+        //title: 'Permobil Connect',
+       // label: 'Permobil Connect',
+        //value: 'Permobil Connect',
+        //image: 'https://f.hubspotusercontent00.net/hubfs/1624307/PermobilConnect.png',
+        //url: 'https://permobilus.com/product/connect/',
+        //categoryName: 'Connect',
+        //order: 6
+    //},
     {
         subtitle: 'EXPLORE',
         title: 'Accessories',
@@ -76,13 +77,14 @@ const menuItems = [
         categoryName: 'Accessories',
         order: 6
     },
-]
+]*/
 
 const Products = ({ algoliaAppID, algoliaSearchKey, algoliaIndexName, hsPortalId }) => {
     const [expanded, setExpanded] = useState(false);
     const [dropdownAlignment, setDropdownAlignment] = useState('left');
     const [selectedCategory, setSelectedCategory] = useState(null);
     const componentRef = useRef(null);
+    const { menuItems, loading } = useProductMenu();
 
     const algoliaClient = algoliasearch(algoliaAppID, algoliaSearchKey);
 
@@ -224,7 +226,7 @@ const Products = ({ algoliaAppID, algoliaSearchKey, algoliaIndexName, hsPortalId
         }
     }, [componentRef]);
 
-    return !!algoliaAppID && !!algoliaSearchKey && !!algoliaIndexName ? (
+    return !!algoliaAppID && !!algoliaSearchKey && !!algoliaIndexName && !!menuItems && !!menuItems.length ? (
         <React.Fragment>
             <InstantSearch searchClient={searchClient} indexName={algoliaIndexName}>
                 <div className="products-component" id="products-component" ref={componentRef}>

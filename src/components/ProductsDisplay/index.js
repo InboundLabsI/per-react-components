@@ -4,11 +4,10 @@ import {
     connectRefinementList,
     connectCurrentRefinements,
     Stats,
-    connectMenu,
     InfiniteHits
 } from 'react-instantsearch-dom';
 import './style.scss';
-import { customSelectStyles, customCategorySelectStyles } from './selectStyles'
+import { customCategorySelectStyles } from './selectStyles'
 
 const subcategoriesList = [
     "Power Wheelchairs",
@@ -119,6 +118,32 @@ const ProductsDisplay = (props) => {
         </div> : null
     })
 
+    const renderCategoryCTA = () => {
+        const currentCategory = menuItems.find(i => i.categoryName === selectedCategory);
+        if (!currentCategory) {
+            return null;
+        }
+
+        if (!currentCategory.ctaUrl) {
+            return null;
+        }
+
+        return <div className="products-display-component__results-cta">
+            <a
+                href={currentCategory.ctaUrl}
+                style={{
+                    backgroundColor: !!currentCategory.ctaBgColor ? currentCategory.ctaBgColor : '#0067a6',
+                    color: !!currentCategory.ctaTextColor ? currentCategory.ctaTextColor : '#ffffff'
+                }}
+            >
+                <span>{currentCategory.ctaLabel}</span>
+                <svg style={{ width: 30, height: 30 }} viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z" />
+                </svg>
+            </a>
+        </div>
+    }
+
 
     const renderResults = () => (
         <div className="products-display-component__results">
@@ -138,6 +163,7 @@ const ProductsDisplay = (props) => {
                     {/*<ProductsTitle transformItems={items =>
                         items.filter(item => item.attribute === 'categories')
                     } />*/}
+                    {renderCategoryCTA()}
                 </div>
             </div>
             <div className="products-display-component__results-body">
