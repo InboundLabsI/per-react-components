@@ -11,8 +11,6 @@ import CloseIcon from '../Icons/CloseIcon'
 import ArrowRightIcon from '../Icons/ArrowRightIcon'
 import PhoneIcon from '../Icons/PhoneIcon'
 
-
-
 const Contact = ({ supportURL, ticketSubmissionURL, salesContactFormId, salesContactPortalId, headerHeight, showTel }) => {
     const [expanded, setExpanded] = useState(false);
     const [zipError, setZipError] = useState(null)
@@ -380,6 +378,7 @@ const Contact = ({ supportURL, ticketSubmissionURL, salesContactFormId, salesCon
 
     return (
         <div className="contact-component" id="contact-component" ref={componentRef} style={{ '--header-height': !!headerHeight ? headerHeight + 'px' : '60px' }}>
+            <link rel="stylesheet" href="https://hub.permobil.com/hubfs/permobil-navigator-components/permobil-navigator-components.umd.css" />
 
             {renderContactButton()}
 

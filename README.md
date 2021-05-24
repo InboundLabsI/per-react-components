@@ -13,7 +13,8 @@ yarn add https://github.com/InboundLabsI/per-react-components#v1.2.7
 ```jsx
 import React from 'react'
 import { Contact, Products, Search } from '@inboundlabs/per-react-components'
-import '@inboundlabs/per-react-components/dist/index.css'
+// Since v.1.2.7 next line can be removed. From now styles are automatically loaded from external source.
+// import '@inboundlabs/per-react-components/dist/index.css'  
 
 const searchOptions = {
   algoliaAppID: "", // Algolia Application ID | required
