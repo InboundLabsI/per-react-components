@@ -259,15 +259,38 @@ body.search-results-opened {
             }
 
             &-url {
-                color: #414042;
+                color: #005EB8 !important;
                 display: block;
                 font-weight: 500;
                 font-size: 12px;
                 line-height: 120%;
-                opacity: 0.6;
+                opacity: 1 !important;
                 white-space: nowrap;
                 text-overflow: ellipsis;
                 overflow: hidden;
+            }
+
+            &-tags {
+                color: #005EB8;
+                display: block;
+                font-weight: 500;
+                font-size: 12px;
+                line-height: 120%;
+                /* opacity: 0.6; */
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
+
+                span {
+                    text-transform: lowercase;
+                    & + span {
+                        &::before {
+                            content: ' • ';
+                            color: #414042;
+                            opacity: 0.6;
+                        }
+                    }
+                }
             }
         }
 

@@ -4,6 +4,12 @@ import { connectCurrentRefinements, Configure, Index, InstantSearch, SearchBox, 
 import './style.scss';
 import CloseIcon from '../Icons/CloseIcon'
 import DocumentIcon from '../Icons/DocumentIcon'
+import WebinarIcon from '../Icons/WebinarIcon'
+import GuideIcon from '../Icons/GuideIcon'
+import VideoIcon from '../Icons/VideoIcon'
+import PdfIcon from '../Icons/PdfIcon'
+import QuickStartGuideIcon from '../Icons/QuickStartGuideIcon'
+import FundingGuideIcon from '../Icons/FundingGuideIcon'
 import ProductIcon from '../Icons/ProductIcon'
 import ChevronLeftIcon from '../Icons/ChevronLeftIcon'
 import BlogIcon from '../Icons/BlogIcon'
@@ -13,6 +19,15 @@ import LANGUAGE_BY_LOCALE from './languages'
 const indexTitles = {
     'products-at': 'Product pages',
     'academy_resources_production': 'Academy Resources'
+}
+
+const resourceIcons = {
+    Webinar: WebinarIcon,
+    Guide: GuideIcon,
+    Video: VideoIcon,
+    PDF: PdfIcon,
+    QuickStartGuide: QuickStartGuideIcon,
+    FundingGuide: FundingGuideIcon,
 }
 
 const hsDomainsToSearch = `domain=hub.permobil.com&domain=permobil.com&domain=academy.permobil.com`
@@ -103,13 +118,35 @@ const Search = ({ algoliaAppID, algoliaSearchKey, algoliaIndices, headerHeight, 
     }
 
     const renderAcademyHit = ({ hit }) => {
-        
+        const { name: type } = hit.type || {name: null};
+        const { name: format } = hit.format || {name: null};
+
+        let iconType = 'PDF';
+        if (hit.title.toLowerCase().includes('Quick Start Guide'.toLowerCase())) {
+            iconType = 'QuickStartGuide';
+        } else if (format == 'MP4') {
+            iconType = 'Video';
+        } else if (type == 'Webinars') {
+            iconType = 'Webinar';
+        } else if (type == 'Guides') {
+            iconType = 'Guide';
+        } else if (type == 'Funding References') {
+            iconType = 'FundingGuide';
+        } else if (format == 'PDF') {
+            iconType = 'PDF';
+        }
         return (
             <span className="search-component__results-hit" onClick={() => { handleHitClick(hit.cta_url) }}>
-                <span className="search-component__results-hit-icon"><DocumentIcon /></span>
+                <span className="search-component__results-hit-icon">
+                    { React.createElement(resourceIcons[iconType]) }
+                </span>
                 <span className="search-component__results-hit-details">
                     <span className="search-component__results-hit-title">{hit.title}</span>
-                    <span className="search-component__results-hit-url">{hit.cta_url}</span>
+                    <span className="search-component__results-hit-tags">
+                        {(hit.audience || []).map(tag => (
+                            <span>{ tag.name }</span>
+                        ))}
+                    </span>
                 </span>
             </span>
         )
