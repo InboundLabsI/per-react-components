@@ -5,16 +5,16 @@
 ## Install
 
 ```bash
-yarn add https://github.com/InboundLabsI/per-react-components#v1.2.7
+yarn add https://github.com/InboundLabsI/per-react-components#v1.2.8
 ```
 
 ## Usage
 
 ```jsx
-import React from 'react'
-import { Contact, Products, Search } from '@inboundlabs/per-react-components'
+import React from "react";
+import { Contact, Products, Search } from "@inboundlabs/per-react-components";
 // Since v.1.2.7 next line can be removed. From now styles are automatically loaded from external source.
-// import '@inboundlabs/per-react-components/dist/index.css'  
+// import '@inboundlabs/per-react-components/dist/index.css'
 
 const searchOptions = {
   algoliaAppID: "", // Algolia Application ID | required
@@ -22,13 +22,13 @@ const searchOptions = {
   algoliaIndices: [], // Array of Algolia index names | required
   headerHeight: "", // Height of the Navigator container (header), in px. | optional
   hsPortalId: "", // Hubspot Portal ID, where to search pages and blog
-}
+};
 
 const productsOptions = {
   algoliaAppID: "", // Algolia Application ID, required
   algoliaSearchKey: "", // Algolia search-only API key | required
-  algoliaIndexName: "" // Algolia index name | required
-}
+  algoliaIndexName: "", // Algolia index name | required
+};
 
 const contactOptions = {
   ticketSubmissionURL: "", // URL for ticket submission link. | optional
@@ -37,18 +37,17 @@ const contactOptions = {
   supportUrl: "", // URL for support menu item. | optional
   headerHeight: "", // Height of the Navigator container (header), in px. | optional
   showTel: "", // Show support phone number in Contact dropdown, | optional | string (phone number)
-}
+};
 
 const Example = () => {
-
   return (
     <div className="example-navigator">
       <Search {...searchOptions} />
       <Products {...productsOptions} />
       <Contact {...contactOptions} />
     </div>
-  )
-} 
+  );
+};
 ```
 
 ## License
