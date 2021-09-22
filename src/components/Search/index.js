@@ -302,41 +302,49 @@ const Search = ({ algoliaAppID, algoliaSearchKey, algoliaIndices, headerHeight, 
     })
 
 
-    const renderResults = connectStateResults(({ searchState }) =>
-        searchState && searchState.query ? (
-            <div className="search-component__results-wrapper">
-                <div className="search-component__results">
-                    <div className="search-component__results-header">
-                        {!!selectedIndex ? 
-                            <button 
-                                className="search-component__results-back" 
-                                onClick={handleBackToResultsClick}
-                            >
-                                    <ChevronLeftIcon />
-                                    <span>Back to all results for "{searchState.query}"</span>
-                            </button> 
-                        : 
-                            <p>Searching for "{searchState.query}"</p>
-                        }
-                        <CloseSearchButton clearsQuery />
-                    </div>
-                    <div className="search-component__results-container">
-                        {!!algoliaIndices && algoliaIndices.filter(index=>{
-                            if(!!selectedIndex){
-                                return index === selectedIndex;
+    const renderResults = connectStateResults(({ searchState }) => {
+        let indices = [...algoliaIndices];
+        const hostName = location.hostname;
+        const academyPattern = new RegExp('^academy\..*');
+        if (academyPattern.test(hostName)) {
+            indices = indices.reverse();
+        }
+        return (
+            searchState && searchState.query ? (
+                <div className="search-component__results-wrapper">
+                    <div className="search-component__results">
+                        <div className="search-component__results-header">
+                            {!!selectedIndex ? 
+                                <button 
+                                    className="search-component__results-back" 
+                                    onClick={handleBackToResultsClick}
+                                >
+                                        <ChevronLeftIcon />
+                                        <span>Back to all results for "{searchState.query}"</span>
+                                </button> 
+                            : 
+                                <p>Searching for "{searchState.query}"</p>
                             }
-                            return true;
-                        }).map(idx => (
-                            <React.Fragment key={idx}>{renderIndexResults(idx)}</React.Fragment>
-                        ))}
-                        {renderBlogResults()}
-                        {renderSiteResults()}
+                            <CloseSearchButton clearsQuery />
+                        </div>
+                        <div className="search-component__results-container">
+                            {!!algoliaIndices && indices.filter(index=>{
+                                if(!!selectedIndex){
+                                    return index === selectedIndex;
+                                }
+                                return true;
+                            }).map(idx => (
+                                <React.Fragment key={idx}>{renderIndexResults(idx)}</React.Fragment>
+                            ))}
+                            {renderBlogResults()}
+                            {renderSiteResults()}
+                        </div>
                     </div>
                 </div>
-            </div>
 
-        ) : null
-    );
+            ) : null
+        );
+    });
 
     const renderSearchBox = () => (
         <div className="search-component__searchbox">
@@ -396,6 +404,8 @@ const Search = ({ algoliaAppID, algoliaSearchKey, algoliaIndices, headerHeight, 
             };
         }
     }, []);
+
+    console.log('algoliaIndices ---> ', algoliaIndices);
 
     return !!algoliaAppID && !!algoliaSearchKey && !!algoliaIndices && algoliaIndices.length > 0 ? (
         <InstantSearch searchClient={searchClient} indexName={algoliaIndices[0]}>
