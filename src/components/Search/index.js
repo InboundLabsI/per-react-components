@@ -171,9 +171,20 @@ const Search = ({ algoliaAppID, algoliaSearchKey, algoliaIndices, headerHeight, 
       );
 
     const renderIndexResults = (idx) => {
+        console.log('idx', idx);
         const renderFuntions = {
             'products-at': renderProductsHit,
             'academy_resources_production': renderAcademyHit
+        }
+        if (idx == 'blog') {
+            return (
+                renderBlogResults()
+            );
+        }
+        if (idx == 'site') {
+            return (
+                renderSiteResults()
+            );
         }
         return (
             <div className="search-component__results-index" >
@@ -256,7 +267,6 @@ const Search = ({ algoliaAppID, algoliaSearchKey, algoliaIndices, headerHeight, 
         ({ searchState}) => {
 
         const hits = !!selectedIndex && selectedIndex === 'site' ? sitePages : sitePages.slice(0,4);
-        console.log('hits', hits);
 
         return !!sitePages && (!selectedIndex || selectedIndex === 'site') ? (
             <div className="search-component__results-index" >
@@ -303,12 +313,41 @@ const Search = ({ algoliaAppID, algoliaSearchKey, algoliaIndices, headerHeight, 
 
 
     const renderResults = connectStateResults(({ searchState }) => {
-        let indices = [...algoliaIndices];
-        const hostName = location.hostname;
-        const academyPattern = new RegExp('^academy\..*');
+        let hostName = '';
+        try {
+            hostName = location.hostname;
+        } catch(err) {}
+        let pathname = '';
+        try {
+            pathname = location.pathname;
+        } catch(err) {}
+
+        let indices = [
+            ...algoliaIndices,
+            'blog',
+            'site',
+        ];
+
+        const academyPattern = new RegExp('^academy\.permo.*');
+        const websitePattern = new RegExp('^hub\.permo.*');
+        const blogPattern = new RegExp('^/blog(/.*){0,1}');
+
+        let currentWebsiteType = '';
         if (academyPattern.test(hostName)) {
-            indices = indices.reverse();
+            currentWebsiteType = 'academy_resources_production';
+        } else if (websitePattern.test(hostName)) {
+            currentWebsiteType = blogPattern.test(pathname) ? 'blog' : 'site'
+        } else {
+            currentWebsiteType = 'products-at';
         }
+
+        indices = indices.reduce((acc, element) => {
+            if (element == currentWebsiteType) {
+                return [element, ...acc];
+            }
+            return [...acc, element];
+        }, []);
+
         return (
             searchState && searchState.query ? (
                 <div className="search-component__results-wrapper">
@@ -336,8 +375,6 @@ const Search = ({ algoliaAppID, algoliaSearchKey, algoliaIndices, headerHeight, 
                             }).map(idx => (
                                 <React.Fragment key={idx}>{renderIndexResults(idx)}</React.Fragment>
                             ))}
-                            {renderBlogResults()}
-                            {renderSiteResults()}
                         </div>
                     </div>
                 </div>
