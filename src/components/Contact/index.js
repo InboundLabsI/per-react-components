@@ -368,14 +368,6 @@ const Contact = ({ supportURL, ticketSubmissionURL, salesContactFormId, salesCon
         }
     }, [componentRef]);
 
-    // get user zipcode by IP
-    useEffect(() => {
-        setTimeout(() => {
-            setShowIframe(true)
-        }, 500)
-
-    }, [])
-
     return (
         <div className="contact-component" id="contact-component" ref={componentRef} style={{ '--header-height': !!headerHeight ? headerHeight + 'px' : '60px' }}>
             <link rel="stylesheet" href="https://hub.permobil.com/hubfs/permobil-navigator-components/permobil-navigator-components.umd.css" />
