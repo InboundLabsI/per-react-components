@@ -21,6 +21,7 @@ const Contact = ({ supportURL, ticketSubmissionURL, salesContactFormId, salesCon
     const [showModalForm, setShowModalForm] = useState(false)
     const [showIframe, setShowIframe] = useState(false)
     const [dropdownAlignment, setDropdownAlignment] = useState('left')
+    const [extraEmailPairs, setExtraEmailPairs] = useState([])
     const componentRef = useRef(null);
 
     const menuItems = [
@@ -57,11 +58,106 @@ const Contact = ({ supportURL, ticketSubmissionURL, salesContactFormId, salesCon
         }
     }
 
-    const onContactRepFormReady = (form, rep) => {
-        let submitButton = document.querySelector('.sales-modal__form input[type="submit"]')
-        if (!!submitButton) {
-            //submitButton.value = `Reach out to ${selectedRep.name}`;
-        }
+    const getExtraEmailPairs = () => {
+        fetch(
+            'https://api.hubapi.com/cms/v3/hubdb/tables/2678791/rows?portalId=1624307&properties=reps'
+        ).then(response => response.json()).then(data => {
+            fetch(
+                'https://api.hubapi.com/cms/v3/hubdb/tables/2657473/rows?portalId=1624307&properties=email'
+            ).then(response => response.json()).then(metadata => {
+                const extraEmailPairs = [...data.results.map(result=>{
+                    return result && result.values && result.values.reps && result.values.reps.map(rep=>{
+                        const meta = metadata.results.find(res=>res.id === rep.id)
+                        return meta && meta.values && meta.values.email || ''
+                    })
+                })]
+                setExtraEmailPairs(extraEmailPairs);
+            })
+        })
+    }
+
+    React.useEffect(()=>{
+        getExtraEmailPairs();
+    }, [])
+
+    const onContactRepFormReady = () => {
+        const form = document.querySelector('#sales-modal__form form');
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                reps: [{
+                    name: selectedRep && selectedRep.name || '', 
+                    email: selectedRep && selectedRep.details && selectedRep.details.email || ''
+                }] 
+            })
+        };
+        fetch(
+            'https://us-central1-inboundlabs-test.cloudfunctions.net/permobil-sales-locator',
+            requestOptions
+        ).then(response => response.json()).then(data => {
+            const sales_rep_email = (data && data.reps && data.reps[0] && data.reps[0].email) || selectedRep && selectedRep.details && selectedRep.details.email || '';
+            const defaultValues = [
+                {
+                    name: 'sales_rep_name',
+                    value: (data && data.reps && data.reps[0] && data.reps[0].name) || selectedRep && selectedRep.name || ''
+                },
+                {
+                    name: 'sales_rep_email',
+                    value: (data && data.reps && data.reps[0] && data.reps[0].email) || selectedRep && selectedRep.details && selectedRep.details.email || ''
+                },
+                {
+                    name: 'sales_locator_extra_email',
+                    value: sales_rep_email
+                },
+                {
+                    name: 'entered_zip',
+                    value: zip || ''
+                },
+                {
+                    name: 'sales_rep_owner_id',
+                    value: (data && data.reps && data.reps[0] && data.reps[0].ownerId) || selectedRep && selectedRep.ownerId || '30630617'
+                },
+                {
+                    name: 'sales_locator_form_mode',
+                    value: ''
+                }
+            ]
+
+            for(let i = 0; i < defaultValues.length; i++){
+                let el = form.querySelector(`[name=${defaultValues[i].name}]`)
+                if(el){
+                    el.value = defaultValues[i].value
+                    el.dispatchEvent(new Event('change'));
+                }
+            }
+
+            if (sales_rep_email) {
+                for (let i = 0; i < extraEmailPairs.length; i++) {
+                    let pair = extraEmailPairs[i].map(email => email.toLowerCase() );
+                    let index = pair.indexOf(sales_rep_email.toLowerCase());
+                    if (index < 0) {
+                        continue;
+                    }
+                    pair.splice(index, 1);
+                    let el = form.querySelector(`[name=sales_locator_extra_email]`)
+                    if(el){
+                        el.value = pair[0] || ''
+                        el.dispatchEvent(new Event('change'));
+                    }
+                    el = form.querySelector(`[name=sales_locator_extra_email_2]`)
+                    if(el){
+                        el.value = pair[1] || ''
+                        el.dispatchEvent(new Event('change'));
+                    }
+                    el = form.querySelector(`[name=sales_locator_extra_email_3]`)
+                    if(el){
+                        el.value = pair[2] || ''
+                        el.dispatchEvent(new Event('change'));
+                    }
+                }
+            }
+        });
     }
 
     const handleModalCloseButtonKeyPress = (e) => {
@@ -223,24 +319,25 @@ const Contact = ({ supportURL, ticketSubmissionURL, salesContactFormId, salesCon
                         </div>
                     )}
 
-                    <div style={{ display: !!salesContactFormId && !!salesContactPortalId && !!showModalForm ? 'block' : 'none' }}>
-                        <div className="sales-modal__form">
-                            <HubspotForm
-                                portalId={salesContactPortalId}
-                                formId={salesContactFormId}
-                                inlineMessage="Thanks for submitting the form"
-                                onSubmit={() => {
-                                    //console.log('Submit!');
-                                }}
-                                onReady={(form) => onContactRepFormReady(form, selectedRep)}
-                                loading={<div>
-                                    <h2 className="sales-modal__title">Loading form...</h2>
-                                    <div style={{ textAlign: 'center' }}><LoadingIcon /></div>
-                                </div>}
-                            />
+                    {!!salesContactFormId && !!salesContactPortalId && !!showModalForm && (
+                        <div style={{ display: !!salesContactFormId && !!salesContactPortalId && !!showModalForm ? 'block' : 'none' }}>
+                            <div className="sales-modal__form" id="sales-modal__form">
+                                <HubspotForm
+                                    portalId={salesContactPortalId}
+                                    formId={salesContactFormId}
+                                    inlineMessage="Thanks for submitting the form"
+                                    onSubmit={() => {
+                                        //console.log('Submit!');
+                                    }}
+                                    onReady={onContactRepFormReady}
+                                    loading={<div>
+                                        <h2 className="sales-modal__title">Loading form...</h2>
+                                        <div style={{ textAlign: 'center' }}><LoadingIcon /></div>
+                                    </div>}
+                                />
+                            </div>
                         </div>
-
-                    </div>
+                    )}
                 </div>
             </div>
         </div>
@@ -334,10 +431,11 @@ const Contact = ({ supportURL, ticketSubmissionURL, salesContactFormId, salesCon
 
                     if (!!data.type && data.type === 'zip_search_result_processed' && !!data.result && !!data.result.reps && data.result.reps.length > 0) {
                         const result = data.result.reps.map(rep => ({
+                            ...rep,
                             key: rep.key,
                             name: rep.name,
                             jobtitle: rep.details.jobtitle,
-                            sales_image: rep.details.sales_image
+                            sales_image: rep.details.sales_image,
                         }))
                         setSalesRep(result);
                         setZipError(null);
@@ -393,27 +491,3 @@ const Contact = ({ supportURL, ticketSubmissionURL, salesContactFormId, salesCon
 }
 
 export default Contact;
-
-
-/*
-
-formElem.find("[name=sales_rep_name]").val(rep.name).change();
-    formElem.find("[name=sales_rep_email]").val(rep.details.email || "").change();
-    formElem.find("[name=sales_locator_extra_email]").val("").change();
-    if (rep.details.email) {
-      for (var i = 0; i < extraEmailPairs.length; i++) {
-        var pair = extraEmailPairs[i].map(function(email) { return email.toLowerCase(); });
-        var index = pair.indexOf(rep.details.email.toLowerCase());
-        if (index < 0) {
-          continue;
-        }
-        pair.splice(index, 1);
-        formElem.find("[name=sales_locator_extra_email]").val(pair[0]).change();
-        formElem.find("[name=sales_locator_extra_email_2]").val(pair[1] || "").change();
-        formElem.find("[name=sales_locator_extra_email_3]").val(pair[2] || "").change();
-      }
-    }
-    formElem.find("[name=entered_zip]").val(lastZip || "").change();
-    formElem.find("[name=sales_rep_owner_id]").val(rep.ownerId).change();
-
-    */
