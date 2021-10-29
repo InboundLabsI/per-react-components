@@ -27,6 +27,12 @@ const User = ({ preferencesURL }) => {
             setModalOpened(false);
         });
 
+        booya.on(booya.events.PROFILE_UPDATE_SUCCESS, function (e) {
+            console.log('profile submitted');
+            setTimeout(() => {
+                setModalOpened(false);
+            }, 1000);
+        });
 
     }
 
