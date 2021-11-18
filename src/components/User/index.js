@@ -176,8 +176,8 @@ const User = ({ preferencesURL }) => {
         <div className="user-component" id="contact-component" ref={componentRef}>
             {!!user && !!user.id ? renderUserButton() : (
                 <React.Fragment>
-                    <button className="user-component__auth-button" onClick={handleSignUpClick}>Sign up</button>
-                    <button className="user-component__auth-button" onClick={handleLogInClick}>Log in</button>
+                    {/* <button className="user-component__auth-button" onClick={handleSignUpClick}>Sign up</button> */}
+                    <button className="user-component__auth-button" onClick={handleLogInClick}>Sign In</button>
                 </React.Fragment>
             )}
             <Modal
