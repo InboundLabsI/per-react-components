@@ -149,8 +149,11 @@ const Search = ({ algoliaAppID, algoliaSearchKey, algoliaIndices, headerHeight, 
             } else if (format == 'PDF') {
                 iconType = 'PDF';
             }
+
+            let baseUrl = 'https://academy.permobilus.com/en-us/resource/';
+
             return (
-                <span className="search-component__results-hit" onClick={() => { handleHitClick(hit.cta_url) }}>
+                <span className="search-component__results-hit" onClick={() => { handleHitClick(baseUrl + hit.path /* hit.cta_url */) }}>
                     <span className="search-component__results-hit-icon">
                         { React.createElement(resourceIcons[iconType]) }
                     </span>
