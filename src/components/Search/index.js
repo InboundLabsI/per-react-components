@@ -49,6 +49,13 @@ const Search = ({ algoliaAppID, algoliaSearchKey, algoliaIndices, headerHeight, 
     const searchClient = {
         ...algoliaClient,
         search(requests) {
+            const nRequest = requests.map(request => {
+                if (request.indexName == 'academy_resources_production') {
+                    request.params.filters = 'published:1 AND market.name:USA';
+                }
+                return request;
+            });
+
             if (requests.every(({ params }) => !params.query)) {
                 return Promise.resolve({
                     results: requests.map(() => ({
