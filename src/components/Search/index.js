@@ -96,6 +96,7 @@ const Search = ({ algoliaAppID, algoliaSearchKey, algoliaIndices, headerHeight, 
     const searchSitePages = async (term, limit = 4) => {
         const res = await fetch(`https://api.hubapi.com/contentsearch/v2/search?portalId=${hsPortalId}&term=${term}&type=SITE_PAGE&type=LANDING_PAGE&length=SHORT&limit=${limit}&${hsDomainsToSearch}&${excludeLanguages}&matchPrefix=false`);
         const data = await res.json();
+
         if(!!data && !!data.results){
             setSitePages(data.results);
             setSiteTotal(data.total)
@@ -106,50 +107,60 @@ const Search = ({ algoliaAppID, algoliaSearchKey, algoliaIndices, headerHeight, 
     }
 
     const renderProductsHit = ({ hit }) => {
-        return (
-            <span className="search-component__results-hit" onClick={() => { handleHitClick(hit.url) }}>
-                <span className="search-component__results-hit-icon"><ProductIcon /></span>
-                <span className="search-component__results-hit-details">
-                    <span className="search-component__results-hit-title">{hit.title}</span>
-                    <span className="search-component__results-hit-url">{hit.url}</span>
+        try {
+            return (
+                <span className="search-component__results-hit" onClick={() => { handleHitClick(hit.url) }}>
+                    <span className="search-component__results-hit-icon"><ProductIcon /></span>
+                    <span className="search-component__results-hit-details">
+                        <span className="search-component__results-hit-title">{hit.title}</span>
+                        <span className="search-component__results-hit-url">{hit.url}</span>
+                    </span>
                 </span>
-            </span>
-        )
+            );
+        } catch(err) {
+            console.log('renderProductsHit error -> ', err);
+            return null;
+        }
     }
 
     const renderAcademyHit = ({ hit }) => {
-        const { name: type } = hit.type || {name: null};
-        const { name: format } = hit.format || {name: null};
-
-        let iconType = 'PDF';
-        if (hit.title.toLowerCase().includes('Quick Start Guide'.toLowerCase())) {
-            iconType = 'QuickStartGuide';
-        } else if (format == 'MP4') {
-            iconType = 'Video';
-        } else if (type == 'Webinars') {
-            iconType = 'Webinar';
-        } else if (type == 'Guides') {
-            iconType = 'Guide';
-        } else if (type == 'Funding References') {
-            iconType = 'FundingGuide';
-        } else if (format == 'PDF') {
-            iconType = 'PDF';
-        }
-        return (
-            <span className="search-component__results-hit" onClick={() => { handleHitClick(hit.cta_url) }}>
-                <span className="search-component__results-hit-icon">
-                    { React.createElement(resourceIcons[iconType]) }
-                </span>
-                <span className="search-component__results-hit-details">
-                    <span className="search-component__results-hit-title">{hit.title}</span>
-                    <span className="search-component__results-hit-tags">
-                        {(hit.audience || []).map(tag => (
-                            <span>{ tag.name }</span>
-                        ))}
+        try {
+            const { name: type } = hit.type || {name: null};
+            const { name: format } = hit.format || {name: null};
+    
+            let iconType = 'PDF';
+            if (hit.title.toLowerCase().includes('Quick Start Guide'.toLowerCase())) {
+                iconType = 'QuickStartGuide';
+            } else if (format == 'MP4') {
+                iconType = 'Video';
+            } else if (type == 'Webinars') {
+                iconType = 'Webinar';
+            } else if (type == 'Guides') {
+                iconType = 'Guide';
+            } else if (type == 'Funding References') {
+                iconType = 'FundingGuide';
+            } else if (format == 'PDF') {
+                iconType = 'PDF';
+            }
+            return (
+                <span className="search-component__results-hit" onClick={() => { handleHitClick(hit.cta_url) }}>
+                    <span className="search-component__results-hit-icon">
+                        { React.createElement(resourceIcons[iconType]) }
+                    </span>
+                    <span className="search-component__results-hit-details">
+                        <span className="search-component__results-hit-title">{hit.title}</span>
+                        <span className="search-component__results-hit-tags">
+                            {(hit.audience || []).map(tag => (
+                                <span>{ tag.name }</span>
+                            ))}
+                        </span>
                     </span>
                 </span>
-            </span>
-        )
+            )
+        } catch(err) {
+            console.log('renderAcademyHit error -> ', err);
+            return null;
+        }
     }
 
     const IndexResults = connectStateResults(
@@ -171,7 +182,6 @@ const Search = ({ algoliaAppID, algoliaSearchKey, algoliaIndices, headerHeight, 
       );
 
     const renderIndexResults = (idx) => {
-        console.log('idx', idx);
         const renderFuntions = {
             'products-at': renderProductsHit,
             'academy_resources_production': renderAcademyHit
@@ -186,6 +196,7 @@ const Search = ({ algoliaAppID, algoliaSearchKey, algoliaIndices, headerHeight, 
                 renderSiteResults()
             );
         }
+
         return (
             <div className="search-component__results-index" >
                 {!!indexTitles[idx] && (
@@ -194,13 +205,13 @@ const Search = ({ algoliaAppID, algoliaSearchKey, algoliaIndices, headerHeight, 
                 <div className="search-component__results-index-hits">
                     <Index indexName={idx}>
                         <IndexResults idx={idx}>
-                            <Configure hitsPerPage={!!selectedIndex ? 1000 : 4} filters={idx === 'academy_resources_production' ? 'published:1 AND market.name:USA' : undefined} />
+                            <Configure hitsPerPage={!!selectedIndex ? 1000 : 4} filters={idx === 'academy_resources_production' ? 'published:1' /* 'published:1 AND market.name:USA' */ : undefined} />
                             <Hits hitComponent={renderFuntions[idx]} />
                         </IndexResults>
                     </Index>
                 </div>
             </div>
-        )
+        );
     }
 
     const CloseSearchButton = connectCurrentRefinements(({ items, refine }) => (
@@ -227,19 +238,18 @@ const Search = ({ algoliaAppID, algoliaSearchKey, algoliaIndices, headerHeight, 
                 
                 <div className="search-component__results-index-hits">
 
-                
                     {blogResults && blogResults.length > 0 ? (
                         <div>
                             <ul>
                                 {hits.map(hit=>(
                                     <li key={`${hit.url}${!!hit.rowId ? '-'+hit.rowId : ''}`}>
-                                    <span className="search-component__results-hit" onClick={() => { handleHitClick(hit.url) }}>
-                                        <span className="search-component__results-hit-icon"><BlogIcon /></span>
-                                        <span className="search-component__results-hit-details">
-                                            <span className="search-component__results-hit-title">{hit.title.replace(/(<([^>]+)>)/gi, "")}</span>
-                                            <span className="search-component__results-hit-url">{hit.url}</span>
+                                        <span className="search-component__results-hit" onClick={() => { handleHitClick(hit.url) }}>
+                                            <span className="search-component__results-hit-icon"><BlogIcon /></span>
+                                            <span className="search-component__results-hit-details">
+                                                <span className="search-component__results-hit-title">{hit.title.replace(/(<([^>]+)>)/gi, "")}</span>
+                                                <span className="search-component__results-hit-url">{hit.url}</span>
+                                            </span>
                                         </span>
-                                    </span>
                                     </li>
                                 ))}
                             </ul>
@@ -441,8 +451,6 @@ const Search = ({ algoliaAppID, algoliaSearchKey, algoliaIndices, headerHeight, 
             };
         }
     }, []);
-
-    console.log('algoliaIndices ---> ', algoliaIndices);
 
     return !!algoliaAppID && !!algoliaSearchKey && !!algoliaIndices && algoliaIndices.length > 0 ? (
         <InstantSearch searchClient={searchClient} indexName={algoliaIndices[0]}>
