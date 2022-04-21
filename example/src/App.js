@@ -18,7 +18,8 @@ function App({ domElement }) {
       salesContactPortalId: domElement.getAttribute('data-sales-contact-portal-id'),
       headerHeight: domElement.getAttribute('data-header-height'),
       showTel: domElement.getAttribute('data-show-tel'),
-      supportURL: domElement.getAttribute('data-support-url')
+      supportURL: domElement.getAttribute('data-support-url'),
+      registerURL: domElement.getAttribute('data-register-url'),
     }
     return <Contact {...options} />
   }

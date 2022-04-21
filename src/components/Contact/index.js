@@ -10,8 +10,9 @@ import LoadingIcon from '../Icons/LoadingIcon';
 import CloseIcon from '../Icons/CloseIcon'
 import ArrowRightIcon from '../Icons/ArrowRightIcon'
 import PhoneIcon from '../Icons/PhoneIcon'
+import RegisterIcon from '../Icons/RegisterIcon'
 
-const Contact = ({ supportURL, ticketSubmissionURL, salesContactFormId, salesContactPortalId, headerHeight, showTel }) => {
+const Contact = ({ supportURL, registerURL, ticketSubmissionURL, salesContactFormId, salesContactPortalId, headerHeight, showTel }) => {
     const [expanded, setExpanded] = useState(false);
     const [zipError, setZipError] = useState(null)
     const [searching, setSearching] = useState(false)
@@ -27,7 +28,8 @@ const Contact = ({ supportURL, ticketSubmissionURL, salesContactFormId, salesCon
     const menuItems = [
         {
             url: `tel:${showTel.replace(/ /g, '').replace(/-/g, "").trim()}`,
-            label: showTel
+            label: showTel,
+            icon: <PhoneIcon />
         }
     ]
 
@@ -263,12 +265,21 @@ const Contact = ({ supportURL, ticketSubmissionURL, salesContactFormId, salesCon
         </div>
     ) : null
 
+    const renderRegisterLink = () => !!registerURL ? (
+        <div className="contact-component__dropdown-support">
+            <a href={registerURL} className="contact-component__dropdown-support-link">
+                <RegisterIcon />
+                <span>Register your product</span>
+            </a>
+        </div>
+    ) : null
+
     const renderMenu = () => !!menuItems && menuItems.length > 0 ? (
         <ul className="contact-component__dropdown-menu">
-            {menuItems.map(menuItem => (
+            {menuItems.filter(i=>i && i.url).map(menuItem => (
                 <li key={menuItem.url}>
                     <a href={menuItem.url}>
-                        <PhoneIcon />
+                        {menuItem.icon || null}
                         <span>{menuItem.label}</span>
                     </a>
                 </li>
@@ -280,6 +291,7 @@ const Contact = ({ supportURL, ticketSubmissionURL, salesContactFormId, salesCon
         <div className={`contact-component__dropdown contact-component__dropdown--${dropdownAlignment}`}>
             {renderSalesNavigator()}
             {renderSupportLink()}
+            {renderRegisterLink()}
             {!!showTel ? renderMenu() : null}
         </div>
     )

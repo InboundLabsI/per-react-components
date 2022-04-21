@@ -469,7 +469,7 @@ const Search = ({ algoliaAppID, algoliaSearchKey, algoliaIndices, headerHeight, 
                 {!!isResultsVisible ? renderResults() : null}
             </div>
         </InstantSearch>
-    ) : <React.Fragment></React.Fragment>;
+    ) : null;
 }
 
 export default Search;

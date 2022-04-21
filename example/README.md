@@ -1,4 +1,4 @@
-# Permobil Navigator 1.2.11 - React Components for HS and WP sites
+# Permobil Navigator 1.2.12 - React Components for HS and WP sites
 
 ## How to use
 
@@ -27,6 +27,7 @@ Options must be passed via `data-` attributes, with each component.
 | ---------------------------- | ---------------- | :------: | -------------------------------------------------------------- |
 | data-component               | \*               |   Yes    | Component name. One of: "Contact", "Products", "User".         |
 | data-support-url             | Contact          |    No    | URL for support menu item.                                     |
+| data-register-url            | Contact          |    No    | URL for register product menu item                             |
 | data-ticket-submission-url   | Contact          |    No    | URL for ticket submission link.                                |
 | data-sales-contact-form-id   | Contact          |    No    | Sales rep contact HS form id.                                  |
 | data-sales-contact-portal-id | Contact          |    No    | Sales rep contact HS portal id.                                |
